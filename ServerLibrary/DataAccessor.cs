@@ -52,7 +52,7 @@ public class DataAccessor
         while (stream.Position < stream.Length)
         {
             Ciphertext transaction = new();
-            transaction.Load(GlobalConfig.EncryptionHelper.Context, stream);
+            transaction.Load(ServerConfig.EncryptionHelper.Context, stream);
             transactions.Add(transaction);
         }
 
@@ -84,7 +84,7 @@ public class DataAccessor
 
         using FileStream stream = new(path, FileMode.Open, FileAccess.Read);
         RelinKeys keys = new();
-        keys.Load(GlobalConfig.EncryptionHelper.Context, stream);
+        keys.Load(ServerConfig.EncryptionHelper.Context, stream);
         return keys;
     }
 }

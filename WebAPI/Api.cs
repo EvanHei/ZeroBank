@@ -19,7 +19,7 @@ public static class Api
         try
         {
             MemoryStream stream = new();
-            GlobalConfig.EncryptionHelper.Parms.Save(stream);
+            ServerConfig.EncryptionHelper.Parms.Save(stream);
             stream.Seek(0, SeekOrigin.Begin);
             return Results.Stream(stream);
         }
@@ -59,7 +59,7 @@ public static class Api
     {
         try
         {
-            Ciphertext? balance = GlobalConfig.EncryptionHelper.GetBalance();
+            Ciphertext? balance = ServerConfig.EncryptionHelper.GetBalance();
 
             if (balance == null)
             {

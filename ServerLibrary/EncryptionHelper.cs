@@ -24,13 +24,13 @@ public class EncryptionHelper
 
         Context = new SEALContext(Parms);
         Evaluator = new Evaluator(Context);
-        RelinKeys = GlobalConfig.DataAccessor.LoadRelinKeys();
+        RelinKeys = ServerConfig.DataAccessor.LoadRelinKeys();
     }
 
     // TODO: test
     public Ciphertext? GetBalance()
     {
-        List<Ciphertext> transactions = GlobalConfig.DataAccessor.LoadTransactions();
+        List<Ciphertext> transactions = ServerConfig.DataAccessor.LoadTransactions();
 
         if (transactions.Count == 0)
         {
