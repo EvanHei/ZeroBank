@@ -1,3 +1,6 @@
+using ClientLibrary;
+using Microsoft.Research.SEAL;
+
 namespace WinFormsUI
 {
     internal static class Program
@@ -8,8 +11,22 @@ namespace WinFormsUI
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            // TODO: test and then clean up
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appDirectoryPath = Path.Combine(appDataPath, Constants.AppDirectoryName);
+            string clientDirectoryPath = Path.Combine(appDirectoryPath, Constants.ClientDirectoryName);
+            string relinKeysFilePath = Path.Combine(clientDirectoryPath, Constants.RelinKeysFileName);
+
+            if (!File.Exists(relinKeysFilePath))
+            {
+                EncryptionParameters parms = ClientConfig.ApiAccessor.GetEncryptionParameters();
+                ClientConfig.EncryptionHelper.Parms = parms;
+                (PublicKey publicKey, SecretKey secretKey, Serializable<RelinKeys> relinKeys) = ClientConfig.EncryptionHelper.GenerateKeys();
+                ClientConfig.DataAccessor.SavePublicKey(publicKey);
+                ClientConfig.DataAccessor.SaveSecretKey(secretKey);
+                ClientConfig.DataAccessor.SaveRelinKeys(relinKeys);
+            }
+
             ApplicationConfiguration.Initialize();
             Application.Run(new Dashboard());
         }

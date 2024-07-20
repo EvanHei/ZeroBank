@@ -8,7 +8,8 @@ namespace ServerLibrary;
 
 public static class Constants
 {
-    public const string AppDirectoryName = "WebAPI";
+    public const string AppDirectoryName = "ZeroBank";
+    public const string ServerDirectoryName = "WebAPI";
     public const string TransactionsFileName = "transactions.bin";
     public const string RelinKeysFileName = "relinkeys.bin";
 }

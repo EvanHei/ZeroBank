@@ -9,24 +9,53 @@ namespace ClientLibrary;
 
 public class EncryptionHelper
 {
-    public EncryptionParameters Parms { private get; set; }
+    private EncryptionParameters? parms;
+    public EncryptionParameters Parms
+    {
+        get => parms;
+        set
+        {
+            parms = value;
+            Context = new SEALContext(Parms);
+            Encoder = new BatchEncoder(Context);
+        }
+    }
 
-    public ulong Decrypt(Ciphertext ciphertext)
+    public SEALContext? Context { get; set; }
+    private BatchEncoder? Encoder { get; set; }
+
+    // TODO: test Decrypt
+    public long Decrypt(Ciphertext ciphertext)
     {
         if (Parms == null)
-            throw new Exception();
+        {
+            throw new InvalidOperationException("Encryption parameters must be set.");
+        }
 
-        // TODO: move into the set function of parms
-        SecretKey key = ClientConfig.DataAccessor.LoadSecretKey();
-        using SEALContext context = new(Parms);
-        using BatchEncoder encoder = new(context);
-        using Decryptor decryptor = new(context, key);
+        SecretKey? secretKey = ClientConfig.DataAccessor.LoadSecretKey();
+
+        if (secretKey == null)
+        {
+            throw new InvalidOperationException("No secret key found.");
+        }
+
         using Plaintext plaintext = new();
-        List<ulong> result = new();
+        using Decryptor decryptor = new(Context, secretKey);
+        List<long> result = new();
 
         decryptor.Decrypt(ciphertext, plaintext);
-        encoder.Decode(plaintext, result);
+        Encoder.Decode(plaintext, result);
 
         return result[0];
+    }
+
+    // TODO: test GenerateKeys
+    public (PublicKey, SecretKey, Serializable<RelinKeys>) GenerateKeys()
+    {
+        using KeyGenerator keygen = new(Context);
+        using SecretKey secretKey = keygen.SecretKey;
+        using Serializable<RelinKeys> relinKeys = keygen.CreateRelinKeys();
+        keygen.CreatePublicKey(out PublicKey publicKey);
+        return (publicKey, secretKey, relinKeys);
     }
 }

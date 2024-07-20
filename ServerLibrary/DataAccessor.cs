@@ -13,14 +13,14 @@ namespace ServerLibrary;
 
 public class DataAccessor
 {
-    private string AppDirectoryPath { get; set; }
+    private string ServerDirectoryPath { get; set; }
 
     public DataAccessor()
     {
         string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        AppDirectoryPath = Path.Combine(appDataPath, Constants.AppDirectoryName);
-        Directory.CreateDirectory(AppDirectoryPath);
-        FileAttributes attributes = File.GetAttributes(AppDirectoryPath);
+        string appDirectoryPath = Path.Combine(appDataPath, Constants.AppDirectoryName);
+        ServerDirectoryPath = Path.Combine(appDirectoryPath, Constants.ServerDirectoryName);
+        Directory.CreateDirectory(ServerDirectoryPath);
     }
 
     // TODO: test
@@ -31,7 +31,7 @@ public class DataAccessor
             throw new ArgumentNullException(nameof(transaction), "Transaction cannot be null.");
         }
 
-        string path = Path.Combine(AppDirectoryPath, Constants.TransactionsFileName);
+        string path = Path.Combine(ServerDirectoryPath, Constants.TransactionsFileName);
         using FileStream stream = new(path, FileMode.Append, FileAccess.Write);
         transaction.Save(stream);
     }
@@ -40,7 +40,7 @@ public class DataAccessor
     public List<Ciphertext> LoadTransactions()
     {
         List<Ciphertext> transactions = new();
-        string path = Path.Combine(AppDirectoryPath, Constants.TransactionsFileName);
+        string path = Path.Combine(ServerDirectoryPath, Constants.TransactionsFileName);
 
         if (!File.Exists(path))
         {
@@ -67,7 +67,7 @@ public class DataAccessor
             throw new ArgumentNullException(nameof(relinKeys), "Relinearization keys cannot be null.");
         }
 
-        string path = Path.Combine(AppDirectoryPath, Constants.RelinKeysFileName);
+        string path = Path.Combine(ServerDirectoryPath, Constants.RelinKeysFileName);
         using FileStream stream = new(path, FileMode.Create, FileAccess.Write);
         relinKeys.Save(stream);
     }
@@ -75,7 +75,7 @@ public class DataAccessor
     // TODO: test
     public RelinKeys? LoadRelinKeys()
     {
-        string path = Path.Combine(AppDirectoryPath, Constants.RelinKeysFileName);
+        string path = Path.Combine(ServerDirectoryPath, Constants.RelinKeysFileName);
 
         if (!File.Exists(path))
         {
