@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using Microsoft.Research.SEAL;
+using ServerLibrary;
+using System.IO;
 
 namespace WebAPI;
 
@@ -16,8 +18,10 @@ public static class Api
     {
         try
         {
-            // TODO: call EncryptionParameters.Save(stream);
-            return Results.Stream(new MemoryStream());
+            MemoryStream stream = new();
+            GlobalConfig.EncryptionHelper.Parms.Save(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+            return Results.Stream(stream);
         }
         catch (Exception ex)
         {
@@ -55,8 +59,17 @@ public static class Api
     {
         try
         {
-            // TODO: sum all ciphertexts (from the blockchain) and call ciphertextSum.Save(stream);
-            return Results.Stream(new MemoryStream());
+            Ciphertext? balance = GlobalConfig.EncryptionHelper.GetBalance();
+
+            if (balance == null)
+            {
+                return Results.NotFound("There are no transactions.");
+            }
+
+            MemoryStream stream = new();
+            balance.Save(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+            return Results.Stream(stream);
         }
         catch (Exception ex)
         {
