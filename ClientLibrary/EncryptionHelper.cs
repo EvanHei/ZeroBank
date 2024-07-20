@@ -49,12 +49,11 @@ public class EncryptionHelper
         return result[0];
     }
 
-    // TODO: test GenerateKeys
     public (PublicKey, SecretKey, Serializable<RelinKeys>) GenerateKeys()
     {
         using KeyGenerator keygen = new(Context);
-        using SecretKey secretKey = keygen.SecretKey;
-        using Serializable<RelinKeys> relinKeys = keygen.CreateRelinKeys();
+        SecretKey secretKey = keygen.SecretKey;
+        Serializable<RelinKeys> relinKeys = keygen.CreateRelinKeys();
         keygen.CreatePublicKey(out PublicKey publicKey);
         return (publicKey, secretKey, relinKeys);
     }
