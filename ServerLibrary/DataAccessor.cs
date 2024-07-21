@@ -13,14 +13,9 @@ namespace ServerLibrary;
 
 public class DataAccessor
 {
-    private string ServerDirectoryPath { get; set; }
-
     public DataAccessor()
     {
-        string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        string appDirectoryPath = Path.Combine(appDataPath, Constants.AppDirectoryName);
-        ServerDirectoryPath = Path.Combine(appDirectoryPath, Constants.ServerDirectoryName);
-        Directory.CreateDirectory(ServerDirectoryPath);
+        Directory.CreateDirectory(Constants.ServerDirectoryPath);
     }
 
     // TODO: test
@@ -31,8 +26,7 @@ public class DataAccessor
             throw new ArgumentNullException(nameof(transaction), "Transaction cannot be null.");
         }
 
-        string path = Path.Combine(ServerDirectoryPath, Constants.TransactionsFileName);
-        using FileStream stream = new(path, FileMode.Append, FileAccess.Write);
+        using FileStream stream = new(Constants.TransactionsFilePath, FileMode.Append, FileAccess.Write);
         transaction.Save(stream);
     }
 
@@ -40,14 +34,13 @@ public class DataAccessor
     public List<Ciphertext> LoadTransactions()
     {
         List<Ciphertext> transactions = new();
-        string path = Path.Combine(ServerDirectoryPath, Constants.TransactionsFileName);
 
-        if (!File.Exists(path))
+        if (!File.Exists(Constants.TransactionsFilePath))
         {
             return transactions;
         }
 
-        using FileStream stream = new(path, FileMode.Open, FileAccess.Read);
+        using FileStream stream = new(Constants.TransactionsFilePath, FileMode.Open, FileAccess.Read);
 
         while (stream.Position < stream.Length)
         {
@@ -67,22 +60,19 @@ public class DataAccessor
             throw new ArgumentNullException(nameof(relinKeys), "Relinearization keys cannot be null.");
         }
 
-        string path = Path.Combine(ServerDirectoryPath, Constants.RelinKeysFileName);
-        using FileStream stream = new(path, FileMode.Create, FileAccess.Write);
+        using FileStream stream = new(Constants.RelinKeysFilePath, FileMode.Create, FileAccess.Write);
         relinKeys.Save(stream);
     }
 
     // TODO: test
     public RelinKeys? LoadRelinKeys()
     {
-        string path = Path.Combine(ServerDirectoryPath, Constants.RelinKeysFileName);
-
-        if (!File.Exists(path))
+        if (!File.Exists(Constants.RelinKeysFilePath))
         {
             return null;
         }
 
-        using FileStream stream = new(path, FileMode.Open, FileAccess.Read);
+        using FileStream stream = new(Constants.RelinKeysFilePath, FileMode.Open, FileAccess.Read);
         RelinKeys keys = new();
         keys.Load(ServerConfig.EncryptionHelper.Context, stream);
         return keys;

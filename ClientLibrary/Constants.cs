@@ -8,8 +8,8 @@ namespace ClientLibrary;
 
 public static class Constants
 {
-    private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-    private static string appDirectoryPath = Path.Combine(appDataPath, "ZeroBank");
+    private static readonly string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+    private static readonly string appDirectoryPath = Path.Combine(appDataPath, "ZeroBank");
 
     public static readonly string ClientDirectoryPath = Path.Combine(appDirectoryPath, "WinFormsUI");
     public static readonly string PublicKeyFilePath = Path.Combine(ClientDirectoryPath, "public_key.bin");

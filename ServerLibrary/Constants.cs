@@ -8,8 +8,10 @@ namespace ServerLibrary;
 
 public static class Constants
 {
-    public const string AppDirectoryName = "ZeroBank";
-    public const string ServerDirectoryName = "WebAPI";
-    public const string TransactionsFileName = "transactions.bin";
-    public const string RelinKeysFileName = "relinkeys.bin";
+    private static readonly string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+    private static readonly string appDirectoryPath = Path.Combine(appDataPath, "ZeroBank");
+
+    public static readonly string ServerDirectoryPath = Path.Combine(appDirectoryPath, "WebAPI");
+    public static readonly string TransactionsFilePath = Path.Combine(ServerDirectoryPath, "transactions.bin");
+    public static readonly string RelinKeysFilePath = Path.Combine(ServerDirectoryPath, "relinkeys.bin");
 }
