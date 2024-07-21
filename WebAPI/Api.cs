@@ -33,7 +33,7 @@ public static class Api
     {
         try
         {
-            // TODO: write relinKeys to a file
+            // TODO: implement PostRelinKeys. write relinKeys to a file
             return Results.Ok();
         }
         catch (Exception ex)
@@ -46,7 +46,7 @@ public static class Api
     {
         try
         {
-            // TODO: call context.Request.Body.CopyToAsync(FileStream);
+            // TODO: implement PostTransaction. call context.Request.Body.CopyToAsync(FileStream);
             return Results.Ok();
         }
         catch (Exception ex)
@@ -63,7 +63,7 @@ public static class Api
 
             if (balance == null)
             {
-                return Results.NotFound("There are no transactions.");
+                return Results.Stream(new MemoryStream());
             }
 
             MemoryStream stream = new();

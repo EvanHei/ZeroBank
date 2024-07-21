@@ -24,7 +24,24 @@ public class EncryptionHelper
     public SEALContext? Context { get; set; }
     private BatchEncoder? Encoder { get; set; }
 
-    // TODO: test Decrypt
+    // TODO: implement Encrypt
+    public Serializable<Ciphertext> Encrypt(long num)
+    {
+        // temp code for testing
+
+        SecretKey? secretKey = ClientConfig.DataAccessor.LoadSecretKey();
+
+        if (secretKey == null)
+        {
+            throw new InvalidOperationException("No secret key found.");
+        }
+
+        using Plaintext plaintext = new("1");
+        using Encryptor encryptor = new(Context, secretKey);
+        Serializable<Ciphertext> ciphertext = encryptor.EncryptSymmetric(plaintext);
+        return ciphertext;
+    }
+
     public long Decrypt(Ciphertext ciphertext)
     {
         if (Parms == null)
@@ -41,11 +58,9 @@ public class EncryptionHelper
 
         using Plaintext plaintext = new();
         using Decryptor decryptor = new(Context, secretKey);
-        List<long> result = new();
-
         decryptor.Decrypt(ciphertext, plaintext);
+        List<long> result = new();
         Encoder.Decode(plaintext, result);
-
         return result[0];
     }
 

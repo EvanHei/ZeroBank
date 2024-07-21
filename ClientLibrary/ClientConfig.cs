@@ -13,11 +13,11 @@ public static class ClientConfig
     public static EncryptionHelper EncryptionHelper { get; set; } = new EncryptionHelper();
     public static ApiAccessor ApiAccessor { get; set; } = new ApiAccessor();
 
-    public static void SetUpClient()
+    public static async void SetUpClient()
     {
         if (!File.Exists(Constants.ParmsFilePath))
         {
-            EncryptionHelper.Parms = ApiAccessor.GetEncryptionParameters();
+            EncryptionHelper.Parms = await ApiAccessor.GetEncryptionParameters();
             (PublicKey publicKey, SecretKey secretKey, Serializable<RelinKeys> relinKeys) = EncryptionHelper.GenerateKeys();
             DataAccessor.SavePublicKey(publicKey);
             DataAccessor.SaveSecretKey(secretKey);
