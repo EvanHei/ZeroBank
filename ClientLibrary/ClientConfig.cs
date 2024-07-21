@@ -13,7 +13,7 @@ public static class ClientConfig
     public static EncryptionHelper EncryptionHelper { get; set; } = new EncryptionHelper();
     public static ApiAccessor ApiAccessor { get; set; } = new ApiAccessor();
 
-    public static async void SetUpClient()
+    public static async Task SetUpClient()
     {
         if (!File.Exists(Constants.ParmsFilePath))
         {

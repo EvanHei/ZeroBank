@@ -1,9 +1,4 @@
 ﻿using Microsoft.Research.SEAL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClientLibrary;
 
@@ -18,27 +13,49 @@ public class EncryptionHelper
             parms = value;
             Context = new SEALContext(Parms);
             Encoder = new BatchEncoder(Context);
+            Evaluator = new Evaluator(Context);
         }
     }
-
     public SEALContext? Context { get; set; }
     private BatchEncoder? Encoder { get; set; }
+    private Evaluator? Evaluator { get; set; }
 
-    // TODO: implement Encrypt
     public Serializable<Ciphertext> Encrypt(long num)
     {
-        // temp code for testing
+        PublicKey? publicKey = ClientConfig.DataAccessor.LoadPublicKey();
+        if (publicKey == null)
+        {
+            throw new InvalidOperationException("No public key key found.");
+        }
 
         SecretKey? secretKey = ClientConfig.DataAccessor.LoadSecretKey();
-
         if (secretKey == null)
         {
             throw new InvalidOperationException("No secret key found.");
         }
 
-        using Plaintext plaintext = new("1");
-        using Encryptor encryptor = new(Context, secretKey);
-        Serializable<Ciphertext> ciphertext = encryptor.EncryptSymmetric(plaintext);
+        if (Parms == null)
+        {
+            throw new InvalidOperationException("Encryption parameters must be set.");
+        }
+
+        using Plaintext absPlaintext = new();
+        using Ciphertext absCiphertext = new();
+        using Encryptor secretEncryptor = new(Context, secretKey);
+        using Encryptor publicEncryptor = new(Context, publicKey);
+        using Decryptor decryptor = new(Context, secretKey);
+        ulong absNum = (ulong)Math.Abs(num);
+        Encoder.Encode(new ulong[] { absNum }, absPlaintext);
+        publicEncryptor.Encrypt(absPlaintext, absCiphertext);
+
+        if (num < 0)
+        {
+            Evaluator.NegateInplace(absCiphertext);
+        }
+
+        using Plaintext plaintext = new();
+        decryptor.Decrypt(absCiphertext, plaintext);
+        Serializable<Ciphertext> ciphertext = secretEncryptor.EncryptSymmetric(plaintext);
         return ciphertext;
     }
 
@@ -50,7 +67,6 @@ public class EncryptionHelper
         }
 
         SecretKey? secretKey = ClientConfig.DataAccessor.LoadSecretKey();
-
         if (secretKey == null)
         {
             throw new InvalidOperationException("No secret key found.");

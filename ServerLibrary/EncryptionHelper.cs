@@ -20,7 +20,7 @@ public class EncryptionHelper
         Parms = new EncryptionParameters(SchemeType.BFV);
         Parms.PolyModulusDegree = polyModulusDegree;
         Parms.CoeffModulus = CoeffModulus.BFVDefault(polyModulusDegree);
-        Parms.PlainModulus = PlainModulus.Batching(Parms.PolyModulusDegree, 30);
+        Parms.PlainModulus = PlainModulus.Batching(Parms.PolyModulusDegree, 60);
 
         Context = new SEALContext(Parms);
         Evaluator = new Evaluator(Context);
