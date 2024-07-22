@@ -29,11 +29,14 @@ public static class Api
         }
     }
 
-    static IResult PostRelinKeys()
+    static IResult PostRelinKeys(HttpContext context)
     {
         try
         {
-            // TODO: implement PostRelinKeys. write relinKeys to a file
+            using MemoryStream stream = new();
+            context.Request.Body.CopyToAsync(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+            ServerConfig.DataAccessor.SaveRelinKeys(stream);
             return Results.Ok();
         }
         catch (Exception ex)
@@ -42,11 +45,14 @@ public static class Api
         }
     }
 
-    static IResult PostTransaction()
+    static IResult PostTransaction(HttpContext context)
     {
         try
         {
-            // TODO: implement PostTransaction. call context.Request.Body.CopyToAsync(FileStream);
+            using MemoryStream stream = new();
+            context.Request.Body.CopyToAsync(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+            ServerConfig.DataAccessor.SaveTransaction(stream);
             return Results.Ok();
         }
         catch (Exception ex)
@@ -60,10 +66,9 @@ public static class Api
         try
         {
             Ciphertext? balance = ServerConfig.EncryptionHelper.GetBalance();
-
             if (balance == null)
             {
-                return Results.Stream(new MemoryStream());
+                return Results.Problem("There are no transactions.");
             }
 
             MemoryStream stream = new();

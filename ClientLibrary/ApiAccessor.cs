@@ -27,15 +27,13 @@ public class ApiAccessor
         return parms;
     }
 
-    public async Task PostRelinKeys(RelinKeys relinKeys)
+    public async Task PostRelinKeys(Stream stream)
     {
         if (!IsValidUrl(Constants.RelinKeysUrl))
         {
             throw new ArgumentException("Invalid URL", nameof(Constants.RelinKeysUrl));
         }
 
-        MemoryStream stream = new();
-        relinKeys.Save(stream);
         using StreamContent content = new(stream);
         HttpResponseMessage response = await client.PostAsync(Constants.RelinKeysUrl, content);
         response.EnsureSuccessStatusCode();
@@ -50,6 +48,7 @@ public class ApiAccessor
 
         MemoryStream stream = new();
         transaction.Save(stream);
+        stream.Seek(0, SeekOrigin.Begin);
         using StreamContent content = new(stream);
         HttpResponseMessage response = await client.PostAsync(Constants.TransactionUrl, content);
         response.EnsureSuccessStatusCode();

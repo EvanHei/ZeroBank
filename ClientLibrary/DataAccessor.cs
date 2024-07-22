@@ -80,7 +80,7 @@ public class DataAccessor
             throw new ArgumentNullException(nameof(relinKeys), "Relinearizaion keys cannot be null.");
         }
 
-        using FileStream stream = new(Constants.RelinKeysFilePath, FileMode.Append, FileAccess.Write);
+        using FileStream stream = new(Constants.RelinKeysFilePath, FileMode.Open, FileAccess.Write);
         relinKeys.Save(stream);
     }
 
@@ -100,6 +100,22 @@ public class DataAccessor
         RelinKeys relinKeys = new();
         relinKeys.Load(ClientConfig.EncryptionHelper.Context, stream);
         return relinKeys;
+    }
+
+    public Stream? LoadRelinKeysStream()
+    {
+        if (!File.Exists(Constants.RelinKeysFilePath))
+        {
+            return null;
+        }
+
+        if (ClientConfig.EncryptionHelper.Context == null)
+        {
+            return null;
+        }
+
+        FileStream stream = new(Constants.RelinKeysFilePath, FileMode.Open, FileAccess.Read);
+        return stream;
     }
 
     public void SaveParms(EncryptionParameters parms)

@@ -18,26 +18,35 @@ public class DataAccessor
         Directory.CreateDirectory(Constants.ServerDirectoryPath);
     }
 
-    // TODO: test
-    public void SaveTransaction(Ciphertext transaction)
+    public void SaveTransaction(Stream stream)
     {
-        if (transaction == null)
+        if (stream.Length == 0)
         {
-            throw new ArgumentNullException(nameof(transaction), "Transaction cannot be null.");
+            return;
         }
 
-        using FileStream stream = new(Constants.TransactionsFilePath, FileMode.Append, FileAccess.Write);
-        transaction.Save(stream);
+        // try to deserialize successfully, then write to file
+        try
+        {
+            Ciphertext transaction = new();
+            transaction.Load(ServerConfig.EncryptionHelper.Context, stream);
+            stream.Seek(0, SeekOrigin.Begin);
+            using FileStream fileStream = new(Constants.TransactionsFilePath, FileMode.Append, FileAccess.Write);
+            stream.CopyTo(fileStream);
+        }
+        catch (Exception)
+        {
+            // TODO: log failure
+        }
     }
 
-    // TODO: test
-    public List<Ciphertext> LoadTransactions()
+    public List<Ciphertext>? LoadTransactions()
     {
         List<Ciphertext> transactions = new();
 
         if (!File.Exists(Constants.TransactionsFilePath))
         {
-            return transactions;
+            return null;
         }
 
         using FileStream stream = new(Constants.TransactionsFilePath, FileMode.Open, FileAccess.Read);
@@ -52,19 +61,29 @@ public class DataAccessor
         return transactions;
     }
 
-    // TODO: test
-    public void SaveRelinKeys(RelinKeys relinKeys)
+    public void SaveRelinKeys(Stream stream)
     {
-        if (relinKeys == null)
+        if (stream.Length == 0)
         {
-            throw new ArgumentNullException(nameof(relinKeys), "Relinearization keys cannot be null.");
+            return;
         }
 
-        using FileStream stream = new(Constants.RelinKeysFilePath, FileMode.Create, FileAccess.Write);
-        relinKeys.Save(stream);
+        // try to deserialize successfully, then write to file
+        try
+        {
+            RelinKeys relinKeys = new();
+            relinKeys.Load(ServerConfig.EncryptionHelper.Context, stream);
+            stream.Seek(0, SeekOrigin.Begin);
+            using FileStream fileStream = new(Constants.RelinKeysFilePath, FileMode.Create, FileAccess.Write);
+            stream.CopyTo(fileStream);
+
+        }
+        catch (Exception ex)
+        {
+            // TODO: log failure
+        }    
     }
 
-    // TODO: test
     public RelinKeys? LoadRelinKeys()
     {
         if (!File.Exists(Constants.RelinKeysFilePath))

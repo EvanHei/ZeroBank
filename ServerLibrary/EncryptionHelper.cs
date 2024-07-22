@@ -10,42 +10,41 @@ namespace ServerLibrary;
 public class EncryptionHelper
 {
     public EncryptionParameters Parms { get; }
-    public RelinKeys RelinKeys { get; set; } = new RelinKeys();
     public SEALContext Context { get; }
     private Evaluator Evaluator { get; set; }
 
     public EncryptionHelper()
     {
         ulong polyModulusDegree = 4096;
-        Parms = new EncryptionParameters(SchemeType.BFV);
+        Parms = new(SchemeType.BFV);
         Parms.PolyModulusDegree = polyModulusDegree;
         Parms.CoeffModulus = CoeffModulus.BFVDefault(polyModulusDegree);
-        Parms.PlainModulus = PlainModulus.Batching(Parms.PolyModulusDegree, 60);
+
+        // adjust as needed
+        Parms.PlainModulus = PlainModulus.Batching(Parms.PolyModulusDegree, 30);
 
         Context = new SEALContext(Parms);
         Evaluator = new Evaluator(Context);
-        RelinKeys = ServerConfig.DataAccessor.LoadRelinKeys();
     }
 
-    // TODO: test
     public Ciphertext? GetBalance()
     {
-        List<Ciphertext> transactions = ServerConfig.DataAccessor.LoadTransactions();
-
-        if (transactions.Count == 0)
+        List<Ciphertext>? transactions = ServerConfig.DataAccessor.LoadTransactions();
+        if (transactions == null || transactions.Count == 0)
         {
             return null;
         }
 
+        RelinKeys? relinKeys = ServerConfig.DataAccessor.LoadRelinKeys();
         Ciphertext balance = new(transactions[0]);
 
         for (int i = 1; i < transactions.Count; i++)
         {
             Evaluator.AddInplace(balance, transactions[i]);
 
-            if (RelinKeys != null)
+            if (relinKeys != null)
             {
-                Evaluator.RelinearizeInplace(balance, RelinKeys);
+                Evaluator.RelinearizeInplace(balance, relinKeys);
             }
         }
 
