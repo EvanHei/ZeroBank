@@ -22,14 +22,13 @@ public class EncryptionHelper
 
         // adjust as needed
         Parms.PlainModulus = PlainModulus.Batching(Parms.PolyModulusDegree, 30);
-
         Context = new SEALContext(Parms);
         Evaluator = new Evaluator(Context);
     }
 
-    public Ciphertext? GetBalance()
+    public Ciphertext? GetBalance(int accountId)
     {
-        List<Ciphertext>? transactions = ServerConfig.DataAccessor.LoadTransactions();
+        List<Ciphertext>? transactions = ServerConfig.DataAccessor.LoadTransactions(accountId);
         if (transactions == null || transactions.Count == 0)
         {
             return null;
@@ -47,7 +46,6 @@ public class EncryptionHelper
                 Evaluator.RelinearizeInplace(balance, relinKeys);
             }
         }
-
         return balance;
     }
 }

@@ -18,6 +18,5 @@ public static class Constants
     public static readonly string ParmsFilePath = Path.Combine(ClientDirectoryPath, "parms.bin");
     public static readonly string ParmsUrl = "https://localhost:7188/parms";
     public static readonly string RelinKeysUrl = "https://localhost:7188/relinkeys";
-    public static readonly string TransactionUrl = "https://localhost:7188/transaction";
-    public static readonly string BalanceUrl = "https://localhost:7188/balance";
+    public static readonly string AccountsBaseUrl = "https://localhost:7188/accounts";
 }

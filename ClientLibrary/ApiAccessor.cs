@@ -1,9 +1,12 @@
 ﻿using Microsoft.Research.SEAL;
+using SharedLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ClientLibrary;
 
@@ -39,26 +42,64 @@ public class ApiAccessor
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task PostTransaction(Serializable<Ciphertext> transaction)
+    public async Task<List<AccountModel>> GetAccounts()
     {
-        if (!IsValidUrl(Constants.TransactionUrl))
+        if (!IsValidUrl(Constants.AccountsBaseUrl))
         {
-            throw new ArgumentException("Invalid URL", nameof(Constants.TransactionUrl));
+            throw new ArgumentException("Invalid URL", nameof(Constants.AccountsBaseUrl));
         }
 
-        MemoryStream stream = new();
-        transaction.Save(stream);
-        stream.Seek(0, SeekOrigin.Begin);
-        using StreamContent content = new(stream);
-        HttpResponseMessage response = await client.PostAsync(Constants.TransactionUrl, content);
+        List<AccountModel> accounts = await client.GetFromJsonAsync<List<AccountModel>>(Constants.AccountsBaseUrl);
+        return accounts;
+    }
+
+    public async Task PostAccount(AccountModel account)
+    {
+        string url = Constants.AccountsBaseUrl;
+        if (!IsValidUrl(url))
+        {
+            throw new ArgumentException("Invalid URL", nameof(url));
+        }
+
+        HttpResponseMessage response = await client.PostAsJsonAsync(url, account);
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task<Ciphertext?> GetBalance()
+    public async Task DeleteAccount(int accountId)
     {
-        if (!IsValidUrl(Constants.BalanceUrl))
+        string url = $"{Constants.AccountsBaseUrl}/{accountId}";
+        if (!IsValidUrl(url))
         {
-            throw new ArgumentException("Invalid URL", nameof(Constants.BalanceUrl));
+            throw new ArgumentException("Invalid URL", nameof(url));
+        }
+
+        HttpResponseMessage response = await client.DeleteAsync(url);
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task PostTransaction(Serializable<Ciphertext> transaction, int accountId)
+    {
+        string url = $"{Constants.AccountsBaseUrl}/{accountId}/transaction";
+        if (!IsValidUrl(url))
+        {
+            throw new ArgumentException("Invalid URL", nameof(url));
+        }
+
+        using MemoryStream stream = new(); // can I use `using`?
+        transaction.Save(stream);
+        stream.Seek(0, SeekOrigin.Begin);
+        using StreamContent content = new(stream);
+        HttpResponseMessage response = await client.PostAsync(url, content);
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task<Ciphertext?> GetBalance(int accountId)
+    {
+        // TODO: find a better way to get the URL
+        string url = $"{Constants.AccountsBaseUrl}/{accountId}/balance";
+        if (!IsValidUrl(url))
+        {
+            throw new ArgumentException("Invalid URL", nameof(url));
         }
 
         if (ClientConfig.EncryptionHelper.Context == null)
@@ -66,18 +107,17 @@ public class ApiAccessor
             throw new InvalidOperationException("SEALContext must be set.");
         }
 
-        Stream stream = await client.GetStreamAsync(Constants.BalanceUrl);
-        MemoryStream memoryStream = new();
-        stream.CopyTo(memoryStream);
-
-        if (memoryStream.Length == 0)
+        Stream stream = await client.GetStreamAsync(url);
+        MemoryStream memStream = new();
+        stream.CopyTo(memStream);
+        if (memStream.Length == 0)
         {
             return null;
         }
+        memStream.Seek(0, SeekOrigin.Begin);
 
-        memoryStream.Seek(0, SeekOrigin.Begin);
         Ciphertext ciphertext = new();
-        ciphertext.Load(ClientConfig.EncryptionHelper.Context, memoryStream);
+        ciphertext.Load(ClientConfig.EncryptionHelper.Context, memStream);
         return ciphertext;
     }
 

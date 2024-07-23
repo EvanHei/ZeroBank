@@ -12,6 +12,6 @@ public static class Constants
     private static readonly string appDirectoryPath = Path.Combine(appDataPath, "ZeroBank");
 
     public static readonly string ServerDirectoryPath = Path.Combine(appDirectoryPath, "WebAPI");
-    public static readonly string TransactionsFilePath = Path.Combine(ServerDirectoryPath, "transactions.bin");
     public static readonly string RelinKeysFilePath = Path.Combine(ServerDirectoryPath, "relin_keys.bin");
+    public static readonly string AccountsFilePath = Path.Combine(ServerDirectoryPath, "accounts.json");
 }

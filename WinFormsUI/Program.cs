@@ -1,5 +1,4 @@
 using ClientLibrary;
-using Microsoft.Research.SEAL;
 
 namespace WinFormsUI
 {
@@ -16,5 +15,5 @@ namespace WinFormsUI
             ApplicationConfiguration.Initialize();
             Application.Run(new Dashboard());
         }
-    }
+    } 
 }

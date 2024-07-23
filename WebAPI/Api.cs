@@ -1,5 +1,6 @@
 ﻿using Microsoft.Research.SEAL;
 using ServerLibrary;
+using SharedLibrary;
 using System.IO;
 
 namespace WebAPI;
@@ -10,11 +11,14 @@ public static class Api
     {
         app.MapGet("/parms", GetParms);
         app.MapPost("/relinkeys", PostRelinKeys);
-        app.MapPost("/transaction", PostTransaction);
-        app.MapGet("/balance", GetBalance);
+        app.MapGet("/accounts", GetAccounts);
+        app.MapPost("/accounts", PostAccount);
+        app.MapDelete("/accounts/{id}", DeleteAccount);
+        app.MapPost("/accounts/{id}/transaction", PostTransaction);
+        app.MapGet("/accounts/{id}/balance", GetBalance);
     }
 
-    static IResult GetParms()
+    private static IResult GetParms()
     {
         try
         {
@@ -29,7 +33,7 @@ public static class Api
         }
     }
 
-    static IResult PostRelinKeys(HttpContext context)
+    private static IResult PostRelinKeys(HttpContext context)
     {
         try
         {
@@ -45,14 +49,14 @@ public static class Api
         }
     }
 
-    static IResult PostTransaction(HttpContext context)
+    private static IResult PostTransaction(HttpContext context, int id)
     {
         try
         {
             using MemoryStream stream = new();
             context.Request.Body.CopyToAsync(stream);
             stream.Seek(0, SeekOrigin.Begin);
-            ServerConfig.DataAccessor.SaveTransaction(stream);
+            ServerConfig.DataAccessor.AddTransaction(stream, id);
             return Results.Ok();
         }
         catch (Exception ex)
@@ -61,11 +65,11 @@ public static class Api
         }
     }
 
-    static IResult GetBalance()
+    private static IResult GetBalance(int id)
     {
         try
         {
-            Ciphertext? balance = ServerConfig.EncryptionHelper.GetBalance();
+            using Ciphertext? balance = ServerConfig.EncryptionHelper.GetBalance(id);
             if (balance == null)
             {
                 return Results.Problem("There are no transactions.");
@@ -75,6 +79,45 @@ public static class Api
             balance.Save(stream);
             stream.Seek(0, SeekOrigin.Begin);
             return Results.Stream(stream);
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
+
+    private static IResult GetAccounts()
+    {
+        try
+        {
+            List<AccountModel> accounts = ServerConfig.DataAccessor.LoadAccounts();
+            return Results.Ok(accounts);
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
+
+    private static IResult PostAccount(AccountModel account)
+    {
+        try
+        {
+            ServerConfig.DataAccessor.AddAccount(account);
+            return Results.Ok();
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
+
+    private static IResult DeleteAccount(int id)
+    {
+        try
+        {
+            ServerConfig.DataAccessor.DeleteAccount(id);
+            return Results.Ok();
         }
         catch (Exception ex)
         {
