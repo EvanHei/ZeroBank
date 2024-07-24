@@ -15,9 +15,7 @@ public static class Constants
     public static readonly string AccountsDirectoryPath = Path.Combine(ClientDirectoryPath, "Accounts");
     public static readonly string PublicKeyFilePath = Path.Combine(ClientDirectoryPath, "public_key.bin");
     public static readonly string SecretKeyFilePath = Path.Combine(ClientDirectoryPath, "secret_key.bin");
-    public static readonly string RelinKeysFilePath = Path.Combine(ClientDirectoryPath, "relin_keys.bin"); // not needed
     public static readonly string ParmsFilePath = Path.Combine(ClientDirectoryPath, "parms.bin");
     public static readonly string ParmsUrl = "https://localhost:7188/parms";
-    public static readonly string RelinKeysUrl = "https://localhost:7188/relinkeys";
     public static readonly string AccountsBaseUrl = "https://localhost:7188/accounts";
 }

@@ -9,14 +9,13 @@ namespace SharedLibrary;
 public class TransactionBlockData
 {
     public byte[] Transaction { get; set; }
-    public DateTime Timestamp { get; set; }
     public byte[] ClientDigSig { get; set; }
     public byte[] ServerDigSig { get; set; }
+    public DateTime Timestamp { get; } = DateTime.Now;
 
-    public TransactionBlockData(byte[] transaction, byte[] clientDigSig, DateTime timestamp)
+    public TransactionBlockData(byte[] transaction, byte[] clientDigSig)
     {
         Transaction = transaction;
         ClientDigSig = clientDigSig;
-        Timestamp = timestamp;
     }
 }

@@ -76,53 +76,6 @@ public class JsonAccessor
         return secretKey;
     }
 
-    public void SaveRelinKeys(Serializable<RelinKeys> relinKeys)
-    {
-        if (relinKeys == null)
-        {
-            throw new ArgumentNullException(nameof(relinKeys), "Relinearizaion keys cannot be null.");
-        }
-
-        using FileStream stream = new(Constants.RelinKeysFilePath, FileMode.Open, FileAccess.Write);
-        relinKeys.Save(stream);
-    }
-
-    public RelinKeys? LoadRelinKeys()
-    {
-        if (!File.Exists(Constants.RelinKeysFilePath))
-        {
-            return null;
-        }
-
-        if (ClientConfig.EncryptionHelper.Context == null)
-        {
-            return null;
-        }
-
-        using FileStream stream = new(Constants.RelinKeysFilePath, FileMode.Open, FileAccess.Read);
-        RelinKeys relinKeys = new();
-        relinKeys.Load(ClientConfig.EncryptionHelper.Context, stream);
-        return relinKeys;
-    }
-
-    public byte[]? LoadRelinKeysBytes()
-    {
-        if (!File.Exists(Constants.RelinKeysFilePath))
-        {
-            return null;
-        }
-
-        if (ClientConfig.EncryptionHelper.Context == null)
-        {
-            return null;
-        }
-
-        using FileStream stream = new(Constants.RelinKeysFilePath, FileMode.Open, FileAccess.Read);
-        using MemoryStream memStream = new();
-        stream.CopyTo(memStream);
-        return memStream.ToArray();
-    }
-
     public void SaveParms(EncryptionParameters parms)
     {
         if (parms == null)

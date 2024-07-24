@@ -109,6 +109,7 @@ public class JsonAccessor
     public Blockchain? LoadAccountById(int accountId)
     {
         Blockchain? account = LoadAccounts().Where(a => a.GetData<GenesisBlockData>(0).AccountId == accountId).FirstOrDefault();
+        account?.EnsureValid();
         return account;
     }
 
@@ -121,10 +122,10 @@ public class JsonAccessor
     }
 
     public List<Ciphertext> LoadTransactionsById(int accountId)
-   {
+    {
         Blockchain? account = LoadAccounts().FirstOrDefault(a => a.GetData<GenesisBlockData>(0).AccountId == accountId) ?? throw new InvalidOperationException("Account not found.");
-
         List<Ciphertext> transactions = new();
+        account?.EnsureValid();
 
         for (int i = 1; i < account.Chain.Count; i++)
         {

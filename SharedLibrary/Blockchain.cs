@@ -24,20 +24,23 @@ public class Blockchain
         Chain.Add(newBlock);
     }
 
-    public bool IsValid()
+    public void EnsureValid()
     {
         for (int i = 1; i < Chain.Count; i++)
         {
             Block currentBlock = Chain[i];
             Block previousBlock = Chain[i - 1];
 
-            if (currentBlock.Hash != currentBlock.CalculateHash() ||
-                currentBlock.PreviousHash != previousBlock.Hash)
+            if (currentBlock.Hash != currentBlock.CalculateHash())
             {
-                return false;
+                throw new InvalidOperationException($"Blockchain is not valid at block index {i}. Current block's hash is invalid.");
+            }
+
+            if (currentBlock.PreviousHash != previousBlock.Hash)
+            {
+                throw new InvalidOperationException($"Blockchain is not valid at block index {i}. Previous hash does not match.");
             }
         }
-        return true;
     }
 
     public string SerializeToJson()

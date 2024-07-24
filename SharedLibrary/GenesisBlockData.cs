@@ -18,6 +18,7 @@ public class GenesisBlockData
     //public byte[] ServerPublicKey { get; set; }
     //public byte[] ClientDigSig { get; set; }
     //public byte[] ServerDigSig { get; set; }
+    public DateTime Timestamp { get; } = DateTime.Now;
 
     public GenesisBlockData(string accountName, AccountType accountType, byte[] relinKeys)
     {

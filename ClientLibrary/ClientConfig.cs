@@ -18,10 +18,9 @@ public static class ClientConfig
         if (!File.Exists(Constants.ParmsFilePath))
         {
             EncryptionHelper.Parms = await ApiAccessor.GetEncryptionParameters();
-            (PublicKey publicKey, SecretKey secretKey, Serializable<RelinKeys> relinKeys) = EncryptionHelper.GenerateKeys();
+            (PublicKey publicKey, SecretKey secretKey, Serializable<RelinKeys> relinKeys) = EncryptionHelper.GenerateKeys(); // needed once the keys are written to the genesis block?
             DataAccessor.SavePublicKey(publicKey);
             DataAccessor.SaveSecretKey(secretKey);
-            DataAccessor.SaveRelinKeys(relinKeys);
             DataAccessor.SaveParms(EncryptionHelper.Parms);
         }
         else
