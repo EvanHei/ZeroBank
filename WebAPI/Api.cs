@@ -89,7 +89,8 @@ public static class Api
         try
         {
             List<Ciphertext> transactions = ServerConfig.DataAccessor.LoadTransactionsById(id);
-            using Ciphertext? balance = ServerConfig.EncryptionHelper.GetBalance(transactions, id);
+            RelinKeys? relinKeys = ServerConfig.DataAccessor.LoadRelinKeysById(id);
+            using Ciphertext? balance = ServerConfig.EncryptionHelper.GetBalance(transactions, id, relinKeys);
             if (balance == null)
             {
                 return Results.Problem("There are no transactions.");

@@ -10,9 +10,9 @@ using System.Transactions;
 
 namespace ClientLibrary;
 
-public class DataAccessor
+public class JsonAccessor
 {
-    public DataAccessor()
+    public JsonAccessor()
     {
         Directory.CreateDirectory(Constants.ClientDirectoryPath);
         Directory.CreateDirectory(Constants.AccountsDirectoryPath);
@@ -105,7 +105,7 @@ public class DataAccessor
         return relinKeys;
     }
 
-    public Stream? LoadRelinKeysStream()
+    public byte[]? LoadRelinKeysBytes()
     {
         if (!File.Exists(Constants.RelinKeysFilePath))
         {
@@ -117,8 +117,10 @@ public class DataAccessor
             return null;
         }
 
-        FileStream stream = new(Constants.RelinKeysFilePath, FileMode.Open, FileAccess.Read);
-        return stream;
+        using FileStream stream = new(Constants.RelinKeysFilePath, FileMode.Open, FileAccess.Read);
+        using MemoryStream memStream = new();
+        stream.CopyTo(memStream);
+        return memStream.ToArray();
     }
 
     public void SaveParms(EncryptionParameters parms)

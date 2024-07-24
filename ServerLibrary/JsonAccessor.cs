@@ -11,12 +11,14 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Transactions;
+using static SharedLibrary.Blockchain;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ServerLibrary;
 
-public class DataAccessor
+public class JsonAccessor
 {
-    public DataAccessor()
+    public JsonAccessor()
     {
         Directory.CreateDirectory(Constants.ServerDirectoryPath);
         Directory.CreateDirectory(Constants.AccountsDirectoryPath);
@@ -45,17 +47,14 @@ public class DataAccessor
         }    
     }
 
-    public RelinKeys? LoadRelinKeys()
+    public RelinKeys? LoadRelinKeysById(int accountId)
     {
-        if (!File.Exists(Constants.RelinKeysFilePath))
-        {
-            return null;
-        }
-
-        using FileStream stream = new(Constants.RelinKeysFilePath, FileMode.Open, FileAccess.Read);
-        RelinKeys keys = new();
-        keys.Load(ServerConfig.EncryptionHelper.Context, stream);
-        return keys;
+        Blockchain? account = LoadAccounts().FirstOrDefault(a => a.GetData<GenesisBlockData>(0).AccountId == accountId) ?? throw new InvalidOperationException("Account not found.");
+        byte[] relinKeysBytes = account.GetData<GenesisBlockData>(0).RelinKeys;
+        MemoryStream stream = new(relinKeysBytes);
+        RelinKeys relinKeys = new();
+        relinKeys.Load(ServerConfig.EncryptionHelper.Context, stream);
+        return relinKeys;
     }
 
     public GenesisBlockData CreateAccount(GenesisBlockData genesisBlockData)
@@ -65,7 +64,7 @@ public class DataAccessor
             throw new ArgumentException("Account cannot be null.");
         }
 
-        // get a new accountId
+        // get a new account ID
         List<Blockchain> accounts = LoadAccounts();
         genesisBlockData.AccountId = accounts.Count != 0 ? accounts.Max(a => a.GetData<GenesisBlockData>(0).AccountId) + 1 : 1;
 
@@ -124,6 +123,7 @@ public class DataAccessor
     public List<Ciphertext> LoadTransactionsById(int accountId)
    {
         Blockchain? account = LoadAccounts().FirstOrDefault(a => a.GetData<GenesisBlockData>(0).AccountId == accountId) ?? throw new InvalidOperationException("Account not found.");
+
         List<Ciphertext> transactions = new();
 
         for (int i = 1; i < account.Chain.Count; i++)

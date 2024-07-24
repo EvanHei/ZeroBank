@@ -8,6 +8,6 @@ namespace ServerLibrary;
 
 public static class ServerConfig
 {
-    public static DataAccessor DataAccessor { get; set; } = new DataAccessor();
+    public static JsonAccessor DataAccessor { get; set; } = new JsonAccessor();
     public static EncryptionHelper EncryptionHelper { get; set; } = new EncryptionHelper();
 }

@@ -26,14 +26,13 @@ public class EncryptionHelper
         Evaluator = new Evaluator(Context);
     }
 
-    public Ciphertext? GetBalance(List<Ciphertext> transactions, int accountId)
+    public Ciphertext? GetBalance(List<Ciphertext> transactions, int accountId, RelinKeys? relinKeys = null)
     {
         if (transactions == null || transactions.Count == 0)
         {
             return null;
         }
 
-        RelinKeys? relinKeys = ServerConfig.DataAccessor.LoadRelinKeys();
         Ciphertext balance = new(transactions[0]);
 
         for (int i = 1; i < transactions.Count; i++)
