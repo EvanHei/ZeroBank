@@ -10,12 +10,11 @@ public static class Api
     public static void ConfigureApi(this WebApplication app)
     {
         app.MapGet("/parms", GetParms);
-        app.MapPost("/relinkeys", PostRelinKeys);
         app.MapGet("/accounts", GetAccounts);
         app.MapPost("/accounts", PostAccount);
-        app.MapDelete("/accounts/{id}", DeleteAccount);
-        app.MapPost("/accounts/{id}/transaction", PostTransaction);
-        app.MapGet("/accounts/{id}/balance", GetBalance);
+        app.MapDelete("/accounts/{id}", DeleteAccountById);
+        app.MapPost("/accounts/{id}/transaction", PostTransactionById);
+        app.MapGet("/accounts/{id}/balance", GetBalanceById);
     }
 
     private static IResult GetParms()
@@ -33,14 +32,37 @@ public static class Api
         }
     }
 
-    private static IResult PostRelinKeys(HttpContext context)
+    private static IResult GetAccounts()
     {
         try
         {
-            using MemoryStream stream = new();
-            context.Request.Body.CopyToAsync(stream);
-            stream.Seek(0, SeekOrigin.Begin);
-            ServerConfig.DataAccessor.SaveRelinKeys(stream);
+            List<Blockchain> accounts = ServerConfig.DataAccessor.LoadAccounts();
+            return Results.Ok(accounts);
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
+
+    private static IResult PostAccount(GenesisBlockData genesisBlockData)
+    {
+        try
+        {
+            GenesisBlockData signedData = ServerConfig.DataAccessor.CreateAccount(genesisBlockData);
+            return Results.Ok(signedData);
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
+
+    private static IResult DeleteAccountById(int id)
+    {
+        try
+        {
+            ServerConfig.DataAccessor.DeleteAccountById(id);
             return Results.Ok();
         }
         catch (Exception ex)
@@ -49,15 +71,12 @@ public static class Api
         }
     }
 
-    private static IResult PostTransaction(HttpContext context, int id)
+    private static IResult PostTransactionById(TransactionBlockData transactionBlockData, int id)
     {
         try
         {
-            using MemoryStream stream = new();
-            context.Request.Body.CopyToAsync(stream);
-            stream.Seek(0, SeekOrigin.Begin);
-            ServerConfig.DataAccessor.AddTransaction(stream, id);
-            return Results.Ok();
+            TransactionBlockData signedData = ServerConfig.DataAccessor.AddTransactionById(transactionBlockData, id);
+            return Results.Ok(signedData);
         }
         catch (Exception ex)
         {
@@ -65,11 +84,12 @@ public static class Api
         }
     }
 
-    private static IResult GetBalance(int id)
+    private static IResult GetBalanceById(int id)
     {
         try
         {
-            using Ciphertext? balance = ServerConfig.EncryptionHelper.GetBalance(id);
+            List<Ciphertext> transactions = ServerConfig.DataAccessor.LoadTransactionsById(id);
+            using Ciphertext? balance = ServerConfig.EncryptionHelper.GetBalance(transactions, id);
             if (balance == null)
             {
                 return Results.Problem("There are no transactions.");
@@ -79,45 +99,6 @@ public static class Api
             balance.Save(stream);
             stream.Seek(0, SeekOrigin.Begin);
             return Results.Stream(stream);
-        }
-        catch (Exception ex)
-        {
-            return Results.Problem(ex.Message);
-        }
-    }
-
-    private static IResult GetAccounts()
-    {
-        try
-        {
-            List<AccountModel> accounts = ServerConfig.DataAccessor.LoadAccounts();
-            return Results.Ok(accounts);
-        }
-        catch (Exception ex)
-        {
-            return Results.Problem(ex.Message);
-        }
-    }
-
-    private static IResult PostAccount(AccountModel account)
-    {
-        try
-        {
-            ServerConfig.DataAccessor.AddAccount(account);
-            return Results.Ok();
-        }
-        catch (Exception ex)
-        {
-            return Results.Problem(ex.Message);
-        }
-    }
-
-    private static IResult DeleteAccount(int id)
-    {
-        try
-        {
-            ServerConfig.DataAccessor.DeleteAccount(id);
-            return Results.Ok();
         }
         catch (Exception ex)
         {

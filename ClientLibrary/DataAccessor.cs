@@ -1,8 +1,10 @@
 ﻿using Microsoft.Research.SEAL;
+using SharedLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -13,6 +15,7 @@ public class DataAccessor
     public DataAccessor()
     {
         Directory.CreateDirectory(Constants.ClientDirectoryPath);
+        Directory.CreateDirectory(Constants.AccountsDirectoryPath);
     }
 
     public void SavePublicKey(PublicKey publicKey)
@@ -140,5 +143,82 @@ public class DataAccessor
         EncryptionParameters parms = new();
         parms.Load(stream);
         return parms;
+    }
+
+    public void CreateAccount(GenesisBlockData genesisBlockData)
+    {
+        if (genesisBlockData == null)
+        {
+            throw new ArgumentException("Account cannot be null.");
+        }
+
+        // get a new accountId
+        List<Blockchain> accounts = LoadAccounts();
+        genesisBlockData.AccountId = accounts.Count != 0 ? accounts.Max(a => a.GetData<GenesisBlockData>(0).AccountId) + 1 : 1;
+
+        // TODO: verify server signature
+
+        // create and save new account blockchain
+        Blockchain account = new();
+        account.AddBlock(genesisBlockData);
+        SaveAccount(account);
+    }
+
+    private void SaveAccount(Blockchain account)
+    {
+        string json = account.SerializeToJson();
+
+        // filename is format <accountId>.json
+        string path = Path.Combine(Constants.AccountsDirectoryPath, $"{account.GetData<GenesisBlockData>(0).AccountId}.json");
+        File.WriteAllText(path, json);
+    }
+
+    public List<Blockchain> LoadAccounts()
+    {
+        if (!Directory.Exists(Constants.AccountsDirectoryPath))
+        {
+            throw new DirectoryNotFoundException($"Directory not found: {Constants.AccountsDirectoryPath}");
+        }
+
+        List<Blockchain> accounts = new();
+
+        string[] accountFiles = Directory.GetFiles(Constants.AccountsDirectoryPath);
+        foreach (string accountFile in accountFiles)
+        {
+            string json = File.ReadAllText(accountFile);
+            Blockchain account = JsonSerializer.Deserialize<Blockchain>(json);
+            accounts.Add(account);
+        }
+
+        return accounts;
+    }
+
+    public Blockchain? LoadAccountById(int accountId)
+    {
+        Blockchain? account = LoadAccounts().Where(a => a.GetData<GenesisBlockData>(0).AccountId == accountId).FirstOrDefault();
+        return account;
+    }
+
+    public void DeleteAccountById(int accountId)
+    {
+        List<Blockchain> accounts = LoadAccounts();
+        Blockchain? accountToRemove = accounts.FirstOrDefault(a => a.GetData<GenesisBlockData>(0).AccountId == accountId) ?? throw new InvalidOperationException("Account not found.");
+        string path = Path.Combine(Constants.AccountsDirectoryPath, $"{accountToRemove.GetData<GenesisBlockData>(0).AccountId}.json");
+        File.Delete(path);
+    }
+
+    public void AddTransactionById(TransactionBlockData transactionBlockData, int accountId)
+    {
+        // verify data will generate a ciphertext
+        using MemoryStream stream = new(transactionBlockData.Transaction);
+        Ciphertext transaction = new();
+        transaction.Load(ClientConfig.EncryptionHelper.Context, stream);
+
+        Blockchain? account = LoadAccounts().FirstOrDefault(a => a.GetData<GenesisBlockData>(0).AccountId == accountId) ?? throw new InvalidOperationException("Account not found.");
+
+        // TODO: verify server signature
+
+        account.AddBlock(transactionBlockData);
+        SaveAccount(account);
     }
 }

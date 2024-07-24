@@ -26,9 +26,8 @@ public class EncryptionHelper
         Evaluator = new Evaluator(Context);
     }
 
-    public Ciphertext? GetBalance(int accountId)
+    public Ciphertext? GetBalance(List<Ciphertext> transactions, int accountId)
     {
-        List<Ciphertext>? transactions = ServerConfig.DataAccessor.LoadTransactions(accountId);
         if (transactions == null || transactions.Count == 0)
         {
             return null;

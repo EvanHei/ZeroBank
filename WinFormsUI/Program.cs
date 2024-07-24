@@ -1,4 +1,6 @@
 using ClientLibrary;
+using Microsoft.Research.SEAL;
+using SharedLibrary;
 
 namespace WinFormsUI
 {

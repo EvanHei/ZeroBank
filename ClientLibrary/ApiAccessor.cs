@@ -30,30 +30,18 @@ public class ApiAccessor
         return parms;
     }
 
-    public async Task PostRelinKeys(Stream stream)
-    {
-        if (!IsValidUrl(Constants.RelinKeysUrl))
-        {
-            throw new ArgumentException("Invalid URL", nameof(Constants.RelinKeysUrl));
-        }
-
-        using StreamContent content = new(stream);
-        HttpResponseMessage response = await client.PostAsync(Constants.RelinKeysUrl, content);
-        response.EnsureSuccessStatusCode();
-    }
-
-    public async Task<List<AccountModel>> GetAccounts()
+    public async Task<List<Blockchain>> GetAccounts()
     {
         if (!IsValidUrl(Constants.AccountsBaseUrl))
         {
             throw new ArgumentException("Invalid URL", nameof(Constants.AccountsBaseUrl));
         }
 
-        List<AccountModel> accounts = await client.GetFromJsonAsync<List<AccountModel>>(Constants.AccountsBaseUrl);
+        List<Blockchain> accounts = await client.GetFromJsonAsync<List<Blockchain>>(Constants.AccountsBaseUrl);
         return accounts;
     }
 
-    public async Task PostAccount(AccountModel account)
+    public async Task<GenesisBlockData> PostAccount(GenesisBlockData genesisBlockData)
     {
         string url = Constants.AccountsBaseUrl;
         if (!IsValidUrl(url))
@@ -61,11 +49,13 @@ public class ApiAccessor
             throw new ArgumentException("Invalid URL", nameof(url));
         }
 
-        HttpResponseMessage response = await client.PostAsJsonAsync(url, account);
+        HttpResponseMessage response = await client.PostAsJsonAsync(url, genesisBlockData);
         response.EnsureSuccessStatusCode();
+        GenesisBlockData returnedGenesisBlockData = await response.Content.ReadFromJsonAsync<GenesisBlockData>();
+        return returnedGenesisBlockData;
     }
 
-    public async Task DeleteAccount(int accountId)
+    public async Task DeleteAccountById(int accountId)
     {
         string url = $"{Constants.AccountsBaseUrl}/{accountId}";
         if (!IsValidUrl(url))
@@ -77,7 +67,7 @@ public class ApiAccessor
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task PostTransaction(Serializable<Ciphertext> transaction, int accountId)
+    public async Task<TransactionBlockData> PostTransactionById(TransactionBlockData transactionBlockData, int accountId)
     {
         string url = $"{Constants.AccountsBaseUrl}/{accountId}/transaction";
         if (!IsValidUrl(url))
@@ -85,17 +75,14 @@ public class ApiAccessor
             throw new ArgumentException("Invalid URL", nameof(url));
         }
 
-        using MemoryStream stream = new(); // can I use `using`?
-        transaction.Save(stream);
-        stream.Seek(0, SeekOrigin.Begin);
-        using StreamContent content = new(stream);
-        HttpResponseMessage response = await client.PostAsync(url, content);
+        HttpResponseMessage response = await client.PostAsJsonAsync(url, transactionBlockData);
         response.EnsureSuccessStatusCode();
+        TransactionBlockData returnedTransactionBlockData = await response.Content.ReadFromJsonAsync<TransactionBlockData>();
+        return returnedTransactionBlockData;
     }
 
-    public async Task<Ciphertext?> GetBalance(int accountId)
+    public async Task<Ciphertext?> GetBalanceById(int accountId)
     {
-        // TODO: find a better way to get the URL
         string url = $"{Constants.AccountsBaseUrl}/{accountId}/balance";
         if (!IsValidUrl(url))
         {
