@@ -10,7 +10,6 @@ using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Transactions;
 using static SharedLibrary.Blockchain;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -24,119 +23,90 @@ public class JsonAccessor
         Directory.CreateDirectory(Constants.AccountsDirectoryPath);
     }
 
-    public void SaveRelinKeys(Stream stream)
+    public RelinKeys? LoadRelinKeysById(int id)
     {
-        if (stream.Length == 0)
-        {
-            return;
-        }
-
-        // try to deserialize successfully, then write to file
-        try
-        {
-            RelinKeys relinKeys = new();
-            relinKeys.Load(ServerConfig.EncryptionHelper.Context, stream);
-            stream.Seek(0, SeekOrigin.Begin);
-            using FileStream fileStream = new(Constants.RelinKeysFilePath, FileMode.Create, FileAccess.Write);
-            stream.CopyTo(fileStream);
-
-        }
-        catch (Exception ex)
-        {
-            // TODO: log failure
-        }    
-    }
-
-    public RelinKeys? LoadRelinKeysById(int accountId)
-    {
-        Blockchain? account = LoadAccounts().FirstOrDefault(a => a.GetData<GenesisBlockData>(0).AccountId == accountId) ?? throw new InvalidOperationException("Account not found.");
-        byte[] relinKeysBytes = account.GetData<GenesisBlockData>(0).RelinKeys;
-        MemoryStream stream = new(relinKeysBytes);
+        Account? account = LoadAccountById(id);
+        byte[] relinKeysBytes = account.RelinKeys;
+        using MemoryStream stream = new(relinKeysBytes);
         RelinKeys relinKeys = new();
         relinKeys.Load(ServerConfig.EncryptionHelper.Context, stream);
         return relinKeys;
     }
 
-    public GenesisBlockData CreateAccount(GenesisBlockData genesisBlockData)
+    public Account CreateAccount(Account account)
     {
-        if (genesisBlockData == null)
+        if (account == null)
         {
             throw new ArgumentException("Account cannot be null.");
         }
 
         // get a new account ID
-        List<Blockchain> accounts = LoadAccounts();
-        genesisBlockData.AccountId = accounts.Count != 0 ? accounts.Max(a => a.GetData<GenesisBlockData>(0).AccountId) + 1 : 1;
+        List<Account> accounts = LoadAccounts();
+        account.Id = accounts.Count != 0 ? accounts.Max(a => a.Id) + 1 : 1;
 
         // TODO: verify client signature and then sign
 
-        // create and save new account blockchain
-        Blockchain account = new();
-        account.AddBlock(genesisBlockData);
+        // save new account
         SaveAccount(account);
-        return genesisBlockData;
+        return account;
     }
 
-    private void SaveAccount(Blockchain account)
+    private void SaveAccount(Account account)
     {
         string json = account.SerializeToJson();
 
-        // filename is format <accountId>.json
-        string path = Path.Combine(Constants.AccountsDirectoryPath, $"{account.GetData<GenesisBlockData>(0).AccountId}.json");
+        // filename is format <Name>.json
+        string path = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
         File.WriteAllText(path, json);
     }
 
-    public List<Blockchain> LoadAccounts()
+    public List<Account> LoadAccounts()
     {
         if (!Directory.Exists(Constants.AccountsDirectoryPath))
         {
             throw new DirectoryNotFoundException($"Directory not found: { Constants.AccountsDirectoryPath}");
         }
 
-        List<Blockchain> accounts = new();
+        List<Account> accounts = new();
 
         string[] accountFiles = Directory.GetFiles(Constants.AccountsDirectoryPath);
         foreach (string accountFile in accountFiles)
         {
             string json = File.ReadAllText(accountFile);
-            Blockchain account = JsonSerializer.Deserialize<Blockchain>(json);
+            Account account = JsonSerializer.Deserialize<Account>(json);
             accounts.Add(account);
         }
-
         return accounts;
     }
 
-    public Blockchain? LoadAccountById(int accountId)
+    private Account? LoadAccountById(int id)
     {
-        Blockchain? account = LoadAccounts().Where(a => a.GetData<GenesisBlockData>(0).AccountId == accountId).FirstOrDefault();
+        Account? account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException("Account not found.");
         account?.EnsureValid();
         return account;
     }
 
-    public void DeleteAccountById(int accountId)
+    public void DeleteAccountById(int id)
     {
-        List<Blockchain> accounts = LoadAccounts();
-        Blockchain? accountToRemove = accounts.FirstOrDefault(a => a.GetData<GenesisBlockData>(0).AccountId == accountId) ?? throw new InvalidOperationException("Account not found.");
-        string path = Path.Combine(Constants.AccountsDirectoryPath, $"{accountToRemove.GetData<GenesisBlockData>(0).AccountId}.json");
+        Account? account = LoadAccountById(id);
+        string path = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
         File.Delete(path);
     }
 
-    public List<Ciphertext> LoadTransactionsById(int accountId)
+    public List<Ciphertext> LoadTransactionsById(int id)
     {
-        Blockchain? account = LoadAccounts().FirstOrDefault(a => a.GetData<GenesisBlockData>(0).AccountId == accountId) ?? throw new InvalidOperationException("Account not found.");
+        Account? account = LoadAccountById(id);
         List<Ciphertext> transactions = new();
         account?.EnsureValid();
 
-        for (int i = 1; i < account.Chain.Count; i++)
+        foreach (Transaction transaction in account.Transactions)
         {
             try
             {
-                byte[] transactionBytes = account.GetData<TransactionBlockData>(i).Transaction;
-                using MemoryStream stream = new(transactionBytes);
-                Ciphertext transaction = new();
-                transaction.Load(ServerConfig.EncryptionHelper.Context, stream);
-                transactions.Add(transaction);
-
+                using MemoryStream stream = new(transaction.Data);
+                Ciphertext ciphertext = new();
+                ciphertext.Load(ServerConfig.EncryptionHelper.Context, stream);
+                transactions.Add(ciphertext);
             }
             catch (Exception ex)
             {
@@ -147,19 +117,19 @@ public class JsonAccessor
         return transactions;
     }
 
-    public TransactionBlockData AddTransactionById(TransactionBlockData transactionBlockData, int accountId)
+    public Transaction AddTransactionById(Transaction transaction, int id)
     {
         // verify data will generate a ciphertext
-        using MemoryStream stream = new(transactionBlockData.Transaction);
-        Ciphertext transaction = new();
-        transaction.Load(ServerConfig.EncryptionHelper.Context, stream);
+        using MemoryStream stream = new(transaction.Data);
+        using Ciphertext ciphertext = new();
+        ciphertext.Load(ServerConfig.EncryptionHelper.Context, stream);
 
-        Blockchain? account = LoadAccounts().FirstOrDefault(a => a.GetData<GenesisBlockData>(0).AccountId == accountId) ?? throw new InvalidOperationException("Account not found.");
+        Account? account = LoadAccountById(id);
 
         // TODO: verify client signature and then sign
 
-        account.AddBlock(transactionBlockData);
+        account.Transactions.Add(transaction);
         SaveAccount(account);
-        return transactionBlockData;
+        return transaction;
     }
 }

@@ -30,18 +30,18 @@ public class ApiAccessor
         return parms;
     }
 
-    public async Task<List<Blockchain>> GetAccounts()
+    public async Task<List<Account>> GetAccounts()
     {
         if (!IsValidUrl(Constants.AccountsBaseUrl))
         {
             throw new ArgumentException("Invalid URL", nameof(Constants.AccountsBaseUrl));
         }
 
-        List<Blockchain> accounts = await client.GetFromJsonAsync<List<Blockchain>>(Constants.AccountsBaseUrl);
+        List<Account> accounts = await client.GetFromJsonAsync<List<Account>>(Constants.AccountsBaseUrl);
         return accounts;
     }
 
-    public async Task<GenesisBlockData> PostAccount(GenesisBlockData genesisBlockData)
+    public async Task<Account> PostAccount(Account account)
     {
         string url = Constants.AccountsBaseUrl;
         if (!IsValidUrl(url))
@@ -49,15 +49,15 @@ public class ApiAccessor
             throw new ArgumentException("Invalid URL", nameof(url));
         }
 
-        HttpResponseMessage response = await client.PostAsJsonAsync(url, genesisBlockData);
+        HttpResponseMessage response = await client.PostAsJsonAsync(url, account);
         response.EnsureSuccessStatusCode();
-        GenesisBlockData returnedGenesisBlockData = await response.Content.ReadFromJsonAsync<GenesisBlockData>();
-        return returnedGenesisBlockData;
+        Account returnedAccount = await response.Content.ReadFromJsonAsync<Account>();
+        return returnedAccount;
     }
 
-    public async Task DeleteAccountById(int accountId)
+    public async Task DeleteAccountById(int id)
     {
-        string url = $"{Constants.AccountsBaseUrl}/{accountId}";
+        string url = $"{Constants.AccountsBaseUrl}/{id}";
         if (!IsValidUrl(url))
         {
             throw new ArgumentException("Invalid URL", nameof(url));
@@ -67,23 +67,23 @@ public class ApiAccessor
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task<TransactionBlockData> PostTransactionById(TransactionBlockData transactionBlockData, int accountId)
+    public async Task<Transaction> PostTransactionById(Transaction transaction, int id)
     {
-        string url = $"{Constants.AccountsBaseUrl}/{accountId}/transaction";
+        string url = $"{Constants.AccountsBaseUrl}/{id}/transaction";
         if (!IsValidUrl(url))
         {
             throw new ArgumentException("Invalid URL", nameof(url));
         }
 
-        HttpResponseMessage response = await client.PostAsJsonAsync(url, transactionBlockData);
+        HttpResponseMessage response = await client.PostAsJsonAsync(url, transaction);
         response.EnsureSuccessStatusCode();
-        TransactionBlockData returnedTransactionBlockData = await response.Content.ReadFromJsonAsync<TransactionBlockData>();
-        return returnedTransactionBlockData;
+        Transaction returnedTransaction = await response.Content.ReadFromJsonAsync<Transaction>();
+        return returnedTransaction;
     }
 
-    public async Task<Ciphertext?> GetBalanceById(int accountId)
+    public async Task<Ciphertext?> GetBalanceById(int id)
     {
-        string url = $"{Constants.AccountsBaseUrl}/{accountId}/balance";
+        string url = $"{Constants.AccountsBaseUrl}/{id}/balance";
         if (!IsValidUrl(url))
         {
             throw new ArgumentException("Invalid URL", nameof(url));

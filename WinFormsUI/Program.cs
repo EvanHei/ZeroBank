@@ -17,5 +17,5 @@ namespace WinFormsUI
             ApplicationConfiguration.Initialize();
             Application.Run(new Dashboard());
         }
-    } 
+    }
 }

@@ -36,7 +36,7 @@ public static class Api
     {
         try
         {
-            List<Blockchain> accounts = ServerConfig.DataAccessor.LoadAccounts();
+            List<Account> accounts = ServerConfig.DataAccessor.LoadAccounts();
             return Results.Ok(accounts);
         }
         catch (Exception ex)
@@ -45,12 +45,12 @@ public static class Api
         }
     }
 
-    private static IResult PostAccount(GenesisBlockData genesisBlockData)
+    private static IResult PostAccount(Account account)
     {
         try
         {
-            GenesisBlockData signedData = ServerConfig.DataAccessor.CreateAccount(genesisBlockData);
-            return Results.Ok(signedData);
+            ServerConfig.DataAccessor.CreateAccount(account);
+            return Results.Ok(account);
         }
         catch (Exception ex)
         {
@@ -71,12 +71,12 @@ public static class Api
         }
     }
 
-    private static IResult PostTransactionById(TransactionBlockData transactionBlockData, int id)
+    private static IResult PostTransactionById(Transaction transaction, int id)
     {
         try
         {
-            TransactionBlockData signedData = ServerConfig.DataAccessor.AddTransactionById(transactionBlockData, id);
-            return Results.Ok(signedData);
+            ServerConfig.DataAccessor.AddTransactionById(transaction, id);
+            return Results.Ok(transaction);
         }
         catch (Exception ex)
         {
@@ -89,7 +89,7 @@ public static class Api
         try
         {
             List<Ciphertext> transactions = ServerConfig.DataAccessor.LoadTransactionsById(id);
-            RelinKeys? relinKeys = ServerConfig.DataAccessor.LoadRelinKeysById(id);
+            using RelinKeys? relinKeys = ServerConfig.DataAccessor.LoadRelinKeysById(id);
             using Ciphertext? balance = ServerConfig.EncryptionHelper.GetBalance(transactions, id, relinKeys);
             if (balance == null)
             {

@@ -13,5 +13,4 @@ public static class Constants
 
     public static readonly string ServerDirectoryPath = Path.Combine(appDirectoryPath, "WebAPI");
     public static readonly string AccountsDirectoryPath = Path.Combine(ServerDirectoryPath, "Accounts");
-    public static readonly string RelinKeysFilePath = Path.Combine(ServerDirectoryPath, "relin_keys.bin");
 }
