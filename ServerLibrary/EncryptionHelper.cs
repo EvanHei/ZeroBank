@@ -26,7 +26,7 @@ public class EncryptionHelper
         Evaluator = new Evaluator(Context);
     }
 
-    public Ciphertext? GetBalance(List<Ciphertext> transactions, int id, RelinKeys? relinKeys = null)
+    public Ciphertext? GetBalance(List<Ciphertext> transactions, RelinKeys? relinKeys = null)
     {
         if (transactions == null || transactions.Count == 0)
         {

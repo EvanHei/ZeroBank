@@ -26,18 +26,22 @@ public class JsonAccessor
         return publicKey;
     }
 
-    public SecretKey? LoadSecretKeyById(int id, SEALContext context)
+    public SecretKey? LoadSecretKeyById(int id, SEALContext context, string password)
     {
         if (context == null)
         {
             return null;
         }
 
-        byte[] SecretKeyBytes = LoadAccountById(id).SEALSecretKeyEncrypted;
+        byte[] encryptedSecretKeyBytes = LoadAccountById(id).SEALSecretKeyEncrypted;
 
-        // TODO: decrypt once encrypted is implemented
+        // decrypt
+        Pbkdf2KeyDeriver keyDeriver = new();
+        AesEncryptor aes = new();
+        byte[] key = keyDeriver.DeriveKey(password, new byte[0]);
+        byte[] secretKeyBytes = aes.Decrypt(encryptedSecretKeyBytes, key);
 
-        using MemoryStream stream = new(SecretKeyBytes);
+        using MemoryStream stream = new(secretKeyBytes);
         SecretKey secretKey = new();
         secretKey.Load(context, stream);
         return secretKey;
@@ -106,7 +110,7 @@ public class JsonAccessor
         File.Delete(path);
     }
 
-    public void AddTransactionById(Transaction transaction, SEALContext context, int id)
+    public void AddTransactionById(int id, Transaction transaction, SEALContext context)
     {
         // verify data will generate a ciphertext
         using MemoryStream stream = new(transaction.Data);

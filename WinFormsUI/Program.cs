@@ -12,10 +12,12 @@ namespace WinFormsUI
         [STAThread]
         static async Task Main()
         {
-            //await ClientConfig.CreateAccount("Test", AccountType.Checking);
-            //await ClientConfig.AddTransactionById(15, 1);
-            //await ClientConfig.AddTransactionById(-20, 1);
-            //long result = await ClientConfig.GetBalanceById(1);
+            string password = "Password123";
+
+            await ClientConfig.CreateAccount("Test", AccountType.Checking, password);
+            await ClientConfig.AddTransactionById(1, 15, password);
+            await ClientConfig.AddTransactionById(1, -20, password);
+            long result = await ClientConfig.GetBalanceById(1, password);
 
             ApplicationConfiguration.Initialize();
             Application.Run(new Dashboard());

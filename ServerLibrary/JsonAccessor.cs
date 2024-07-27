@@ -10,7 +10,6 @@ using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using static SharedLibrary.Blockchain;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ServerLibrary;
@@ -117,7 +116,7 @@ public class JsonAccessor
         return transactions;
     }
 
-    public Transaction AddTransactionById(Transaction transaction, int id)
+    public Transaction AddTransactionById(int id, Transaction transaction)
     {
         // verify data will generate a ciphertext
         using MemoryStream stream = new(transaction.Data);

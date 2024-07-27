@@ -4,7 +4,7 @@ namespace ClientLibrary;
 
 public class EncryptionHelper
 {
-    public Serializable<Ciphertext> EncryptById(long amount, SEALContext context, PublicKey publicKey, SecretKey secretKey, int id)
+    public Serializable<Ciphertext> EncryptById(int id, long amount, SEALContext context, PublicKey publicKey, SecretKey secretKey)
     {
         if (context == null)
         {
@@ -48,7 +48,7 @@ public class EncryptionHelper
         return ciphertext;
     }
 
-    public long DecryptById(Ciphertext ciphertext, SEALContext context, SecretKey secretKey, int id)
+    public long DecryptById(int id, Ciphertext ciphertext, SEALContext context, SecretKey secretKey)
     {
         if (context == null)
         {

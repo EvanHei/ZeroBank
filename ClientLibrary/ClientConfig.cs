@@ -15,7 +15,7 @@ public static class ClientConfig
     public static EncryptionHelper EncryptionHelper { get; set; } = new EncryptionHelper();
     public static ApiAccessor ApiAccessor { get; set; } = new ApiAccessor();
 
-    public static async Task CreateAccount(string name, AccountType type)
+    public static async Task CreateAccount(string name, AccountType type, string password)
     {
         // get encryption parameters from server
         using MemoryStream parmsStream = new();
@@ -35,9 +35,13 @@ public static class ClientConfig
 
         // TODO: encrypt secret key bytes
         byte[] secretKeyBytes = secretKeyStream.ToArray();
+        Pbkdf2KeyDeriver keyDeriver = new();
+        AesEncryptor aes = new();
+        byte[] key = keyDeriver.DeriveKey(password, new byte[0]);
+        byte[] encryptedSecretKeyBytes = aes.Encrypt(secretKeyBytes, key);
 
         // create account
-        Account account = new(name, type, DateTime.Now, parmsStream.ToArray(), publicKeyStream.ToArray(), secretKeyBytes, relinKeysStream.ToArray());
+        Account account = new(name, type, DateTime.Now, parmsStream.ToArray(), publicKeyStream.ToArray(), encryptedSecretKeyBytes, relinKeysStream.ToArray());
 
         // post to server
         Account returnedAccount = await ApiAccessor.PostAccount(account);
@@ -46,17 +50,17 @@ public static class ClientConfig
         DataAccessor.CreateAccount(returnedAccount);
     }
 
-    public static async Task AddTransactionById(long amount, int id)
+    public static async Task AddTransactionById(int id, long amount, string password)
     {
         // get encryption data
         using EncryptionParameters parms = DataAccessor.LoadParmsById(id);
         using SEALContext context = new(parms);
         using PublicKey publicKey = DataAccessor.LoadPublicKeyById(id, context);
-        using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context);
+        using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context, password);
 
         // generate ciphertext and save to stream
         using MemoryStream ciphertextStream = new();
-        EncryptionHelper.EncryptById(amount, context, publicKey, secretKey, id).Save(ciphertextStream);
+        EncryptionHelper.EncryptById(id, amount, context, publicKey, secretKey).Save(ciphertextStream);
 
         // TODO: add client dig sig
         Transaction transaction = new(ciphertextStream.ToArray(), new byte[0], new byte[0]);
@@ -65,16 +69,17 @@ public static class ClientConfig
         await ApiAccessor.PostTransactionById(transaction, id);
 
         // save to client
-        DataAccessor.AddTransactionById(transaction, context, id);
+        DataAccessor.AddTransactionById(id, transaction, context);
     }
 
-    public static async Task<long> GetBalanceById(int id)
+    public static async Task<long> GetBalanceById(int id, string password)
     {
+        // get encryption data
         using EncryptionParameters parms = DataAccessor.LoadParmsById(id);
         using SEALContext context = new(parms);
-        using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context);
+        using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context, password);
         using Ciphertext ciphertext = await ApiAccessor.GetBalanceById(context, id);
-        long balance = EncryptionHelper.DecryptById(ciphertext, context, secretKey, id);
+        long balance = EncryptionHelper.DecryptById(id, ciphertext, context, secretKey);
         return balance;
     }
 }

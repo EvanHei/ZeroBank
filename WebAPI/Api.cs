@@ -71,11 +71,11 @@ public static class Api
         }
     }
 
-    private static IResult PostTransactionById(Transaction transaction, int id)
+    private static IResult PostTransactionById(int id, Transaction transaction)
     {
         try
         {
-            ServerConfig.DataAccessor.AddTransactionById(transaction, id);
+            ServerConfig.DataAccessor.AddTransactionById(id, transaction);
             return Results.Ok(transaction);
         }
         catch (Exception ex)
@@ -90,7 +90,7 @@ public static class Api
         {
             List<Ciphertext> transactions = ServerConfig.DataAccessor.LoadTransactionsById(id);
             using RelinKeys? relinKeys = ServerConfig.DataAccessor.LoadRelinKeysById(id);
-            using Ciphertext? balance = ServerConfig.EncryptionHelper.GetBalance(transactions, id, relinKeys);
+            using Ciphertext? balance = ServerConfig.EncryptionHelper.GetBalance(transactions, relinKeys);
             if (balance == null)
             {
                 return Results.Problem("There are no transactions.");
