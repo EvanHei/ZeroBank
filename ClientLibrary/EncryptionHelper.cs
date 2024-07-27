@@ -4,85 +4,75 @@ namespace ClientLibrary;
 
 public class EncryptionHelper
 {
-    private EncryptionParameters? parms;
-    public EncryptionParameters Parms
+    public Serializable<Ciphertext> EncryptById(long amount, SEALContext context, PublicKey publicKey, SecretKey secretKey, int id)
     {
-        get => parms;
-        set
+        if (context == null)
         {
-            parms = value;
-            Context = new SEALContext(Parms);
-            Encoder = new BatchEncoder(Context);
-            Evaluator = new Evaluator(Context);
+            throw new ArgumentNullException("SEALContext cannot be null.");
         }
-    }
-    public SEALContext? Context { get; set; }
-    private BatchEncoder? Encoder { get; set; }
-    private Evaluator? Evaluator { get; set; }
 
-    public Serializable<Ciphertext> Encrypt(long num)
-    {
-        PublicKey? publicKey = ClientConfig.DataAccessor.LoadPublicKey();
         if (publicKey == null)
         {
-            throw new InvalidOperationException("No public key key found.");
+            throw new ArgumentNullException("Public key cannot be null.");
         }
 
-        SecretKey? secretKey = ClientConfig.DataAccessor.LoadSecretKey();
         if (secretKey == null)
         {
-            throw new InvalidOperationException("No secret key found.");
+            throw new ArgumentNullException("Secret key cannot be null.");
         }
 
-        if (Parms == null)
-        {
-            throw new InvalidOperationException("Encryption parameters must be set.");
-        }
-
+        using BatchEncoder encoder = new(context);
+        using Evaluator evaluator = new(context);
         using Plaintext absPlaintext = new();
         using Ciphertext absCiphertext = new();
-        using Encryptor secretEncryptor = new(Context, secretKey);
-        using Encryptor publicEncryptor = new(Context, publicKey);
-        using Decryptor decryptor = new(Context, secretKey);
-        ulong absNum = (ulong)Math.Abs(num);
-        Encoder.Encode(new ulong[] { absNum }, absPlaintext);
+        using Encryptor secretEncryptor = new(context, secretKey);
+        using Encryptor publicEncryptor = new(context, publicKey);
+        using Decryptor decryptor = new(context, secretKey);
+
+        // convert to positive number
+        ulong absNum = (ulong)Math.Abs(amount);
+
+        encoder.Encode(new ulong[] { absNum }, absPlaintext);
         publicEncryptor.Encrypt(absPlaintext, absCiphertext);
 
-        if (num < 0)
+        // mulitply ciphertext by -1 if the amount is negative
+        if (amount < 0)
         {
-            Evaluator.NegateInplace(absCiphertext);
+            evaluator.NegateInplace(absCiphertext);
         }
 
+        // encrypt symmetrically to reduce the size
         using Plaintext plaintext = new();
         decryptor.Decrypt(absCiphertext, plaintext);
         Serializable<Ciphertext> ciphertext = secretEncryptor.EncryptSymmetric(plaintext);
         return ciphertext;
     }
 
-    public long Decrypt(Ciphertext ciphertext)
+    public long DecryptById(Ciphertext ciphertext, SEALContext context, SecretKey secretKey, int id)
     {
-        if (Parms == null)
+        if (context == null)
         {
-            throw new InvalidOperationException("Encryption parameters must be set.");
+            throw new ArgumentNullException("SEALContext cannot be null.");
         }
 
-        SecretKey? secretKey = ClientConfig.DataAccessor.LoadSecretKey();
         if (secretKey == null)
         {
-            throw new InvalidOperationException("No secret key found.");
+            throw new ArgumentNullException("Secret key cannot be null.");
         }
 
+        using BatchEncoder encoder = new(context);
         using Plaintext plaintext = new();
-        using Decryptor decryptor = new(Context, secretKey);
+        using Decryptor decryptor = new(context, secretKey);
         decryptor.Decrypt(ciphertext, plaintext);
         List<long> result = new();
-        Encoder.Decode(plaintext, result);
+        encoder.Decode(plaintext, result);
         return result[0];
     }
 
-    public (PublicKey, SecretKey, Serializable<RelinKeys>) GenerateKeys()
+    public (PublicKey, SecretKey, Serializable<RelinKeys>) GenerateKeys(EncryptionParameters parms)
     {
-        using KeyGenerator keygen = new(Context);
+        using SEALContext context = new(parms);
+        using KeyGenerator keygen = new(context);
         SecretKey secretKey = keygen.SecretKey;
         Serializable<RelinKeys> relinKeys = keygen.CreateRelinKeys();
         keygen.CreatePublicKey(out PublicKey publicKey);

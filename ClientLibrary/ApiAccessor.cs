@@ -81,17 +81,17 @@ public class ApiAccessor
         return returnedTransaction;
     }
 
-    public async Task<Ciphertext?> GetBalanceById(int id)
+    public async Task<Ciphertext?> GetBalanceById(SEALContext context, int id)
     {
+        if (context == null)
+        {
+            throw new ArgumentNullException("SEALContext cannot be null.");
+        }
+
         string url = $"{Constants.AccountsBaseUrl}/{id}/balance";
         if (!IsValidUrl(url))
         {
             throw new ArgumentException("Invalid URL", nameof(url));
-        }
-
-        if (ClientConfig.EncryptionHelper.Context == null)
-        {
-            throw new InvalidOperationException("SEALContext must be set.");
         }
 
         Stream stream = await client.GetStreamAsync(url);
@@ -104,7 +104,7 @@ public class ApiAccessor
         memStream.Seek(0, SeekOrigin.Begin);
 
         Ciphertext ciphertext = new();
-        ciphertext.Load(ClientConfig.EncryptionHelper.Context, memStream);
+        ciphertext.Load(context, memStream);
         return ciphertext;
     }
 

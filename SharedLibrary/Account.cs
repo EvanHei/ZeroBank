@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Research.SEAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,22 +14,27 @@ public class Account
     public int Id { get; set; }
     public string Name { get; set; }
     public AccountType Type { get; set; }
-    public DateTime DateCreated { get; } = DateTime.Now;
-    public byte[] RelinKeys { get; set; }
+    public DateTime DateCreated { get; private set; }
+    public byte[] Parms { get; set; }
+    public byte[] SEALPublicKey { get; set; }
+    public byte[] SEALSecretKeyEncrypted { get; set; }
+    public byte[] SEALRelinKeys { get; set; }
     public byte[] ClientSigningPublicKey { get; set; }
     public byte[] ClientEncryptedSigningPrivateKey { get; set; }
-    public byte[] ClientSEALPublicKey { get; set; }
-    public byte[] ClientEncryptedSEALPrivateKey { get; set; }
     public byte[] ServerPublicKey { get; set; }
     public byte[] ServerDigSig { get; set; }
     public byte[] ClientDigSig { get; set; }
     public List<Transaction> Transactions { get; set; } = new();
 
-    public Account(string name, AccountType type, byte[] relinKeys)
+    public Account(string name, AccountType type, DateTime dateCreated, byte[] parms, byte[] SEALPublicKey, byte[] SEALSecretKeyEncrypted, byte[] SEALRelinKeys)
     {
         Name = name;
         Type = type;
-        RelinKeys = relinKeys;
+        DateCreated = dateCreated;
+        Parms = parms;
+        this.SEALPublicKey = SEALPublicKey;
+        this.SEALSecretKeyEncrypted = SEALSecretKeyEncrypted;
+        this.SEALRelinKeys = SEALRelinKeys;
     }
 
     public string SerializeToJson()

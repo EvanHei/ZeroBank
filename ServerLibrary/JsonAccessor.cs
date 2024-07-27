@@ -26,7 +26,7 @@ public class JsonAccessor
     public RelinKeys? LoadRelinKeysById(int id)
     {
         Account? account = LoadAccountById(id);
-        byte[] relinKeysBytes = account.RelinKeys;
+        byte[] relinKeysBytes = account.SEALRelinKeys;
         using MemoryStream stream = new(relinKeysBytes);
         RelinKeys relinKeys = new();
         relinKeys.Load(ServerConfig.EncryptionHelper.Context, stream);

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Research.SEAL;
+using SharedLibrary;
 using System;
 using System.Collections.Generic;
+using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,19 +15,66 @@ public static class ClientConfig
     public static EncryptionHelper EncryptionHelper { get; set; } = new EncryptionHelper();
     public static ApiAccessor ApiAccessor { get; set; } = new ApiAccessor();
 
-    public static async Task SetUpClient()
+    public static async Task CreateAccount(string name, AccountType type)
     {
-        if (!File.Exists(Constants.ParmsFilePath))
-        {
-            EncryptionHelper.Parms = await ApiAccessor.GetEncryptionParameters();
-            (PublicKey publicKey, SecretKey secretKey, Serializable<RelinKeys> relinKeys) = EncryptionHelper.GenerateKeys(); // needed once the keys are written to the genesis block?
-            DataAccessor.SavePublicKey(publicKey);
-            DataAccessor.SaveSecretKey(secretKey);
-            DataAccessor.SaveParms(EncryptionHelper.Parms);
-        }
-        else
-        {
-            EncryptionHelper.Parms = DataAccessor.LoadParms();
-        }
+        // get encryption parameters from server
+        using MemoryStream parmsStream = new();
+        using EncryptionParameters parms = await ApiAccessor.GetEncryptionParameters();
+        parms.Save(parmsStream);
+
+        // generate keys
+        (PublicKey publicKey, SecretKey secretKey, Serializable<RelinKeys> relinKeys) = EncryptionHelper.GenerateKeys(parms);
+
+        // save keys to streams
+        using MemoryStream publicKeyStream = new();
+        using MemoryStream secretKeyStream = new();
+        using MemoryStream relinKeysStream = new();
+        publicKey.Save(publicKeyStream);
+        secretKey.Save(secretKeyStream);
+        relinKeys.Save(relinKeysStream);
+
+        // TODO: encrypt secret key bytes
+        byte[] secretKeyBytes = secretKeyStream.ToArray();
+
+        // create account
+        Account account = new(name, type, DateTime.Now, parmsStream.ToArray(), publicKeyStream.ToArray(), secretKeyBytes, relinKeysStream.ToArray());
+
+        // post to server
+        Account returnedAccount = await ApiAccessor.PostAccount(account);
+
+        // save to client
+        DataAccessor.CreateAccount(returnedAccount);
+    }
+
+    public static async Task AddTransactionById(long amount, int id)
+    {
+        // get encryption data
+        using EncryptionParameters parms = DataAccessor.LoadParmsById(id);
+        using SEALContext context = new(parms);
+        using PublicKey publicKey = DataAccessor.LoadPublicKeyById(id, context);
+        using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context);
+
+        // generate ciphertext and save to stream
+        using MemoryStream ciphertextStream = new();
+        EncryptionHelper.EncryptById(amount, context, publicKey, secretKey, id).Save(ciphertextStream);
+
+        // TODO: add client dig sig
+        Transaction transaction = new(ciphertextStream.ToArray(), new byte[0], new byte[0]);
+
+        // post to server
+        await ApiAccessor.PostTransactionById(transaction, id);
+
+        // save to client
+        DataAccessor.AddTransactionById(transaction, context, id);
+    }
+
+    public static async Task<long> GetBalanceById(int id)
+    {
+        using EncryptionParameters parms = DataAccessor.LoadParmsById(id);
+        using SEALContext context = new(parms);
+        using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context);
+        using Ciphertext ciphertext = await ApiAccessor.GetBalanceById(context, id);
+        long balance = EncryptionHelper.DecryptById(ciphertext, context, secretKey, id);
+        return balance;
     }
 }
