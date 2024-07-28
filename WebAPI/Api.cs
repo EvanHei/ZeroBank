@@ -9,7 +9,6 @@ namespace WebAPI;
 
 public static class Api
 {
-    private static System.Timers.Timer Timer;
 
     public static void ConfigureApi(this WebApplication app)
     {
@@ -58,6 +57,7 @@ public static class Api
      * 
      * If the cleint does not complete step 3 within 60 seconds, the server will delete all resources associated with the partial account.
      */
+    private static System.Timers.Timer Timer;
     private static IResult PostPartialAccount(Account account)
     {
         // 60 second timer will delete partial account after time has elapsed

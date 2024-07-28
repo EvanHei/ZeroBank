@@ -61,8 +61,6 @@ public static class ClientConfig
         // post to server to get an ID and the server's public signing key
         Account returnedAccount = await ApiAccessor.PostPartialAccount(account);
 
-        // verify server digital signature
-        returnedAccount.EnsureValid();
 
         // sign
         RsaSigner rsa = new();
@@ -71,6 +69,9 @@ public static class ClientConfig
 
         // send to server again
         await ApiAccessor.PostFullAccount(returnedAccount);
+
+        // verify digital signatures
+        returnedAccount.EnsureValid();
 
         // save to client
         DataAccessor.CreateAccount(returnedAccount);
@@ -84,27 +85,39 @@ public static class ClientConfig
 
     public static async Task AddTransactionById(int id, long amount, string password)
     {
+        Account account = DataAccessor.LoadAccountById(id);
+
         // get encryption data
         using EncryptionParameters parms = DataAccessor.LoadParmsById(id);
         using SEALContext context = new(parms);
         using PublicKey publicKey = DataAccessor.LoadPublicKeyById(id, context);
         using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context, password);
 
-        // generate ciphertext and save to stream
+        // decrypt client signing encrypted key
+        Pbkdf2KeyDeriver keyDeriver = new();
+        AesEncryptor aes = new();
+        byte[] key = keyDeriver.DeriveKey(password);
+        byte[] clientSigningPrivateKey = aes.Decrypt(account.ClientSigningPrivateKeyEncrypted, key);
+
+        // generate ciphertext and create transaction
         using MemoryStream ciphertextStream = new();
         EncryptionHelper.EncryptById(id, amount, context, publicKey, secretKey).Save(ciphertextStream);
+        Transaction transaction = new(ciphertextStream.ToArray());
 
-        // TODO: add client dig sig
-
-        Transaction transaction = new(ciphertextStream.ToArray(), new byte[0], new byte[0]);
+        // sign
+        RsaSigner rsa = new();
+        byte[] clientDigSig = rsa.Sign(clientSigningPrivateKey, transaction.Data);
+        transaction.ClientDigSig = clientDigSig;
 
         // post to server
-        Transaction returnTransaction = await ApiAccessor.PostTransactionById(id, transaction);
+        Transaction returnedTransaction = await ApiAccessor.PostTransactionById(id, transaction);
 
-        // TODO: verify server dig sig
+        // verify digital signatures
+        account.Transactions.Add(returnedTransaction);
+        account.EnsureValid();
 
         // save to client
-        DataAccessor.AddTransactionById(id, transaction, context);
+        DataAccessor.SaveAccount(account);
     }
 
     public static async Task<long> GetBalanceById(int id, string password)

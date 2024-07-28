@@ -95,7 +95,7 @@ public class JsonAccessor
         return accounts;
     }
 
-    private Account? LoadAccountById(int id)
+    public Account? LoadAccountById(int id)
     {
         Account? account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException("Account not found.");
         account?.EnsureValid();
@@ -144,11 +144,22 @@ public class JsonAccessor
         using Ciphertext ciphertext = new();
         ciphertext.Load(ServerConfig.EncryptionHelper.Context, stream);
 
+        // verify client digital signature
         Account? account = LoadAccountById(id);
 
-        // TODO: verify client signature and then sign
+        // load server signing private key
+        string path = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Name + ".bin");
+        byte[] serverSigningPrivateKey = File.ReadAllBytes(path);
 
+        // sign
+        RsaSigner rsa = new();
+        byte[] serverDigSig = rsa.Sign(serverSigningPrivateKey, transaction.Data);
+        transaction.ServerDigSig = serverDigSig;
         account.Transactions.Add(transaction);
+
+        // verify signatures
+        account.EnsureValid();
+
         SaveAccount(account);
         return transaction;
     }

@@ -63,12 +63,10 @@ public class JsonAccessor
             throw new ArgumentException("Account cannot be null.");
         }
 
-        // TODO: verify server signature
-
         SaveAccount(account);
     }
 
-    private void SaveAccount(Account account)
+    public void SaveAccount(Account account)
     {
         string json = account.SerializeToJson();
 
@@ -96,7 +94,7 @@ public class JsonAccessor
         return accounts;
     }
 
-    private Account? LoadAccountById(int id)
+    public Account? LoadAccountById(int id)
     {
         Account? account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException($"Account with ID {id} not found.");
         account?.EnsureValid();
@@ -110,6 +108,7 @@ public class JsonAccessor
         File.Delete(path);
     }
 
+    // TODO: needed?
     public void AddTransactionById(int id, Transaction transaction, SEALContext context)
     {
         // verify data will generate a ciphertext

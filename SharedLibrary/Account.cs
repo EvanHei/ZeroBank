@@ -26,8 +26,8 @@ public class Account
     public byte[] ClientSigningPublicKey { get; set; }
     public byte[] ClientSigningPrivateKeyEncrypted { get; set; }
     public byte[] ServerSigningPublicKey { get; set; }
-    public byte[] ServerDigSig { get; set; }
     public byte[] ClientDigSig { get; set; }
+    public byte[] ServerDigSig { get; set; }
     public List<Transaction> Transactions { get; set; } = new();
 
     public Account(string name,
@@ -80,21 +80,40 @@ public class Account
         byte[] bytes = SerializeMetadataToBytes();
         RsaSigner rsa = new();
 
-        // verify client digital signature
+        // verify client and server digital signatures on the account
         if (ClientSigningPublicKey != null && ClientDigSig != null)
         {
             if (!rsa.Verify(ClientSigningPublicKey, ClientDigSig, bytes))
             {
-                throw new CryptographicException("Client digital signature verification failed.");
+                throw new CryptographicException("Client digital signature verification failed on the account.");
             }
         }
 
-        // verify server digital signature
         if (ServerSigningPublicKey != null && ServerDigSig != null)
         {
             if (!rsa.Verify(ServerSigningPublicKey, ServerDigSig, bytes))
             {
-                throw new CryptographicException("Server digital signature verification failed.");
+                throw new CryptographicException("Server digital signature verification failed on the account.");
+            }
+        }
+
+        // verify client and server digital signatures on each transaction
+        foreach (Transaction transaction in Transactions)
+        {
+            if (ClientSigningPublicKey != null && transaction.ClientDigSig != null)
+            {
+                if (!rsa.Verify(ClientSigningPublicKey, transaction.ClientDigSig, transaction.Data))
+                {
+                    throw new CryptographicException("Client digital signature verification failed on a transaction.");
+                }
+            }
+
+            if (ServerSigningPublicKey != null && transaction.ServerDigSig != null)
+            {
+                if (!rsa.Verify(ServerSigningPublicKey, transaction.ServerDigSig, transaction.Data))
+                {
+                    throw new CryptographicException("Server digital signature verification failed on a transaction.");
+                }
             }
         }
     }
