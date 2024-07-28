@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
@@ -20,6 +21,7 @@ public class JsonAccessor
     {
         Directory.CreateDirectory(Constants.ServerDirectoryPath);
         Directory.CreateDirectory(Constants.AccountsDirectoryPath);
+        Directory.CreateDirectory(Constants.PrivateKeysDirectoryPath);
     }
 
     public RelinKeys? LoadRelinKeysById(int id)
@@ -39,18 +41,33 @@ public class JsonAccessor
             throw new ArgumentException("Account cannot be null.");
         }
 
-        // get a new account ID
+        // ensure the account name is not taken
         List<Account> accounts = LoadAccounts();
+        if (accounts.Any(a => a.Name == account.Name))
+        {
+            throw new InvalidOperationException($"Account with name {account.Name} already exists.");
+        }
+
+        // get a new account ID
         account.Id = accounts.Count != 0 ? accounts.Max(a => a.Id) + 1 : 1;
 
-        // TODO: verify client signature and then sign
+        // get a new server signing key pair and sign
+        RsaSigner rsa = new();
+        (byte[] serverSigningPublicKey, byte[] serverSigningPrivateKey) = rsa.GenerateKeyPair();
+        account.ServerSigningPublicKey = serverSigningPublicKey;
+        byte[] serverDigSig = rsa.Sign(serverSigningPrivateKey, account.SerializeMetadataToBytes());
+        account.ServerDigSig = serverDigSig;
 
-        // save new account
+        // save server signing private key
+        string path = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Name + ".bin");
+        File.WriteAllBytes(path, serverSigningPrivateKey);
+
+        // save partial account
         SaveAccount(account);
         return account;
     }
 
-    private void SaveAccount(Account account)
+    public void SaveAccount(Account account)
     {
         string json = account.SerializeToJson();
 
@@ -88,8 +105,12 @@ public class JsonAccessor
     public void DeleteAccountById(int id)
     {
         Account? account = LoadAccountById(id);
-        string path = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
-        File.Delete(path);
+        string accountPath = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
+        File.Delete(accountPath);
+
+        // delete the key file
+        string keyPath = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Name + ".bin");
+        File.Delete(keyPath);
     }
 
     public List<Ciphertext> LoadTransactionsById(int id)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Research.SEAL;
+using SharedLibrary;
 
 namespace ClientLibrary;
 
@@ -69,13 +70,19 @@ public class EncryptionHelper
         return result[0];
     }
 
-    public (PublicKey, SecretKey, Serializable<RelinKeys>) GenerateKeys(EncryptionParameters parms)
+    public (PublicKey SEALPublicKey, SecretKey SEALSecretKey, Serializable<RelinKeys> SEALRelinKeys, byte[] publicSigningKey, byte[] privateSigningKey) GenerateKeys(EncryptionParameters parms)
     {
+        // signing keys
+        RsaSigner rsa = new();
+        (byte[] publicSigningKey, byte[] privateSigningKey) = rsa.GenerateKeyPair();
+
+        // SEAL keys
         using SEALContext context = new(parms);
         using KeyGenerator keygen = new(context);
-        SecretKey secretKey = keygen.SecretKey;
-        Serializable<RelinKeys> relinKeys = keygen.CreateRelinKeys();
-        keygen.CreatePublicKey(out PublicKey publicKey);
-        return (publicKey, secretKey, relinKeys);
+        SecretKey SEALSecretKey = keygen.SecretKey;
+        Serializable<RelinKeys> SEALRelinKeys = keygen.CreateRelinKeys();
+        keygen.CreatePublicKey(out PublicKey SEALPublicKey);
+
+        return (SEALPublicKey, SEALSecretKey, SEALRelinKeys, publicSigningKey, privateSigningKey);
     }
 }

@@ -9,7 +9,7 @@ namespace SharedLibrary;
 
 public class RsaSigner
 {
-    public (byte[], byte[]) GenerateKeyPair()
+    public (byte[] publicKey, byte[] privateKey) GenerateKeyPair()
     {
         using RSACryptoServiceProvider rsa = new();
         byte[] publicKey = rsa.ExportRSAPublicKey();

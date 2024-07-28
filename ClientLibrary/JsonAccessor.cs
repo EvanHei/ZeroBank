@@ -98,7 +98,7 @@ public class JsonAccessor
 
     private Account? LoadAccountById(int id)
     {
-        Account? account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException("Account not found.");
+        Account? account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException($"Account with ID {id} not found.");
         account?.EnsureValid();
         return account;
     }

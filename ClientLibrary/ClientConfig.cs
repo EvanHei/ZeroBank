@@ -23,31 +23,63 @@ public static class ClientConfig
         parms.Save(parmsStream);
 
         // generate keys
-        (PublicKey publicKey, SecretKey secretKey, Serializable<RelinKeys> relinKeys) = EncryptionHelper.GenerateKeys(parms);
+        (PublicKey SEALPublicKey, 
+         SecretKey SEALSecretKey,
+         Serializable<RelinKeys> SEALRelinKeys, 
+         byte[] clientSigningPublicKey, 
+         byte[] clientSigningPrivateKey) = EncryptionHelper.GenerateKeys(parms);
 
-        // save keys to streams
-        using MemoryStream publicKeyStream = new();
-        using MemoryStream secretKeyStream = new();
-        using MemoryStream relinKeysStream = new();
-        publicKey.Save(publicKeyStream);
-        secretKey.Save(secretKeyStream);
-        relinKeys.Save(relinKeysStream);
+        // save SEAL keys to streams
+        using MemoryStream SEALPublicKeyStream = new();
+        using MemoryStream SEALSecretKeyStream = new();
+        using MemoryStream SEALRelinKeysStream = new();
+        SEALPublicKey.Save(SEALPublicKeyStream);
+        SEALSecretKey.Save(SEALSecretKeyStream);
+        SEALRelinKeys.Save(SEALRelinKeysStream);
 
-        // TODO: encrypt secret key bytes
-        byte[] secretKeyBytes = secretKeyStream.ToArray();
+        // encrypt the SEAL secret key
         Pbkdf2KeyDeriver keyDeriver = new();
         AesEncryptor aes = new();
         byte[] key = keyDeriver.DeriveKey(password, new byte[0]);
-        byte[] encryptedSecretKeyBytes = aes.Encrypt(secretKeyBytes, key);
+        byte[] SEALSecretKeyBytes = SEALSecretKeyStream.ToArray();
+        byte[] SEALSecretKeyBytesEncrypted = aes.Encrypt(SEALSecretKeyBytes, key);
+
+        // encrypt the client signing private key
+        byte[] clientSigningPrivateKeyEncrypted = aes.Encrypt(clientSigningPrivateKey, key);
 
         // create account
-        Account account = new(name, type, DateTime.Now, parmsStream.ToArray(), publicKeyStream.ToArray(), encryptedSecretKeyBytes, relinKeysStream.ToArray());
+        Account account = new(name,
+                              type,
+                              DateTime.Now,
+                              parmsStream.ToArray(),
+                              SEALPublicKeyStream.ToArray(),
+                              SEALSecretKeyBytesEncrypted,
+                              SEALRelinKeysStream.ToArray(),
+                              clientSigningPublicKey,
+                              clientSigningPrivateKeyEncrypted);
 
-        // post to server
-        Account returnedAccount = await ApiAccessor.PostAccount(account);
+        // post to server to get an ID and the server's public signing key
+        Account returnedAccount = await ApiAccessor.PostPartialAccount(account);
+
+        // verify server digital signature
+        returnedAccount.EnsureValid();
+
+        // sign
+        RsaSigner rsa = new();
+        byte[] clientDigSig = rsa.Sign(clientSigningPrivateKey, returnedAccount.SerializeMetadataToBytes());
+        returnedAccount.ClientDigSig = clientDigSig;
+
+        // send to server again
+        await ApiAccessor.PostFullAccount(returnedAccount);
 
         // save to client
         DataAccessor.CreateAccount(returnedAccount);
+    }
+
+    public static async Task<List<Account>> GetAccounts()
+    {
+        // TODO: implement GetAccounts
+        return new List<Account>();
     }
 
     public static async Task AddTransactionById(int id, long amount, string password)
@@ -63,10 +95,13 @@ public static class ClientConfig
         EncryptionHelper.EncryptById(id, amount, context, publicKey, secretKey).Save(ciphertextStream);
 
         // TODO: add client dig sig
+
         Transaction transaction = new(ciphertextStream.ToArray(), new byte[0], new byte[0]);
 
         // post to server
-        await ApiAccessor.PostTransactionById(transaction, id);
+        Transaction returnTransaction = await ApiAccessor.PostTransactionById(id, transaction);
+
+        // TODO: verify server dig sig
 
         // save to client
         DataAccessor.AddTransactionById(id, transaction, context);
@@ -78,8 +113,13 @@ public static class ClientConfig
         using EncryptionParameters parms = DataAccessor.LoadParmsById(id);
         using SEALContext context = new(parms);
         using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context, password);
-        using Ciphertext ciphertext = await ApiAccessor.GetBalanceById(context, id);
+        using Ciphertext ciphertext = await ApiAccessor.GetBalanceById(id, context);
         long balance = EncryptionHelper.DecryptById(id, ciphertext, context, secretKey);
         return balance;
+    }
+
+    public static async Task DeleteAccountById()
+    {
+        // TODO: implement DeleteAccountById
     }
 }

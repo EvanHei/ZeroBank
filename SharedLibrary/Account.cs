@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -11,6 +14,7 @@ namespace SharedLibrary;
 
 public class Account
 {
+    // TODO: move to metadata class?
     public int Id { get; set; }
     public string Name { get; set; }
     public AccountType Type { get; set; }
@@ -20,13 +24,21 @@ public class Account
     public byte[] SEALSecretKeyEncrypted { get; set; }
     public byte[] SEALRelinKeys { get; set; }
     public byte[] ClientSigningPublicKey { get; set; }
-    public byte[] ClientEncryptedSigningPrivateKey { get; set; }
-    public byte[] ServerPublicKey { get; set; }
+    public byte[] ClientSigningPrivateKeyEncrypted { get; set; }
+    public byte[] ServerSigningPublicKey { get; set; }
     public byte[] ServerDigSig { get; set; }
     public byte[] ClientDigSig { get; set; }
     public List<Transaction> Transactions { get; set; } = new();
 
-    public Account(string name, AccountType type, DateTime dateCreated, byte[] parms, byte[] SEALPublicKey, byte[] SEALSecretKeyEncrypted, byte[] SEALRelinKeys)
+    public Account(string name,
+                   AccountType type,
+                   DateTime dateCreated,
+                   byte[] parms,
+                   byte[] SEALPublicKey,
+                   byte[] SEALSecretKeyEncrypted,
+                   byte[] SEALRelinKeys,
+                   byte[] clientSigningPublicKey,
+                   byte[] clientSigningPrivateKeyEncrypted)
     {
         Name = name;
         Type = type;
@@ -35,6 +47,8 @@ public class Account
         this.SEALPublicKey = SEALPublicKey;
         this.SEALSecretKeyEncrypted = SEALSecretKeyEncrypted;
         this.SEALRelinKeys = SEALRelinKeys;
+        ClientSigningPublicKey = clientSigningPublicKey;
+        ClientSigningPrivateKeyEncrypted = clientSigningPrivateKeyEncrypted;
     }
 
     public string SerializeToJson()
@@ -42,8 +56,46 @@ public class Account
         return JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
     }
 
+    public byte[] SerializeMetadataToBytes()
+    {
+        var dataToSign = new
+        {
+            Id,
+            Name,
+            Type,
+            DateCreated,
+            Parms,
+            SEALPublicKey,
+            SEALSecretKeyEncrypted,
+            SEALRelinKeys,
+            ClientSigningPublicKey,
+            ClientSigningPrivateKeyEncrypted,
+            ServerSigningPublicKey
+        };
+        return JsonSerializer.SerializeToUtf8Bytes(dataToSign);
+    }
+
     public void EnsureValid()
     {
-        // for each transaction, verify the signatures with RSA and throw exception if it doesn't work
+        byte[] bytes = SerializeMetadataToBytes();
+        RsaSigner rsa = new();
+
+        // verify client digital signature
+        if (ClientSigningPublicKey != null && ClientDigSig != null)
+        {
+            if (!rsa.Verify(ClientSigningPublicKey, ClientDigSig, bytes))
+            {
+                throw new CryptographicException("Client digital signature verification failed.");
+            }
+        }
+
+        // verify server digital signature
+        if (ServerSigningPublicKey != null && ServerDigSig != null)
+        {
+            if (!rsa.Verify(ServerSigningPublicKey, ServerDigSig, bytes))
+            {
+                throw new CryptographicException("Server digital signature verification failed.");
+            }
+        }
     }
 }

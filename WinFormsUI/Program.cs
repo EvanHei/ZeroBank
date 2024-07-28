@@ -14,10 +14,18 @@ namespace WinFormsUI
         {
             string password = "Password123";
 
-            await ClientConfig.CreateAccount("Test", AccountType.Checking, password);
-            await ClientConfig.AddTransactionById(1, 15, password);
-            await ClientConfig.AddTransactionById(1, -20, password);
-            long result = await ClientConfig.GetBalanceById(1, password);
+            try
+            {
+                await ClientConfig.CreateAccount("Test", AccountType.Checking, password);
+                await ClientConfig.AddTransactionById(1, 15, password);
+                await ClientConfig.AddTransactionById(1, -20, password);
+                long result = await ClientConfig.GetBalanceById(1, password);
+                await ClientConfig.ApiAccessor.DeleteAccountById(1);
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
 
             ApplicationConfiguration.Initialize();
             Application.Run(new Dashboard());
