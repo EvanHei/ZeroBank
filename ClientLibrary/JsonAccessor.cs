@@ -70,7 +70,7 @@ public class JsonAccessor
     {
         string json = account.SerializeToJson();
 
-        // filename is format <accountId>.json
+        // filename is format <Name>.json
         string path = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
         File.WriteAllText(path, json);
     }
@@ -97,7 +97,6 @@ public class JsonAccessor
     public Account? LoadAccountById(int id)
     {
         Account? account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException($"Account with ID {id} not found.");
-        account?.EnsureValid();
         return account;
     }
 
@@ -108,18 +107,9 @@ public class JsonAccessor
         File.Delete(path);
     }
 
-    // TODO: needed?
     public void AddTransactionById(int id, Transaction transaction, SEALContext context)
     {
-        // verify data will generate a ciphertext
-        using MemoryStream stream = new(transaction.Data);
-        using Ciphertext ciphertext = new();
-        ciphertext.Load(context, stream);
-
         Account? account = LoadAccountById(id);
-
-        // TODO: verify server signature and then sign
-
         account.Transactions.Add(transaction);
         SaveAccount(account);
     }

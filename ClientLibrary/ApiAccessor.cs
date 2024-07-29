@@ -38,7 +38,6 @@ public class ApiAccessor
         return parms;
     }
 
-    // test
     public async Task<List<Account>> GetAccounts()
     {
         if (!IsValidUrl(Constants.AccountsBaseUrl))

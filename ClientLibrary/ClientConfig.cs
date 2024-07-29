@@ -61,7 +61,6 @@ public static class ClientConfig
         // post to server to get an ID and the server's public signing key
         Account returnedAccount = await ApiAccessor.PostPartialAccount(account);
 
-
         // sign
         RsaSigner rsa = new();
         byte[] clientDigSig = rsa.Sign(clientSigningPrivateKey, returnedAccount.SerializeMetadataToBytes());
@@ -75,12 +74,6 @@ public static class ClientConfig
 
         // save to client
         DataAccessor.CreateAccount(returnedAccount);
-    }
-
-    public static async Task<List<Account>> GetAccounts()
-    {
-        // TODO: implement GetAccounts
-        return new List<Account>();
     }
 
     public static async Task AddTransactionById(int id, long amount, string password)
@@ -112,17 +105,20 @@ public static class ClientConfig
         // post to server
         Transaction returnedTransaction = await ApiAccessor.PostTransactionById(id, transaction);
 
-        // verify digital signatures
-        account.Transactions.Add(returnedTransaction);
+        // verify signatures
         account.EnsureValid();
 
+        // verify data will generate a ciphertext
+        using MemoryStream stream = new(transaction.Data);
+        using Ciphertext ciphertext = new();
+        ciphertext.Load(context, stream);
+
         // save to client
-        DataAccessor.SaveAccount(account);
+        DataAccessor.AddTransactionById(account.Id, returnedTransaction, context);
     }
 
     public static async Task<long> GetBalanceById(int id, string password)
     {
-        // get encryption data
         using EncryptionParameters parms = DataAccessor.LoadParmsById(id);
         using SEALContext context = new(parms);
         using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context, password);
@@ -131,8 +127,9 @@ public static class ClientConfig
         return balance;
     }
 
-    public static async Task DeleteAccountById()
+    public static async Task DeleteAccountById(int id)
     {
-        // TODO: implement DeleteAccountById
+        await ApiAccessor.DeleteAccountById(id);
+        DataAccessor.DeleteAccountById(id);
     }
 }

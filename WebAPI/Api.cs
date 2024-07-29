@@ -74,7 +74,7 @@ public static class Api
 
         try
         {
-            ServerConfig.DataAccessor.CreateAccount(account);
+            ServerConfig.CreateAccount(account);
             return Results.Ok(account);
         }
         catch (Exception ex)
@@ -116,7 +116,7 @@ public static class Api
     {
         try
         {
-            ServerConfig.DataAccessor.AddTransactionById(id, transaction);
+            ServerConfig.AddTransactionById(id, transaction);
             return Results.Ok(transaction);
         }
         catch (Exception ex)
@@ -129,17 +129,7 @@ public static class Api
     {
         try
         {
-            List<Ciphertext> transactions = ServerConfig.DataAccessor.LoadTransactionsById(id);
-            using RelinKeys? relinKeys = ServerConfig.DataAccessor.LoadRelinKeysById(id);
-            using Ciphertext? balance = ServerConfig.EncryptionHelper.GetBalance(transactions, relinKeys);
-            if (balance == null)
-            {
-                return Results.Problem("There are no transactions.");
-            }
-
-            MemoryStream stream = new();
-            balance.Save(stream);
-            stream.Seek(0, SeekOrigin.Begin);
+            MemoryStream stream = ServerConfig.GetBalanceStreamById(id);
             return Results.Stream(stream);
         }
         catch (Exception ex)

@@ -34,29 +34,12 @@ public class JsonAccessor
         return relinKeys;
     }
 
-    public Account CreateAccount(Account account)
+    public Account CreateAccount(Account account, byte[] serverSigningPrivateKey)
     {
         if (account == null)
         {
             throw new ArgumentException("Account cannot be null.");
         }
-
-        // ensure the account name is not taken
-        List<Account> accounts = LoadAccounts();
-        if (accounts.Any(a => a.Name == account.Name))
-        {
-            throw new InvalidOperationException($"Account with name {account.Name} already exists.");
-        }
-
-        // get a new account ID
-        account.Id = accounts.Count != 0 ? accounts.Max(a => a.Id) + 1 : 1;
-
-        // get a new server signing key pair and sign
-        RsaSigner rsa = new();
-        (byte[] serverSigningPublicKey, byte[] serverSigningPrivateKey) = rsa.GenerateKeyPair();
-        account.ServerSigningPublicKey = serverSigningPublicKey;
-        byte[] serverDigSig = rsa.Sign(serverSigningPrivateKey, account.SerializeMetadataToBytes());
-        account.ServerDigSig = serverDigSig;
 
         // save server signing private key
         string path = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Name + ".bin");
@@ -84,7 +67,6 @@ public class JsonAccessor
         }
 
         List<Account> accounts = new();
-
         string[] accountFiles = Directory.GetFiles(Constants.AccountsDirectoryPath);
         foreach (string accountFile in accountFiles)
         {
@@ -98,7 +80,6 @@ public class JsonAccessor
     public Account? LoadAccountById(int id)
     {
         Account? account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException("Account not found.");
-        account?.EnsureValid();
         return account;
     }
 
@@ -117,7 +98,6 @@ public class JsonAccessor
     {
         Account? account = LoadAccountById(id);
         List<Ciphertext> transactions = new();
-        account?.EnsureValid();
 
         foreach (Transaction transaction in account.Transactions)
         {
@@ -139,28 +119,16 @@ public class JsonAccessor
 
     public Transaction AddTransactionById(int id, Transaction transaction)
     {
-        // verify data will generate a ciphertext
-        using MemoryStream stream = new(transaction.Data);
-        using Ciphertext ciphertext = new();
-        ciphertext.Load(ServerConfig.EncryptionHelper.Context, stream);
-
-        // verify client digital signature
-        Account? account = LoadAccountById(id);
-
-        // load server signing private key
-        string path = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Name + ".bin");
-        byte[] serverSigningPrivateKey = File.ReadAllBytes(path);
-
-        // sign
-        RsaSigner rsa = new();
-        byte[] serverDigSig = rsa.Sign(serverSigningPrivateKey, transaction.Data);
-        transaction.ServerDigSig = serverDigSig;
+        Account account = LoadAccountById(id);
         account.Transactions.Add(transaction);
-
-        // verify signatures
-        account.EnsureValid();
-
         SaveAccount(account);
         return transaction;
+    }
+
+    public byte[] LoadSigningKeyById(int id)
+    {
+        Account? account = LoadAccountById(id);
+        string path = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Name + ".bin");
+        return File.ReadAllBytes(path);
     }
 }
