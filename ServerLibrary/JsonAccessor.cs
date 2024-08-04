@@ -22,11 +22,54 @@ public class JsonAccessor
         Directory.CreateDirectory(Constants.ServerDirectoryPath);
         Directory.CreateDirectory(Constants.AccountsDirectoryPath);
         Directory.CreateDirectory(Constants.PrivateKeysDirectoryPath);
+
+        if (!File.Exists(Constants.UsersFilePath))
+        {
+            string json = JsonSerializer.Serialize(new List<User>());
+            File.WriteAllText(Constants.UsersFilePath, json);
+        }
     }
 
-    public RelinKeys? LoadRelinKeysById(int id)
+    public User LoadUser(UserLogin userLogin)
     {
-        Account? account = LoadAccountById(id);
+        User user = LoadUsers().FirstOrDefault(u => u.Username.Equals(userLogin.Username, StringComparison.OrdinalIgnoreCase) && u.Password.Equals(userLogin.Password));
+        return user;
+    }
+
+    private List<User> LoadUsers()
+    {
+        if (!File.Exists(Constants.UsersFilePath))
+        {
+            throw new FileNotFoundException($"File not found: {Constants.UsersFilePath}");
+        }
+
+        string json = File.ReadAllText(Constants.UsersFilePath);
+        List<User> users = JsonSerializer.Deserialize<List<User>>(json);
+        return users;
+    }
+
+    public void CreateUser(User user)
+    {
+        if (user == null)
+        {
+            throw new ArgumentException("User cannot be null.");
+        }
+
+        List<User> users = LoadUsers();
+
+        if (users.Any(u => u.Username == user.Username))
+        {
+            throw new ArgumentException("Username taken.");
+        }
+
+        users.Add(user);
+        string json = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(Constants.UsersFilePath, json);
+    }
+
+    public RelinKeys LoadRelinKeysById(int id)
+    {
+        Account account = LoadAccountById(id);
         byte[] relinKeysBytes = account.SEALRelinKeys;
         using MemoryStream stream = new(relinKeysBytes);
         RelinKeys relinKeys = new();
@@ -77,9 +120,9 @@ public class JsonAccessor
         return accounts;
     }
 
-    public Account? LoadAccountById(int id)
+    public Account LoadAccountById(int id)
     {
-        Account? account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException("Account not found.");
+        Account account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException("Account not found.");
         return account;
     }
 

@@ -6,9 +6,6 @@ namespace WinFormsUI;
 
 internal static class Program
 {
-    /// <summary>
-    ///  The main entry point for the application.
-    /// </summary>
     [STAThread]
     static async Task Main()
     {
@@ -16,6 +13,8 @@ internal static class Program
 
         try
         {
+            await ClientConfig.ApiAccessor.Login("Evan", "Password");
+            var p = await ClientConfig.ApiAccessor.GetEncryptionParameters();
             await ClientConfig.CreateAccount("Test", AccountType.Checking, password);
             await ClientConfig.AddTransactionById(1, 15, password);
             await ClientConfig.AddTransactionById(1, -20, password);

@@ -12,7 +12,7 @@ public class JsonAccessor
         Directory.CreateDirectory(Constants.AccountsDirectoryPath);
     }
 
-    public PublicKey? LoadPublicKeyById(int id, SEALContext context)
+    public PublicKey LoadPublicKeyById(int id, SEALContext context)
     {
         if (context == null)
         {
@@ -26,7 +26,7 @@ public class JsonAccessor
         return publicKey;
     }
 
-    public SecretKey? LoadSecretKeyById(int id, SEALContext context, string password)
+    public SecretKey LoadSecretKeyById(int id, SEALContext context, string password)
     {
         if (context == null)
         {
@@ -47,7 +47,7 @@ public class JsonAccessor
         return secretKey;
     }
 
-    public EncryptionParameters? LoadParmsById(int id)
+    public EncryptionParameters LoadParmsById(int id)
     {
         byte[] parmsBytes = LoadAccountById(id).Parms;
         using MemoryStream stream = new(parmsBytes);
@@ -94,22 +94,22 @@ public class JsonAccessor
         return accounts;
     }
 
-    public Account? LoadAccountById(int id)
+    public Account LoadAccountById(int id)
     {
-        Account? account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException($"Account with ID {id} not found.");
+        Account account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException($"Account with ID {id} not found.");
         return account;
     }
 
     public void DeleteAccountById(int id)
     {
-        Account? account = LoadAccountById(id);
+        Account account = LoadAccountById(id);
         string path = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
         File.Delete(path);
     }
 
     public void AddTransactionById(int id, Transaction transaction, SEALContext context)
     {
-        Account? account = LoadAccountById(id);
+        Account account = LoadAccountById(id);
         account.Transactions.Add(transaction);
         SaveAccount(account);
     }

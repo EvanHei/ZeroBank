@@ -3,6 +3,8 @@ using SharedLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +15,27 @@ namespace ClientLibrary;
 public class ApiAccessor
 {
     private static readonly HttpClient client = new();
+
+    public async Task<string> Login(string username, string password)
+    {
+        string url = $"{Constants.UsersBaseUrl}/login";
+        if (!IsValidUrl(url))
+        {
+            throw new ArgumentException("Invalid URL", nameof(url));
+        }
+
+        UserLogin loginData = new UserLogin { Username = username, Password = password };
+        HttpResponseMessage response = await client.PostAsJsonAsync(url, loginData);
+        if (!response.IsSuccessStatusCode)
+        {
+            string errorMessage = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorMessage}");
+        }
+
+        string token = await response.Content.ReadFromJsonAsync<string>();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        return token;
+    }
 
     public async Task<EncryptionParameters> GetEncryptionParameters()
     {
@@ -126,7 +149,7 @@ public class ApiAccessor
         return returnedTransaction;
     }
 
-    public async Task<Ciphertext?> GetBalanceById(int id, SEALContext context)
+    public async Task<Ciphertext> GetBalanceById(int id, SEALContext context)
     {
         if (context == null)
         {

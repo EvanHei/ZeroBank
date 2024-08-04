@@ -13,6 +13,7 @@ public static class Constants
 
     public static readonly string ClientDirectoryPath = Path.Combine(appDirectoryPath, "WinFormsUI");
     public static readonly string AccountsDirectoryPath = Path.Combine(ClientDirectoryPath, "Accounts");
-    public static readonly string ParmsUrl = "https://localhost:7188/parms";
-    public static readonly string AccountsBaseUrl = "https://localhost:7188/accounts";
+    public static readonly string ParmsUrl = "https://localhost:7188/api/Parms";
+    public static readonly string AccountsBaseUrl = "https://localhost:7188/api/Accounts";
+    public static readonly string UsersBaseUrl = "https://localhost:7188/api/Users";
 }
