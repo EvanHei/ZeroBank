@@ -3,12 +3,12 @@
 public class User
 {
     public string Username { get; set; }
-    public string Password { get; set; }
+    public string PasswordHash { get; set; }
     public int Id { get; set; }
 
-    public User(string username, string password)
+    public User(string username, string passwordHash)
     {
         Username = username;
-        Password = password;
+        PasswordHash = passwordHash;
     }
 }

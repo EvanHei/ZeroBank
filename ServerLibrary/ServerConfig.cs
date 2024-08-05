@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using BCrypt.Net;
 
 namespace ServerLibrary;
 
@@ -28,14 +29,33 @@ public static class ServerConfig
             throw new InvalidOperationException("A user with the provided credentials already exists.");
         }
 
-        // TODO: hash the password with BCrypt
-        User newUser = new(userCredentials.Username, userCredentials.Password);
+        // hash the password
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(userCredentials.Password);
+
+        User newUser = new(userCredentials.Username, passwordHash);
 
         // set user ID
         List<User> users = DataAccessor.LoadUsers();
         newUser.Id = users.Count != 0 ? users.Max(u => u.Id) + 1 : 1;
 
         DataAccessor.CreateUser(newUser);
+    }
+
+    public static User LoadUser(UserCredentials userCredentials)
+    {
+        if (string.IsNullOrEmpty(userCredentials.Username) || string.IsNullOrEmpty(userCredentials.Password))
+        {
+            throw new ArgumentException("Username and password must not be empty.");
+        }
+
+        // get user from database
+        User user = DataAccessor.LoadUser(userCredentials);
+        if (user == null)
+        {
+            throw new InvalidOperationException("User not found.");
+        }
+
+        return user;
     }
 
     public static void CreatePartialAccount(Account account, int userId)

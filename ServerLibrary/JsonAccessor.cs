@@ -32,8 +32,15 @@ public class JsonAccessor
 
     public User LoadUser(UserCredentials userCredentials)
     {
-        User user = LoadUsers().FirstOrDefault(u => u.Username.Equals(userCredentials.Username, StringComparison.OrdinalIgnoreCase) && u.Password.Equals(userCredentials.Password));
-        return user;
+        User user = LoadUsers().FirstOrDefault(u => u.Username.Equals(userCredentials.Username, StringComparison.OrdinalIgnoreCase));
+
+        // verify the password
+        if (user != null && BCrypt.Net.BCrypt.Verify(userCredentials.Password, user.PasswordHash))
+        {
+            return user;
+        }
+
+        return null;
     }
 
     public List<User> LoadUsers()

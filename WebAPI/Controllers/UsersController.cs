@@ -30,18 +30,7 @@ public class UsersController : ControllerBase
 
         try
         {
-            if (string.IsNullOrEmpty(userCredentials.Username) || string.IsNullOrEmpty(userCredentials.Password))
-            {
-                _logger.LogWarning($"User not found: {userCredentials.Username}");
-                return Results.BadRequest("Invalid user credentials");
-            }
-
-            // get user from database
-            User user = ServerConfig.DataAccessor.LoadUser(userCredentials);
-            if (user == null)
-            {
-                return Results.NotFound("User not found");
-            }
+            User user = ServerConfig.LoadUser(userCredentials);
 
             // create claims
             List<Claim> claims = new();
