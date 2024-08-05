@@ -24,20 +24,20 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("login")]
-    public IResult Login(UserLogin userLogin)
+    public IResult Login(UserCredentials userCredentials)
     {
-        _logger.LogInformation($"Login attempt for user: {userLogin.Username}");
+        _logger.LogInformation($"Login attempt for user: {userCredentials.Username}");
 
         try
         {
-            if (string.IsNullOrEmpty(userLogin.Username) || string.IsNullOrEmpty(userLogin.Password))
+            if (string.IsNullOrEmpty(userCredentials.Username) || string.IsNullOrEmpty(userCredentials.Password))
             {
-                _logger.LogWarning($"User not found: {userLogin.Username}");
+                _logger.LogWarning($"User not found: {userCredentials.Username}");
                 return Results.BadRequest("Invalid user credentials");
             }
 
             // get user from database
-            User user = ServerConfig.DataAccessor.LoadUser(userLogin);
+            User user = ServerConfig.DataAccessor.LoadUser(userCredentials);
             if (user == null)
             {
                 return Results.NotFound("User not found");
@@ -45,7 +45,8 @@ public class UsersController : ControllerBase
 
             // create claims
             List<Claim> claims = new();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Username));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+            claims.Add(new Claim(ClaimTypes.Name, user.Username));
 
             // create the new JWT token
             JwtSecurityToken token = new
@@ -65,12 +66,29 @@ public class UsersController : ControllerBase
             string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             _logger.LogInformation($"JWT token generated successfully for user: {user.Username}");
             return Results.Ok(tokenString);
-
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred while processing the login for user: {userLogin.Username}");
+            _logger.LogError(ex, $"An error occurred while processing the login for user: {userCredentials.Username}");
             return Results.Problem(ex.Message);
         }    
+    }
+
+    [HttpPost("signup")]
+    public IResult SignUp(UserCredentials userCredentials)
+    {
+        _logger.LogInformation($"Sign-up attempt for user: {userCredentials.Username}");
+
+        try
+        {
+            ServerConfig.CreateUser(userCredentials);
+            _logger.LogInformation($"User signed up successfully: {userCredentials.Username}");
+            return Results.Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"An error occurred while processing the sign-up for user: {userCredentials.Username}");
+            return Results.Problem(ex.Message);
+        }
     }
 }

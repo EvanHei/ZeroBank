@@ -30,13 +30,13 @@ public class JsonAccessor
         }
     }
 
-    public User LoadUser(UserLogin userLogin)
+    public User LoadUser(UserCredentials userCredentials)
     {
-        User user = LoadUsers().FirstOrDefault(u => u.Username.Equals(userLogin.Username, StringComparison.OrdinalIgnoreCase) && u.Password.Equals(userLogin.Password));
+        User user = LoadUsers().FirstOrDefault(u => u.Username.Equals(userCredentials.Username, StringComparison.OrdinalIgnoreCase) && u.Password.Equals(userCredentials.Password));
         return user;
     }
 
-    private List<User> LoadUsers()
+    public List<User> LoadUsers()
     {
         if (!File.Exists(Constants.UsersFilePath))
         {
@@ -102,7 +102,13 @@ public class JsonAccessor
         File.WriteAllText(path, json);
     }
 
-    public List<Account> LoadAccounts()
+    public List<Account> LoadUserAccounts(int id)
+    {
+        List <Account> userAccounts = LoadAllAccounts().Where(a => a.UserId == id).ToList();
+        return userAccounts;
+    }
+
+    public List<Account> LoadAllAccounts()
     {
         if (!Directory.Exists(Constants.AccountsDirectoryPath))
         {
@@ -122,13 +128,13 @@ public class JsonAccessor
 
     public Account LoadAccountById(int id)
     {
-        Account account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException("Account not found.");
+        Account account = LoadAllAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException("Account not found.");
         return account;
     }
 
     public void DeleteAccountById(int id)
     {
-        Account? account = LoadAccountById(id);
+        Account account = LoadAccountById(id);
         string accountPath = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
         File.Delete(accountPath);
 
@@ -139,7 +145,7 @@ public class JsonAccessor
 
     public List<Ciphertext> LoadTransactionsById(int id)
     {
-        Account? account = LoadAccountById(id);
+        Account account = LoadAccountById(id);
         List<Ciphertext> transactions = new();
 
         foreach (Transaction transaction in account.Transactions)

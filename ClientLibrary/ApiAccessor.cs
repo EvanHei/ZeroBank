@@ -16,7 +16,7 @@ public class ApiAccessor
 {
     private static readonly HttpClient client = new();
 
-    public async Task<string> Login(string username, string password)
+    public async Task Login(string username, string password)
     {
         string url = $"{Constants.UsersBaseUrl}/login";
         if (!IsValidUrl(url))
@@ -24,8 +24,8 @@ public class ApiAccessor
             throw new ArgumentException("Invalid URL", nameof(url));
         }
 
-        UserLogin loginData = new UserLogin { Username = username, Password = password };
-        HttpResponseMessage response = await client.PostAsJsonAsync(url, loginData);
+        UserCredentials credentials = new(username, password);
+        HttpResponseMessage response = await client.PostAsJsonAsync(url, credentials);
         if (!response.IsSuccessStatusCode)
         {
             string errorMessage = await response.Content.ReadAsStringAsync();
@@ -34,7 +34,23 @@ public class ApiAccessor
 
         string token = await response.Content.ReadFromJsonAsync<string>();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        return token;
+    }
+
+    public async Task SignUp(string username, string password)
+    {
+        string url = $"{Constants.UsersBaseUrl}/signup";
+        if (!IsValidUrl(url))
+        {
+            throw new ArgumentException("Invalid URL", nameof(url));
+        }
+
+        UserCredentials credentials = new(username, password);
+        HttpResponseMessage response = await client.PostAsJsonAsync(url, credentials);
+        if (!response.IsSuccessStatusCode)
+        {
+            string errorMessage = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorMessage}");
+        }
     }
 
     public async Task<EncryptionParameters> GetEncryptionParameters()

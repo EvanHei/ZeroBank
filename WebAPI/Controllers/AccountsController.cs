@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ServerLibrary;
 using SharedLibrary;
+using System.Security.Claims;
 
 namespace WebAPI.Controllers;
 
@@ -27,7 +28,9 @@ public class AccountsController : ControllerBase
 
         try
         {
-            List<Account> accounts = ServerConfig.DataAccessor.LoadAccounts();
+            string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = int.Parse(userIdClaim);
+            List<Account> accounts = ServerConfig.DataAccessor.LoadUserAccounts(userId);
             _logger.LogInformation("Successfully retrieved accounts");
             return Results.Ok(accounts);
         }
@@ -44,6 +47,7 @@ public class AccountsController : ControllerBase
     {
         _logger.LogInformation($"PostPartialAccount method called");
 
+        // configure timer
         AccountCreationTimer = new(60000);
         AccountCreationTimer.Elapsed += (sender, e) =>
         {
@@ -57,7 +61,9 @@ public class AccountsController : ControllerBase
 
         try
         {
-            ServerConfig.CreateAccount(account);
+            string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = int.Parse(userIdClaim);
+            ServerConfig.CreatePartialAccount(account, userId);
             _logger.LogInformation($"Created partial account ID: {account.Id}");
             return Results.Ok(account);
         }
@@ -78,7 +84,9 @@ public class AccountsController : ControllerBase
         AccountCreationTimer.Dispose();
         try
         {
-            ServerConfig.DataAccessor.SaveAccount(account);
+            string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = int.Parse(userIdClaim);
+            ServerConfig.CreateFullAccount(userId, account);
             _logger.LogInformation($"Successfully saved full account ID: {account.Id}");
             return Results.Ok();
         }
@@ -91,13 +99,15 @@ public class AccountsController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize]
-    public IResult DeleteAccountById(int id)
+    public IResult Delete(int id)
     {
-        _logger.LogInformation($"DeleteAccountById method called for account ID: {id}");
+        _logger.LogInformation($"Delete method called for account ID: {id}");
 
         try
         {
-            ServerConfig.DataAccessor.DeleteAccountById(id);
+            string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = int.Parse(userIdClaim);
+            ServerConfig.DeleteAccount(id, userId);
             _logger.LogInformation($"Successfully deleted account ID: {id}");
             return Results.Ok();
         }
@@ -116,7 +126,9 @@ public class AccountsController : ControllerBase
 
         try
         {
-            ServerConfig.AddTransactionById(id, transaction);
+            string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = int.Parse(userIdClaim);
+            ServerConfig.AddTransactionById(id, userId, transaction);
             _logger.LogInformation($"Successfully added transaction for account ID: {id}");
             return Results.Ok(transaction);
         }
@@ -129,13 +141,15 @@ public class AccountsController : ControllerBase
 
     [HttpGet("{id}/balance")]
     [Authorize]
-    public IResult GetBalanceById(int id)
+    public IResult GetBalance(int id)
     {
         _logger.LogInformation($"GetBalanceById method called for account ID: {id}");
 
         try
         {
-            MemoryStream stream = ServerConfig.GetBalanceStreamById(id);
+            string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = int.Parse(userIdClaim);
+            MemoryStream stream = ServerConfig.GetBalanceStreamById(id, userId);
             _logger.LogInformation($"Successfully retrieved balance for account ID: {id}");
             return Results.Stream(stream);
         }

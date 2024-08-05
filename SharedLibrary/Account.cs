@@ -15,6 +15,7 @@ namespace SharedLibrary;
 public class Account
 {
     public int Id { get; set; }
+    public int UserId { get; set; }
     public string Name { get; set; }
     public AccountType Type { get; set; }
     public DateTime DateCreated { get; private set; }
@@ -28,6 +29,7 @@ public class Account
     public byte[] ClientDigSig { get; set; }
     public byte[] ServerDigSig { get; set; }
     public List<Transaction> Transactions { get; set; } = new();
+
 
     public Account(string name,
                    AccountType type,
@@ -55,11 +57,13 @@ public class Account
         return JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
     }
 
+    // only these properties are signed, first by the server which initializes the Id and UserId, second by the client
     public byte[] SerializeMetadataToBytes()
     {
         var dataToSign = new
         {
             Id,
+            UserId,
             Name,
             Type,
             DateCreated,
