@@ -130,9 +130,9 @@ public class ApiAccessor
         }
     }
 
-    public async Task DeleteAccountById(int id)
+    public async Task DeleteAccount(int accountId)
     {
-        string url = $"{Constants.AccountsBaseUrl}/{id}";
+        string url = $"{Constants.AccountsBaseUrl}/{accountId}";
         if (!IsValidUrl(url))
         {
             throw new ArgumentException("Invalid URL", nameof(url));
@@ -146,7 +146,7 @@ public class ApiAccessor
         }
     }
 
-    public async Task<CiphertextTransaction> PostTransactionById(CiphertextTransaction transaction)
+    public async Task<CiphertextTransaction> PostTransaction(CiphertextTransaction transaction)
     {
         string url = $"{Constants.AccountsBaseUrl}/{transaction.AccountId}/transaction";
         if (!IsValidUrl(url))
@@ -165,9 +165,9 @@ public class ApiAccessor
         return returnedTransaction;
     }
 
-    public async Task<Stream> GetBalanceStreamById(int id)
+    public async Task<Stream> GetBalanceStream(int accountId)
     {
-        string url = $"{Constants.AccountsBaseUrl}/{id}/balance";
+        string url = $"{Constants.AccountsBaseUrl}/{accountId}/balance";
         if (!IsValidUrl(url))
         {
             throw new ArgumentException("Invalid URL", nameof(url));

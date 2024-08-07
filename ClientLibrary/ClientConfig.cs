@@ -79,15 +79,15 @@ public static class ClientConfig
         DataAccessor.CreateAccount(returnedAccount);
     }
 
-    public static async Task AddTransactionById(int id, long amount, string password)
+    public static async Task AddTransaction(int accountId, long amount, string password)
     {
-        Account account = DataAccessor.LoadAccountById(id);
+        Account account = DataAccessor.LoadAccount(accountId);
 
         // get encryption data
-        using EncryptionParameters parms = DataAccessor.LoadParmsById(id);
+        using EncryptionParameters parms = DataAccessor.LoadParms(accountId);
         using SEALContext context = new(parms);
-        using PublicKey publicKey = DataAccessor.LoadPublicKeyById(id, context);
-        using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context, password);
+        using PublicKey publicKey = DataAccessor.LoadPublicKeyById(accountId, context);
+        using SecretKey secretKey = DataAccessor.LoadSecretKey(accountId, context, password);
 
         // decrypt client signing encrypted key
         Pbkdf2KeyDeriver keyDeriver = new();
@@ -97,8 +97,8 @@ public static class ClientConfig
 
         // generate ciphertext and create transaction
         using MemoryStream ciphertextStream = new();
-        EncryptionHelper.EncryptById(id, amount, context, publicKey, secretKey).Save(ciphertextStream);
-        CiphertextTransaction transaction = new(ciphertextStream.ToArray(), id);
+        EncryptionHelper.EncryptById(accountId, amount, context, publicKey, secretKey).Save(ciphertextStream);
+        CiphertextTransaction transaction = new(ciphertextStream.ToArray(), accountId);
 
         // sign
         RsaSigner rsa = new();
@@ -106,7 +106,7 @@ public static class ClientConfig
         transaction.ClientDigSig = clientDigSig;
 
         // post to server
-        CiphertextTransaction returnedTransaction = await ApiAccessor.PostTransactionById(transaction);
+        CiphertextTransaction returnedTransaction = await ApiAccessor.PostTransaction(transaction);
 
         // verify signatures
         account.EnsureValid();
@@ -120,13 +120,13 @@ public static class ClientConfig
         DataAccessor.AddTransaction(returnedTransaction, context);
     }
 
-    public static async Task<long> GetBalanceById(int id, string password)
+    public static async Task<long> GetBalance(int accountId, string password)
     {
-        using EncryptionParameters parms = DataAccessor.LoadParmsById(id);
+        using EncryptionParameters parms = DataAccessor.LoadParms(accountId);
         using SEALContext context = new(parms);
-        using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context, password);
+        using SecretKey secretKey = DataAccessor.LoadSecretKey(accountId, context, password);
 
-        Stream stream = await ApiAccessor.GetBalanceStreamById(id);
+        Stream stream = await ApiAccessor.GetBalanceStream(accountId);
 
         using MemoryStream memStream = new();
         stream.CopyTo(memStream);
@@ -143,37 +143,37 @@ public static class ClientConfig
         return balance;
     }
 
-    public static async Task DeleteAccountById(int id)
+    public static async Task DeleteAccount(int accountId)
     {
-        await ApiAccessor.DeleteAccountById(id);
-        DataAccessor.DeleteAccountById(id);
+        await ApiAccessor.DeleteAccount(accountId);
+        DataAccessor.DeleteAccount(accountId);
     }
 
-    public static async Task<List<PlaintextTransaction>> GetAccountPlaintextTransactions(int id, string password)
+    public static async Task<List<PlaintextTransaction>> GetPlaintextTransactions(int accountId, string password)
     {
-        List<PlaintextTransaction> transactionDatas = new();
+        List<PlaintextTransaction> plaintextTransactions = new();
 
         List<Account> accounts = await ApiAccessor.GetAccounts();
-        Account account = accounts.FirstOrDefault(a => a.Id == id);
+        Account account = accounts.FirstOrDefault(a => a.Id == accountId);
 
-        using EncryptionParameters parms = DataAccessor.LoadParmsById(id);
+        using EncryptionParameters parms = DataAccessor.LoadParms(accountId);
         using SEALContext context = new(parms);
-        using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context, password);
+        using SecretKey secretKey = DataAccessor.LoadSecretKey(accountId, context, password);
 
-        foreach (CiphertextTransaction transaction in account.Transactions)
+        foreach (CiphertextTransaction ciphertextTransaction in account.Transactions)
         {
-            using MemoryStream memStream = new(transaction.Ciphertext);
+            using MemoryStream memStream = new(ciphertextTransaction.Ciphertext);
             Ciphertext ciphertext = new();
             ciphertext.Load(context, memStream);
 
-            PlaintextTransaction data = new();
-            data.Amount = EncryptionHelper.Decrypt(ciphertext, context, secretKey);
+            PlaintextTransaction plaintextTransaction = new();
+            plaintextTransaction.Amount = EncryptionHelper.Decrypt(ciphertext, context, secretKey);
+            plaintextTransaction.AccountId = ciphertextTransaction.AccountId;
+            plaintextTransaction.Timestamp = ciphertextTransaction.Timestamp;
 
-            // TODO: implement when Transaction.Timestamp property is finished
-            //data.Timestamp = transaction.Timestmp;
-            transactionDatas.Add(data);
+            plaintextTransactions.Add(plaintextTransaction);
         }
 
-        return transactionDatas;
+        return plaintextTransactions;
     }
 }

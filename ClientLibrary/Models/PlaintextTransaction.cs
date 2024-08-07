@@ -9,5 +9,6 @@ namespace ClientLibrary.Models;
 public class PlaintextTransaction
 {
     public long Amount { get; set; }
+    public int AccountId { get; set; }
     public DateTime Timestamp { get; set; }
 }

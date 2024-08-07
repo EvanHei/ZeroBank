@@ -180,7 +180,7 @@ public class AccountsController : ControllerBase
         {
             string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             int userId = int.Parse(userIdClaim);
-            MemoryStream stream = ServerConfig.GetBalanceStreamById(id, userId);
+            MemoryStream stream = ServerConfig.GetBalanceStream(id, userId);
             _logger.LogInformation($"Successfully retrieved balance for account ID: {id}");
             return Results.Stream(stream);
         }

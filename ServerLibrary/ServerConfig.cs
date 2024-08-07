@@ -112,7 +112,7 @@ public static class ServerConfig
         DataAccessor.AddTransaction(transaction);
     }
 
-    public static MemoryStream GetBalanceStreamById(int accountId, int userId)
+    public static MemoryStream GetBalanceStream(int accountId, int userId)
     {
         // verify signatures
         DataAccessor.LoadAccountById(accountId).EnsureValid();

@@ -1,4 +1,5 @@
-﻿using Microsoft.Research.SEAL;
+﻿using ClientLibrary.Models;
+using Microsoft.Research.SEAL;
 using SharedLibrary.Models;
 using System.Text.Json;
 
@@ -19,21 +20,21 @@ public class JsonAccessor
             return null;
         }
 
-        byte[] publicKeyBytes = LoadAccountById(id).SEALPublicKey;
+        byte[] publicKeyBytes = LoadAccount(id).SEALPublicKey;
         using MemoryStream stream = new(publicKeyBytes);
         PublicKey publicKey = new();
         publicKey.Load(context, stream);
         return publicKey;
     }
 
-    public SecretKey LoadSecretKeyById(int id, SEALContext context, string password)
+    public SecretKey LoadSecretKey(int id, SEALContext context, string password)
     {
         if (context == null)
         {
             return null;
         }
 
-        byte[] encryptedSecretKeyBytes = LoadAccountById(id).SEALSecretKeyEncrypted;
+        byte[] encryptedSecretKeyBytes = LoadAccount(id).SEALSecretKeyEncrypted;
 
         // decrypt
         Pbkdf2KeyDeriver keyDeriver = new();
@@ -47,9 +48,9 @@ public class JsonAccessor
         return secretKey;
     }
 
-    public EncryptionParameters LoadParmsById(int id)
+    public EncryptionParameters LoadParms(int id)
     {
-        byte[] parmsBytes = LoadAccountById(id).Parms;
+        byte[] parmsBytes = LoadAccount(id).Parms;
         using MemoryStream stream = new(parmsBytes);
         EncryptionParameters parms = new();
         parms.Load(stream);
@@ -94,23 +95,39 @@ public class JsonAccessor
         return accounts;
     }
 
-    public Account LoadAccountById(int id)
+    public Account LoadAccount(int accountId)
     {
-        Account account = LoadAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException($"Account with ID {id} not found.");
+        Account account = LoadAccounts().Where(a => a.Id == accountId).FirstOrDefault() ?? throw new InvalidOperationException($"Account with ID {accountId} not found.");
         return account;
     }
 
-    public void DeleteAccountById(int id)
+    public void DeleteAccount(int accountId)
     {
-        Account account = LoadAccountById(id);
+        Account account = LoadAccount(accountId);
         string path = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
         File.Delete(path);
     }
 
     public void AddTransaction(CiphertextTransaction transaction, SEALContext context)
     {
-        Account account = LoadAccountById(transaction.AccountId);
+        Account account = LoadAccount(transaction.AccountId);
         account.Transactions.Add(transaction);
         SaveAccount(account);
+    }
+
+    public List<CiphertextTransaction> LoadAllCiphertextTransactions()
+    {
+        List<CiphertextTransaction> ciphertextTransactions = new();
+        List<Account> accounts = LoadAccounts();
+
+        foreach (Account account in accounts)
+        {
+            foreach (CiphertextTransaction ciphertextTransaction in account.Transactions)
+            {
+                ciphertextTransactions.Add(ciphertextTransaction);
+            }
+        }
+
+        return ciphertextTransactions;
     }
 }

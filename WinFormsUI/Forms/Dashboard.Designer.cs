@@ -33,6 +33,8 @@
             AccountsLabel = new Label();
             DashboardLabel = new Label();
             SidebarBubble = new PictureBox();
+            AccountsPanel = new Panel();
+            label3 = new Label();
             AccountDetailsPanel = new Panel();
             ChartPanel = new Panel();
             SwitchViewPictureBox = new PictureBox();
@@ -40,14 +42,20 @@
             TransactionsListPictureBox = new PictureBox();
             BalancePictureBox = new PictureBox();
             ChartPictureBox = new PictureBox();
+            DashboardPanel = new Panel();
+            NumberOfTransactionsLabel = new Label();
+            NumberOfAccountsLabel = new Label();
+            TotalBalanceLabel = new Label();
             SidebarPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)SidebarBubble).BeginInit();
+            AccountsPanel.SuspendLayout();
             AccountDetailsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)SwitchViewPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TransactionsNumberPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TransactionsListPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)BalancePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ChartPictureBox).BeginInit();
+            DashboardPanel.SuspendLayout();
             SuspendLayout();
             // 
             // SidebarPanel
@@ -70,17 +78,19 @@
             AccountsLabel.Size = new Size(73, 21);
             AccountsLabel.TabIndex = 2;
             AccountsLabel.Text = "Accounts";
+            AccountsLabel.Click += AccountsLabel_Click;
             // 
             // DashboardLabel
             // 
             DashboardLabel.AutoSize = true;
             DashboardLabel.BackColor = Color.FromArgb(79, 79, 79);
             DashboardLabel.ForeColor = Color.FromArgb(172, 172, 172);
-            DashboardLabel.Location = new Point(30, 131);
+            DashboardLabel.Location = new Point(30, 130);
             DashboardLabel.Name = "DashboardLabel";
             DashboardLabel.Size = new Size(86, 21);
             DashboardLabel.TabIndex = 1;
             DashboardLabel.Text = "Dashboard";
+            DashboardLabel.Click += DashboardLabel_Click;
             // 
             // SidebarBubble
             // 
@@ -91,6 +101,25 @@
             SidebarBubble.SizeMode = PictureBoxSizeMode.StretchImage;
             SidebarBubble.TabIndex = 1;
             SidebarBubble.TabStop = false;
+            // 
+            // AccountsPanel
+            // 
+            AccountsPanel.Controls.Add(label3);
+            AccountsPanel.Location = new Point(195, -6);
+            AccountsPanel.Name = "AccountsPanel";
+            AccountsPanel.Size = new Size(987, 530);
+            AccountsPanel.TabIndex = 10;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 24F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label3.ForeColor = Color.White;
+            label3.Location = new Point(367, 300);
+            label3.Name = "label3";
+            label3.Size = new Size(266, 45);
+            label3.TabIndex = 0;
+            label3.Text = "<accountsPanel>";
             // 
             // AccountDetailsPanel
             // 
@@ -162,27 +191,76 @@
             ChartPictureBox.TabIndex = 8;
             ChartPictureBox.TabStop = false;
             // 
+            // DashboardPanel
+            // 
+            DashboardPanel.Controls.Add(NumberOfTransactionsLabel);
+            DashboardPanel.Controls.Add(NumberOfAccountsLabel);
+            DashboardPanel.Controls.Add(TotalBalanceLabel);
+            DashboardPanel.Location = new Point(195, -6);
+            DashboardPanel.Name = "DashboardPanel";
+            DashboardPanel.Size = new Size(987, 530);
+            DashboardPanel.TabIndex = 9;
+            // 
+            // NumberOfTransactionsLabel
+            // 
+            NumberOfTransactionsLabel.AutoSize = true;
+            NumberOfTransactionsLabel.ForeColor = Color.FromArgb(172, 172, 172);
+            NumberOfTransactionsLabel.Location = new Point(436, 416);
+            NumberOfTransactionsLabel.Name = "NumberOfTransactionsLabel";
+            NumberOfTransactionsLabel.Size = new Size(109, 21);
+            NumberOfTransactionsLabel.TabIndex = 4;
+            NumberOfTransactionsLabel.Text = "# Transactions";
+            // 
+            // NumberOfAccountsLabel
+            // 
+            NumberOfAccountsLabel.AutoSize = true;
+            NumberOfAccountsLabel.ForeColor = Color.FromArgb(172, 172, 172);
+            NumberOfAccountsLabel.Location = new Point(447, 386);
+            NumberOfAccountsLabel.Name = "NumberOfAccountsLabel";
+            NumberOfAccountsLabel.Size = new Size(86, 21);
+            NumberOfAccountsLabel.TabIndex = 3;
+            NumberOfAccountsLabel.Text = "# Accounts";
+            // 
+            // TotalBalanceLabel
+            // 
+            TotalBalanceLabel.AutoSize = true;
+            TotalBalanceLabel.Font = new Font("Segoe UI", 24F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            TotalBalanceLabel.ForeColor = Color.White;
+            TotalBalanceLabel.Location = new Point(367, 300);
+            TotalBalanceLabel.Name = "TotalBalanceLabel";
+            TotalBalanceLabel.Size = new Size(247, 45);
+            TotalBalanceLabel.TabIndex = 0;
+            TotalBalanceLabel.Text = "<total balance>";
+            // 
             // Dashboard
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 520);
+            Controls.Add(DashboardPanel);
             Controls.Add(AccountDetailsPanel);
             Controls.Add(SidebarPanel);
+            Controls.Add(AccountsPanel);
             Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4);
             Name = "Dashboard";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "ZeroBank";
             SidebarPanel.ResumeLayout(false);
             SidebarPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)SidebarBubble).EndInit();
+            AccountsPanel.ResumeLayout(false);
+            AccountsPanel.PerformLayout();
             AccountDetailsPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)SwitchViewPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)TransactionsNumberPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)TransactionsListPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)BalancePictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)ChartPictureBox).EndInit();
+            DashboardPanel.ResumeLayout(false);
+            DashboardPanel.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -199,5 +277,11 @@
         private PictureBox BalancePictureBox;
         private Panel ChartPanel;
         private PictureBox ChartPictureBox;
+        private Panel DashboardPanel;
+        private Label TotalBalanceLabel;
+        private Label NumberOfAccountsLabel;
+        private Label NumberOfTransactionsLabel;
+        private Panel AccountsPanel;
+        private Label label3;
     }
 }
