@@ -10,7 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace SharedLibrary;
+namespace SharedLibrary.Models;
 
 public class Account
 {
@@ -28,7 +28,7 @@ public class Account
     public byte[] ServerSigningPublicKey { get; set; }
     public byte[] ClientDigSig { get; set; }
     public byte[] ServerDigSig { get; set; }
-    public List<Transaction> Transactions { get; set; } = new();
+    public List<CiphertextTransaction> Transactions { get; set; } = new();
 
 
     public Account(string name,
@@ -103,14 +103,14 @@ public class Account
         }
 
         // verify client and server digital signatures on each transaction
-        foreach (Transaction transaction in Transactions)
+        foreach (CiphertextTransaction transaction in Transactions)
         {
-            if (!rsa.Verify(ClientSigningPublicKey, transaction.ClientDigSig, transaction.Data))
+            if (!rsa.Verify(ClientSigningPublicKey, transaction.ClientDigSig, transaction.SerializeMetadataToBytes()))
             {
                 throw new CryptographicException("Client digital signature verification failed on a transaction.");
             }
 
-            if (!rsa.Verify(ServerSigningPublicKey, transaction.ServerDigSig, transaction.Data))
+            if (!rsa.Verify(ServerSigningPublicKey, transaction.ServerDigSig, transaction.SerializeMetadataToBytes()))
             {
                 throw new CryptographicException("Server digital signature verification failed on a transaction.");
             }

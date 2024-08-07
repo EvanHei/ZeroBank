@@ -1,5 +1,4 @@
 ﻿using Microsoft.Research.SEAL;
-using SharedLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using SharedLibrary.Models;
 
 namespace ClientLibrary;
 
@@ -146,9 +146,9 @@ public class ApiAccessor
         }
     }
 
-    public async Task<Transaction> PostTransactionById(int id, Transaction transaction)
+    public async Task<CiphertextTransaction> PostTransactionById(CiphertextTransaction transaction)
     {
-        string url = $"{Constants.AccountsBaseUrl}/{id}/transaction";
+        string url = $"{Constants.AccountsBaseUrl}/{transaction.AccountId}/transaction";
         if (!IsValidUrl(url))
         {
             throw new ArgumentException("Invalid URL", nameof(url));
@@ -161,17 +161,12 @@ public class ApiAccessor
             throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorContent}");
         }
 
-        Transaction returnedTransaction = await response.Content.ReadFromJsonAsync<Transaction>();
+        CiphertextTransaction returnedTransaction = await response.Content.ReadFromJsonAsync<CiphertextTransaction>();
         return returnedTransaction;
     }
 
-    public async Task<Ciphertext> GetBalanceById(int id, SEALContext context)
+    public async Task<Stream> GetBalanceStreamById(int id)
     {
-        if (context == null)
-        {
-            throw new ArgumentNullException(nameof(context), "SEALContext cannot be null.");
-        }
-
         string url = $"{Constants.AccountsBaseUrl}/{id}/balance";
         if (!IsValidUrl(url))
         {
@@ -185,19 +180,7 @@ public class ApiAccessor
             throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorContent}");
         }
 
-        using Stream stream = await response.Content.ReadAsStreamAsync();
-        using MemoryStream memStream = new();
-        stream.CopyTo(memStream);
-        if (memStream.Length == 0)
-        {
-            return null;
-        }
-
-        memStream.Seek(0, SeekOrigin.Begin);
-
-        Ciphertext ciphertext = new();
-        ciphertext.Load(context, memStream);
-        return ciphertext;
+        return await response.Content.ReadAsStreamAsync();
     }
 
     private static bool IsValidUrl(string url)

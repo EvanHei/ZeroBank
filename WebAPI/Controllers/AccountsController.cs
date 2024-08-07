@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ServerLibrary;
-using SharedLibrary;
+using SharedLibrary.Models;
 using System.Security.Claims;
 
 namespace WebAPI.Controllers;
@@ -78,12 +78,13 @@ public class AccountsController : ControllerBase
         accountCreationTimer.AutoReset = false;
         accountCreationTimer.Start();
 
-        // store the account creation state
-        UserAccountStates[userId] = (account.Id, accountCreationTimer);
-
         try
         {
             ServerConfig.CreatePartialAccount(account, userId);
+
+            // store the account creation state
+            UserAccountStates[userId] = (account.Id, accountCreationTimer);
+
             _logger.LogInformation($"Created partial account ID: {account.Id}");
             return Results.Ok(account);
         }
@@ -150,21 +151,21 @@ public class AccountsController : ControllerBase
 
     [HttpPost("{id}/transaction")]
     [Authorize]
-    public IResult PostTransactionById(int id, [FromBody] Transaction transaction)
+    public IResult PostTransactionById([FromBody] CiphertextTransaction transaction)
     {
-        _logger.LogInformation($"PostTransactionById method called for account ID: {id}");
+        _logger.LogInformation($"PostTransactionById method called for account ID: {transaction.AccountId}");
 
         try
         {
             string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             int userId = int.Parse(userIdClaim);
-            ServerConfig.AddTransactionById(id, userId, transaction);
-            _logger.LogInformation($"Successfully added transaction for account ID: {id}");
+            ServerConfig.AddTransaction(userId, transaction);
+            _logger.LogInformation($"Successfully added transaction for account ID: {transaction.AccountId}");
             return Results.Ok(transaction);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred while adding a transaction for account ID: {id}");
+            _logger.LogError(ex, $"An error occurred while adding a transaction for account ID: {transaction.AccountId}");
             return Results.Problem(ex.Message);
         }
     }

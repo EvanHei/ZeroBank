@@ -1,5 +1,5 @@
 ﻿using Microsoft.Research.SEAL;
-using SharedLibrary;
+using SharedLibrary.Models;
 using System.Text.Json;
 
 namespace ClientLibrary;
@@ -107,9 +107,9 @@ public class JsonAccessor
         File.Delete(path);
     }
 
-    public void AddTransactionById(int id, Transaction transaction, SEALContext context)
+    public void AddTransaction(CiphertextTransaction transaction, SEALContext context)
     {
-        Account account = LoadAccountById(id);
+        Account account = LoadAccountById(transaction.AccountId);
         account.Transactions.Add(transaction);
         SaveAccount(account);
     }

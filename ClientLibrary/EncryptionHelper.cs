@@ -49,7 +49,7 @@ public class EncryptionHelper
         return ciphertext;
     }
 
-    public long DecryptById(int id, Ciphertext ciphertext, SEALContext context, SecretKey secretKey)
+    public long Decrypt(Ciphertext ciphertext, SEALContext context, SecretKey secretKey)
     {
         if (context == null)
         {

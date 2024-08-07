@@ -1,6 +1,8 @@
 using ClientLibrary;
+using ClientLibrary.Models;
 using Microsoft.Research.SEAL;
 using SharedLibrary;
+using SharedLibrary.Models;
 
 namespace WinFormsUI;
 
@@ -22,17 +24,16 @@ internal static class Program
             // user 1
             await ClientConfig.ApiAccessor.SignUp(username1, password1);
             await ClientConfig.ApiAccessor.Login(username1, password1);
-            var p = await ClientConfig.ApiAccessor.GetEncryptionParameters();
             await ClientConfig.CreateAccount("Evan's account", AccountType.Checking, encryptionPassword1);
             await ClientConfig.AddTransactionById(1, 15, encryptionPassword1);
             await ClientConfig.AddTransactionById(1, -20, encryptionPassword1);
             long result = await ClientConfig.GetBalanceById(1, encryptionPassword1);
             List<Account> accounts = await ClientConfig.ApiAccessor.GetAccounts();
+            List<PlaintextTransaction> datapoints = await ClientConfig.GetAccountPlaintextTransactions(1, encryptionPassword1);
 
             // user 2
             await ClientConfig.ApiAccessor.SignUp(username2, password2);
             await ClientConfig.ApiAccessor.Login(username2, password2);
-            p = await ClientConfig.ApiAccessor.GetEncryptionParameters();
             await ClientConfig.CreateAccount("Ian's account", AccountType.Checking, encryptionPassword2);
             await ClientConfig.AddTransactionById(2, 15, encryptionPassword2);
             await ClientConfig.AddTransactionById(2, -20, encryptionPassword2);

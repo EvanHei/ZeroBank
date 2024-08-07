@@ -1,12 +1,6 @@
 ﻿using Microsoft.Research.SEAL;
 using SharedLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using BCrypt.Net;
+using SharedLibrary.Models;
 
 namespace ServerLibrary;
 
@@ -87,35 +81,35 @@ public static class ServerConfig
     public static void CreateFullAccount(int userId, Account account)
     {
         // verify the user owns the account
-        AuthorizeUser(account.Id, userId);
+        AuthorizeAccountAccess(account.Id, userId);
         account.EnsureValid();
         DataAccessor.SaveAccount(account);
     }
 
-    public static void AddTransactionById(int accountId, int userId, Transaction transaction)
+    public static void AddTransaction(int userId, CiphertextTransaction transaction)
     {
-        Account account = DataAccessor.LoadAccountById(accountId);
+        Account account = DataAccessor.LoadAccountById(transaction.AccountId);
 
         // verify the user owns the account
-        AuthorizeUser(accountId, userId);
+        AuthorizeAccountAccess(transaction.AccountId, userId);
 
         // verify data will generate a ciphertext
-        using MemoryStream stream = new(transaction.Data);
+        using MemoryStream stream = new(transaction.Ciphertext);
         using Ciphertext ciphertext = new();
         ciphertext.Load(EncryptionHelper.Context, stream);
 
         // load server signing key
-        byte[] serverSigningPrivateKey = DataAccessor.LoadSigningKeyById(accountId);
+        byte[] serverSigningPrivateKey = DataAccessor.LoadSigningKeyById(transaction.AccountId);
 
         // sign
         RsaSigner rsa = new();
-        byte[] serverDigSig = rsa.Sign(serverSigningPrivateKey, transaction.Data);
+        byte[] serverDigSig = rsa.Sign(serverSigningPrivateKey, transaction.SerializeMetadataToBytes());
         transaction.ServerDigSig = serverDigSig;
 
         // verify signatures
         account.EnsureValid();
 
-        DataAccessor.AddTransactionById(accountId, transaction);
+        DataAccessor.AddTransaction(transaction);
     }
 
     public static MemoryStream GetBalanceStreamById(int accountId, int userId)
@@ -124,7 +118,7 @@ public static class ServerConfig
         DataAccessor.LoadAccountById(accountId).EnsureValid();
 
         // verify the user owns the account
-        AuthorizeUser(accountId, userId);
+        AuthorizeAccountAccess(accountId, userId);
 
         List<Ciphertext> transactions = DataAccessor.LoadTransactionsById(accountId);
         using RelinKeys relinKeys = DataAccessor.LoadRelinKeysById(accountId);
@@ -136,7 +130,7 @@ public static class ServerConfig
         return stream;
     }
 
-    private static void AuthorizeUser(int accountId, int userId)
+    private static void AuthorizeAccountAccess(int accountId, int userId)
     {
         Account account = DataAccessor.LoadAccountById(accountId);
         if (account.UserId != userId)
@@ -148,7 +142,7 @@ public static class ServerConfig
     public static void DeleteAccount(int accountId, int userId)
     {
         // verify the user owns the account
-        AuthorizeUser(accountId, userId);
+        AuthorizeAccountAccess(accountId, userId);
         DataAccessor.DeleteAccountById(accountId);
     }
 }

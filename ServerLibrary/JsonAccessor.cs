@@ -1,6 +1,6 @@
 ﻿using Microsoft.Research.SEAL;
 using Microsoft.VisualBasic;
-using SharedLibrary;
+using SharedLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -155,11 +155,11 @@ public class JsonAccessor
         Account account = LoadAccountById(id);
         List<Ciphertext> transactions = new();
 
-        foreach (Transaction transaction in account.Transactions)
+        foreach (CiphertextTransaction transaction in account.Transactions)
         {
             try
             {
-                using MemoryStream stream = new(transaction.Data);
+                using MemoryStream stream = new(transaction.Ciphertext);
                 Ciphertext ciphertext = new();
                 ciphertext.Load(ServerConfig.EncryptionHelper.Context, stream);
                 transactions.Add(ciphertext);
@@ -173,9 +173,9 @@ public class JsonAccessor
         return transactions;
     }
 
-    public Transaction AddTransactionById(int id, Transaction transaction)
+    public CiphertextTransaction AddTransaction(CiphertextTransaction transaction)
     {
-        Account account = LoadAccountById(id);
+        Account account = LoadAccountById(transaction.AccountId);
         account.Transactions.Add(transaction);
         SaveAccount(account);
         return transaction;

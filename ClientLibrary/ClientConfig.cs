@@ -1,7 +1,10 @@
-﻿using Microsoft.Research.SEAL;
+﻿using ClientLibrary.Models;
+using Microsoft.Research.SEAL;
 using SharedLibrary;
+using SharedLibrary.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text;
@@ -95,26 +98,26 @@ public static class ClientConfig
         // generate ciphertext and create transaction
         using MemoryStream ciphertextStream = new();
         EncryptionHelper.EncryptById(id, amount, context, publicKey, secretKey).Save(ciphertextStream);
-        Transaction transaction = new(ciphertextStream.ToArray());
+        CiphertextTransaction transaction = new(ciphertextStream.ToArray(), id);
 
         // sign
         RsaSigner rsa = new();
-        byte[] clientDigSig = rsa.Sign(clientSigningPrivateKey, transaction.Data);
+        byte[] clientDigSig = rsa.Sign(clientSigningPrivateKey, transaction.SerializeMetadataToBytes());
         transaction.ClientDigSig = clientDigSig;
 
         // post to server
-        Transaction returnedTransaction = await ApiAccessor.PostTransactionById(id, transaction);
+        CiphertextTransaction returnedTransaction = await ApiAccessor.PostTransactionById(transaction);
 
         // verify signatures
         account.EnsureValid();
 
         // verify data will generate a ciphertext
-        using MemoryStream stream = new(transaction.Data);
+        using MemoryStream stream = new(transaction.Ciphertext);
         using Ciphertext ciphertext = new();
         ciphertext.Load(context, stream);
 
         // save to client
-        DataAccessor.AddTransactionById(account.Id, returnedTransaction, context);
+        DataAccessor.AddTransaction(returnedTransaction, context);
     }
 
     public static async Task<long> GetBalanceById(int id, string password)
@@ -122,8 +125,21 @@ public static class ClientConfig
         using EncryptionParameters parms = DataAccessor.LoadParmsById(id);
         using SEALContext context = new(parms);
         using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context, password);
-        using Ciphertext ciphertext = await ApiAccessor.GetBalanceById(id, context);
-        long balance = EncryptionHelper.DecryptById(id, ciphertext, context, secretKey);
+
+        Stream stream = await ApiAccessor.GetBalanceStreamById(id);
+
+        using MemoryStream memStream = new();
+        stream.CopyTo(memStream);
+        if (memStream.Length == 0)
+        {
+            throw new InvalidOperationException("The balance does not contain any data.");
+        }
+        memStream.Seek(0, SeekOrigin.Begin);
+
+        Ciphertext ciphertext = new();
+        ciphertext.Load(context, memStream);
+
+        long balance = EncryptionHelper.Decrypt(ciphertext, context, secretKey);
         return balance;
     }
 
@@ -131,5 +147,33 @@ public static class ClientConfig
     {
         await ApiAccessor.DeleteAccountById(id);
         DataAccessor.DeleteAccountById(id);
+    }
+
+    public static async Task<List<PlaintextTransaction>> GetAccountPlaintextTransactions(int id, string password)
+    {
+        List<PlaintextTransaction> transactionDatas = new();
+
+        List<Account> accounts = await ApiAccessor.GetAccounts();
+        Account account = accounts.FirstOrDefault(a => a.Id == id);
+
+        using EncryptionParameters parms = DataAccessor.LoadParmsById(id);
+        using SEALContext context = new(parms);
+        using SecretKey secretKey = DataAccessor.LoadSecretKeyById(id, context, password);
+
+        foreach (CiphertextTransaction transaction in account.Transactions)
+        {
+            using MemoryStream memStream = new(transaction.Ciphertext);
+            Ciphertext ciphertext = new();
+            ciphertext.Load(context, memStream);
+
+            PlaintextTransaction data = new();
+            data.Amount = EncryptionHelper.Decrypt(ciphertext, context, secretKey);
+
+            // TODO: implement when Transaction.Timestamp property is finished
+            //data.Timestamp = transaction.Timestmp;
+            transactionDatas.Add(data);
+        }
+
+        return transactionDatas;
     }
 }
