@@ -3,6 +3,7 @@ using ClientLibrary.Models;
 using Microsoft.Research.SEAL;
 using SharedLibrary;
 using SharedLibrary.Models;
+using WinFormsUI.Forms;
 
 namespace WinFormsUI;
 
@@ -19,7 +20,7 @@ internal static class Program
         {
             // user 1
             //await ClientConfig.ApiAccessor.SignUp(username1, password1);
-            await ClientConfig.ApiAccessor.Login(username1, password1);
+            //await ClientConfig.ApiAccessor.Login(username1, password1);
             //await ClientConfig.CreateAccount("Evan's account", AccountType.Checking, encryptionPassword1);
             //await ClientConfig.AddTransaction(1, 15, encryptionPassword1);
             //await ClientConfig.AddTransaction(1, -20, encryptionPassword1);
@@ -34,6 +35,6 @@ internal static class Program
         }
 
         ApplicationConfiguration.Initialize();
-        Application.Run(new Dashboard());
+        Application.Run(new LoginForm());
     }
 }

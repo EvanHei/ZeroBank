@@ -1,6 +1,6 @@
 ﻿namespace WinFormsUI
 {
-    partial class Dashboard
+    partial class DashboardForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DashboardForm));
             SidebarPanel = new Panel();
             AccountsLabel = new Label();
             DashboardLabel = new Label();
@@ -232,20 +232,20 @@
             TotalBalanceLabel.TabIndex = 0;
             TotalBalanceLabel.Text = "<total balance>";
             // 
-            // Dashboard
+            // DashboardForm
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 520);
+            Controls.Add(SidebarPanel);
             Controls.Add(DashboardPanel);
             Controls.Add(AccountDetailsPanel);
-            Controls.Add(SidebarPanel);
             Controls.Add(AccountsPanel);
             Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4);
-            Name = "Dashboard";
+            Name = "DashboardForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "ZeroBank";
             SidebarPanel.ResumeLayout(false);
@@ -278,10 +278,10 @@
         private Panel ChartPanel;
         private PictureBox ChartPictureBox;
         private Panel DashboardPanel;
-        private Label TotalBalanceLabel;
-        private Label NumberOfAccountsLabel;
-        private Label NumberOfTransactionsLabel;
         private Panel AccountsPanel;
         private Label label3;
+        private Label NumberOfTransactionsLabel;
+        private Label NumberOfAccountsLabel;
+        private Label TotalBalanceLabel;
     }
 }

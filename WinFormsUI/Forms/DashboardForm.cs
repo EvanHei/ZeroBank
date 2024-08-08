@@ -6,9 +6,9 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace WinFormsUI
 {
-    public partial class Dashboard : Form
+    public partial class DashboardForm : Form
     {
-        public Dashboard()
+        public DashboardForm()
         {
             InitializeComponent();
             PopulateForm();
