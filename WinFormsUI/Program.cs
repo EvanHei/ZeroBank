@@ -20,8 +20,9 @@ internal static class Program
         {
             // user 1
             //await ClientConfig.ApiAccessor.SignUp(username1, password1);
-            //await ClientConfig.ApiAccessor.Login(username1, password1);
-            //await ClientConfig.CreateAccount("Evan's account", AccountType.Checking, encryptionPassword1);
+            await ClientConfig.ApiAccessor.Login(username1, password1);
+            //await ClientConfig.CreateAccount("Account 1", AccountType.Checking, encryptionPassword1);
+            //await ClientConfig.CreateAccount("Account 2", AccountType.Savings, encryptionPassword1);
             //await ClientConfig.AddTransaction(1, 15, encryptionPassword1);
             //await ClientConfig.AddTransaction(1, -20, encryptionPassword1);
             //long result = await ClientConfig.GetBalance(1, encryptionPassword1);
@@ -35,6 +36,6 @@ internal static class Program
         }
 
         ApplicationConfiguration.Initialize();
-        Application.Run(new LoginForm());
+        Application.Run(new DashboardForm());
     }
 }
