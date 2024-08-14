@@ -1,5 +1,6 @@
 ﻿using ClientLibrary;
 using ClientLibrary.Models;
+using SharedLibrary;
 using SharedLibrary.Models;
 using System.Globalization;
 using System.Transactions;
@@ -133,8 +134,8 @@ namespace WinFormsUI
             chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(145, 145, 145);
             chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(145, 145, 145);
 
-            // TODO: update to formet better and set the horizontal lines to be a more muted color
-            chartArea.AxisY.LabelStyle.Format = "${}";
+            // TODO: update to formet better
+            chartArea.AxisY.LabelStyle.Format = "$#,##0.00;- $#,##0.00";
 
             // define series
             Series series = new();
@@ -204,6 +205,7 @@ namespace WinFormsUI
             AccountsPanel.Visible = false;
             AccountDetailsPanel.Visible = false;
             TransactPanel.Visible = false;
+            CreateAccountPanel.Visible = false;
         }
 
         private void ShowAccountsPanel()
@@ -214,6 +216,7 @@ namespace WinFormsUI
             AccountsPanel.Visible = true;
             AccountDetailsPanel.Visible = false;
             TransactPanel.Visible = false;
+            CreateAccountPanel.Visible = false;
         }
 
         private void ShowTransactPanel()
@@ -222,6 +225,7 @@ namespace WinFormsUI
             AccountsPanel.Visible = false;
             AccountDetailsPanel.Visible = false;
             TransactPanel.Visible = true;
+            CreateAccountPanel.Visible = false;
         }
 
         private void ShowAccountDetailsPanel()
@@ -230,11 +234,24 @@ namespace WinFormsUI
             AccountsPanel.Visible = false;
             AccountDetailsPanel.Visible = true;
             TransactPanel.Visible = false;
+            CreateAccountPanel.Visible = false;
 
             AccountDetailsPanelTransactionsListBox.DataSource = selectedAccountPlaintextTransactions;
             AccountsPanelPasswordTextBox.Text = "";
             LoadDoughnutChart(selectedAccountPlaintextTransactions);
             LoadMainChart(selectedAccountPlaintextTransactions);
+        }
+
+        private void ShowCreateAccountPanel()
+        {
+            CreateAccountPanelTypeComboBox.SelectedIndex = 0;
+
+            DashboardPanel.Visible = false;
+            AccountsPanel.Visible = false;
+            AccountDetailsPanel.Visible = false;
+            TransactPanel.Visible = false;
+            AccountDetailsPanel.Visible = false;
+            CreateAccountPanel.Visible = true;
         }
 
         private void AccountsPictureBox_Paint(object sender, PaintEventArgs e)
@@ -314,6 +331,8 @@ namespace WinFormsUI
 
         private void BalancePictureBox_Paint(object sender, PaintEventArgs e)
         {
+            PictureBox pictureBox = (PictureBox)sender;
+
             // draw "Name"
             string smallText = "Name";
 
@@ -321,11 +340,11 @@ namespace WinFormsUI
             using SolidBrush brush = new(Color.White);
             SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
 
-            float smallTextX = (AccountsPanelAccountsPictureBox.ClientSize.Width - smallTextSize.Width) / 2;
-            float smallTextY = (AccountsPanelAccountsPictureBox.ClientSize.Height - smallTextSize.Height) / 2;
+            float smallTextX = (pictureBox.ClientSize.Width - smallTextSize.Width) / 2;
+            float smallTextY = (pictureBox.ClientSize.Height - smallTextSize.Height) / 2;
 
-            float smallTextOffsetX = 58;  // shift n pixels left
-            float smallTextOffsetY = 24;   // shift m pixels up
+            float smallTextOffsetX = 42;  // shift n pixels left
+            float smallTextOffsetY = 15;   // shift m pixels up
             smallTextX -= smallTextOffsetX;
             smallTextY -= smallTextOffsetY;
 
@@ -349,6 +368,8 @@ namespace WinFormsUI
 
         private void TransactionsPictureBox_Paint(object sender, PaintEventArgs e)
         {
+            PictureBox pictureBox = (PictureBox)sender;
+
             // draw "Transactions"
             string smallText = "Transactions";
 
@@ -356,11 +377,11 @@ namespace WinFormsUI
             using SolidBrush brush = new(Color.White);
             SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
 
-            float smallTextX = (AccountsPanelAccountsPictureBox.ClientSize.Width - smallTextSize.Width) / 2;
-            float smallTextY = (AccountsPanelAccountsPictureBox.ClientSize.Height - smallTextSize.Height) / 2;
+            float smallTextX = (pictureBox.ClientSize.Width - smallTextSize.Width) / 2;
+            float smallTextY = (pictureBox.ClientSize.Height - smallTextSize.Height) / 2;
 
-            float smallTextOffsetX = 41;  // shift n pixels left
-            float smallTextOffsetY = 24;   // shift m pixels up
+            float smallTextOffsetX = 25;  // shift n pixels left
+            float smallTextOffsetY = 15;   // shift m pixels up
             smallTextX -= smallTextOffsetX;
             smallTextY -= smallTextOffsetY;
 
@@ -384,6 +405,8 @@ namespace WinFormsUI
 
         private void BlockchainPictureBox_Paint(object sender, PaintEventArgs e)
         {
+            PictureBox pictureBox = (PictureBox)sender;
+
             // draw "Switch To"
             string smallText = "Switch To";
 
@@ -391,11 +414,11 @@ namespace WinFormsUI
             using SolidBrush brush = new(Color.White);
             SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
 
-            float smallTextX = (AccountsPanelAccountsPictureBox.ClientSize.Width - smallTextSize.Width) / 2;
-            float smallTextY = (AccountsPanelAccountsPictureBox.ClientSize.Height - smallTextSize.Height) / 2;
+            float smallTextX = (pictureBox.ClientSize.Width - smallTextSize.Width) / 2;
+            float smallTextY = (pictureBox.ClientSize.Height - smallTextSize.Height) / 2;
 
-            float smallTextOffsetX = 50;  // shift n pixels left
-            float smallTextOffsetY = 24;   // shift m pixels up
+            float smallTextOffsetX = 35;  // shift n pixels left
+            float smallTextOffsetY = 15;   // shift m pixels up
             smallTextX -= smallTextOffsetX;
             smallTextY -= smallTextOffsetY;
 
@@ -620,7 +643,7 @@ namespace WinFormsUI
             string text = "Confirm";
 
             using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular, GraphicsUnit.Point);
-            using Brush brush = new SolidBrush(Color.White);
+            using SolidBrush brush = new(Color.White);
             SizeF textSize = e.Graphics.MeasureString(text, font);
 
             float x = (TransactPanelConfirmPictureBox.ClientSize.Width - textSize.Width) / 2;
@@ -683,6 +706,11 @@ namespace WinFormsUI
 
         private void AccountDetailsPanelLastWeekLabel_Click(object sender, EventArgs e)
         {
+            if (AccountDetailsPanelLastWeekPictureBox.Visible == true)
+            {
+                return;
+            }
+
             AccountDetailsPanelLastWeekPictureBox.Visible = true;
             AccountDetailsPanelLastMonthPictureBox.Visible = false;
             AccountDetailsPanelLastYearPictureBox.Visible = false;
@@ -695,6 +723,11 @@ namespace WinFormsUI
 
         private void AccountDetailsPanelLastMonthLabel_Click(object sender, EventArgs e)
         {
+            if (AccountDetailsPanelLastMonthPictureBox.Visible == true)
+            {
+                return;
+            }
+
             AccountDetailsPanelLastWeekPictureBox.Visible = false;
             AccountDetailsPanelLastMonthPictureBox.Visible = true;
             AccountDetailsPanelLastYearPictureBox.Visible = false;
@@ -707,6 +740,11 @@ namespace WinFormsUI
 
         private void AccountDetailsPanelLastYearLabel_Click(object sender, EventArgs e)
         {
+            if (AccountDetailsPanelLastYearPictureBox.Visible == true)
+            {
+                return;
+            }
+
             AccountDetailsPanelLastWeekPictureBox.Visible = false;
             AccountDetailsPanelLastMonthPictureBox.Visible = false;
             AccountDetailsPanelLastYearPictureBox.Visible = true;
@@ -715,6 +753,116 @@ namespace WinFormsUI
             AccountDetailsPanelLastYearLabel.BackColor = Color.FromArgb(79, 79, 79);
 
             LoadMainChart(selectedAccountPlaintextTransactions);
+        }
+
+        private void CreateAccountPanelTypePictureBox_Click(object sender, EventArgs e)
+        {
+            CreateAccountPanelTypeComboBox.DroppedDown = true;
+        }
+
+        private async void CreateAccountPanelCreatePictureBox_Click(object sender, EventArgs e)
+        {
+            // TODO: create error msg
+            if (string.IsNullOrWhiteSpace(CreateAccountPanelNameTextBox.Text))
+            {
+                MessageBox.Show("Please enter a name for the account.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (CreateAccountPanelTypeComboBox.SelectedItem == null)
+            {
+                MessageBox.Show("Please select an account type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(CreateAccountPanelPasswordTextBox.Text))
+            {
+                MessageBox.Show("Please enter a password.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string selectedType = CreateAccountPanelTypeComboBox.SelectedItem.ToString();
+            if (!Enum.TryParse<AccountType>(selectedType, out AccountType type))
+            {
+                MessageBox.Show("The selected account type is invalid.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                await ClientConfig.CreateAccount(CreateAccountPanelNameTextBox.Text,
+                                                 type,
+                                                 CreateAccountPanelPasswordTextBox.Text);
+
+                // clear fields
+                CreateAccountPanelNameTextBox.Text = "";
+                CreateAccountPanelTypeComboBox.SelectedIndex = 0;
+                CreateAccountPanelPasswordTextBox.Text = "";
+
+                await GetData();
+                ShowAccountsPanel();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while creating the account: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CreateAccountPanelCreatePictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            PictureBox pictureBox = (PictureBox)sender;
+
+            string text = "Create";
+
+            using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular, GraphicsUnit.Point);
+            using SolidBrush brush = new(Color.White);
+            SizeF textSize = e.Graphics.MeasureString(text, font);
+
+            float x = (pictureBox.ClientSize.Width - textSize.Width) / 2;
+            float y = (pictureBox.ClientSize.Height - textSize.Height) / 2;
+
+            e.Graphics.DrawString(text, font, brush, new PointF(x, y));
+        }
+
+        private void CreateAccountPanelTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CreateAccountPanelTypePictureBox.Invalidate();
+        }
+
+        private void CreateAccountPanelTypePictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            PictureBox pictureBox = (PictureBox)sender;
+
+            string text = CreateAccountPanelTypeComboBox.SelectedItem as string;
+            using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular);
+            using SolidBrush brush = new(Color.White);
+            SizeF textSize = e.Graphics.MeasureString(text, font);
+
+            float x = 10;
+            float y = (pictureBox.Height - textSize.Height) / 2;
+
+            e.Graphics.DrawString(text, font, brush, x, y);
+        }
+
+        private void AccountsPanelCreateNewButton_Click(object sender, EventArgs e)
+        {
+            ShowCreateAccountPanel();
+        }
+
+        private void AccountsPanelCreateNewPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            PictureBox pictureBox = (PictureBox)sender;
+
+            string text = "Create New";
+
+            using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular, GraphicsUnit.Point);
+            using SolidBrush brush = new(Color.White);
+            SizeF textSize = e.Graphics.MeasureString(text, font);
+
+            float x = (pictureBox.ClientSize.Width - textSize.Width) / 2;
+            float y = (pictureBox.ClientSize.Height - textSize.Height) / 2;
+
+            e.Graphics.DrawString(text, font, brush, new PointF(x, y));
         }
     }
 }
