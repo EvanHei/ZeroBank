@@ -29,471 +29,629 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DashboardForm));
-            SidebarPanel = new Panel();
-            AccountsLabel = new Label();
-            DashboardLabel = new Label();
             AccountsPanel = new Panel();
-            AccountsListBox = new ListBox();
-            PasswordArrowPictureBox = new PictureBox();
-            AccountsListPictureBox = new PictureBox();
-            PasswordTextBox = new TextBox();
-            PasswordPictureBox = new PictureBox();
-            PasswordLabel = new Label();
-            AccountsPictureBox = new PictureBox();
+            AccountsPanelListBox = new ListBox();
+            AccountsPanelPasswordArrowPictureBox = new PictureBox();
+            AccountsPanelListPictureBox = new PictureBox();
+            AccountsPanelPasswordTextBox = new TextBox();
+            AccountsPanelPasswordPictureBox = new PictureBox();
+            AccountsPanelPasswordLabel = new Label();
+            AccountsPanelAccountsPictureBox = new PictureBox();
             AccountDetailsPanel = new Panel();
-            ChartPanel = new Panel();
-            SwitchViewPictureBox = new PictureBox();
-            TransactionsNumberPictureBox = new PictureBox();
-            TransactionsListPictureBox = new PictureBox();
-            BalancePictureBox = new PictureBox();
-            ChartPictureBox = new PictureBox();
+            AccountDetailsPanelbutton1 = new Button();
+            AccountDetailsPanelDoughnutChartPanel = new Panel();
+            AccountDetailsPanelTransactionsListBox = new ListBox();
+            AccountDetailsPanelTranasctionsListPictureBox = new PictureBox();
+            AccountDetailsPanelBlockchainPictureBox = new PictureBox();
+            AccountDetailsPanelTransactionsPictureBox = new PictureBox();
+            AccountDetailsPanelMainChartPanel = new Panel();
+            AccountDetailsPanelDoughnutChartPictureBox = new PictureBox();
+            AccountDetailsPanelBalancePictureBox = new PictureBox();
+            AccountDetailsPanelChartPictureBox = new PictureBox();
             DashboardPanel = new Panel();
-            MakeTransactionLabel = new Label();
-            MakeTransactionIconPictureBox = new PictureBox();
-            MakeTransactionPictureBox = new PictureBox();
-            CreateAccountLabel = new Label();
-            CreateAccountIconPictureBox = new PictureBox();
-            CreateAccountPictureBox = new PictureBox();
-            LogsLabel = new Label();
-            LogsIconPictureBox = new PictureBox();
-            LogsPictureBox = new PictureBox();
-            UserGuideLabel = new Label();
-            UserGuideIconPictureBox = new PictureBox();
-            UserGuidePictureBox = new PictureBox();
-            SidebarPanel.SuspendLayout();
+            DashboardPanelCreateAccountLabel = new Label();
+            DashboardPanelCreateAccountIconPictureBox = new PictureBox();
+            DashboardPanelCreateAccountPictureBox = new PictureBox();
+            DashboardPanelLogsLabel = new Label();
+            DashboardPanelLogsIconPictureBox = new PictureBox();
+            DashboardPanelLogsPictureBox = new PictureBox();
+            DashboardPanelUserGuideLabel = new Label();
+            DashboardPanelUserGuideIconPictureBox = new PictureBox();
+            DashboardPanelUserGuidePictureBox = new PictureBox();
+            SidebarListBox = new ListBox();
+            TransactPanel = new Panel();
+            TransactPanelDollarSignLabel = new Label();
+            TransactPanelConfirmPictureBox = new PictureBox();
+            TransactPanelAmountTextBox = new TextBox();
+            TransactPanelAmountPictureBox = new PictureBox();
+            TransactPanelAmountLabel = new Label();
+            TransactPanelWithdrawLabel = new Label();
+            TransactPanelDepositLabel = new Label();
+            TransactPanelTransactLabel = new Label();
+            TransactPanelDepositPictureBox = new PictureBox();
+            TransactPanelWithdrawPictureBox = new PictureBox();
             AccountsPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)PasswordArrowPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)AccountsListPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)PasswordPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)AccountsPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountsPanelPasswordArrowPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountsPanelListPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountsPanelPasswordPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountsPanelAccountsPictureBox).BeginInit();
             AccountDetailsPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)SwitchViewPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)TransactionsNumberPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)TransactionsListPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)BalancePictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ChartPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTranasctionsListPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelBlockchainPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactionsPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelDoughnutChartPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelBalancePictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelChartPictureBox).BeginInit();
             DashboardPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)MakeTransactionIconPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)MakeTransactionPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)CreateAccountIconPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)CreateAccountPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)LogsIconPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)LogsPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)UserGuideIconPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)UserGuidePictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DashboardPanelCreateAccountIconPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DashboardPanelCreateAccountPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DashboardPanelLogsIconPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DashboardPanelLogsPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DashboardPanelUserGuideIconPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DashboardPanelUserGuidePictureBox).BeginInit();
+            TransactPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)TransactPanelConfirmPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)TransactPanelAmountPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)TransactPanelDepositPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)TransactPanelWithdrawPictureBox).BeginInit();
             SuspendLayout();
-            // 
-            // SidebarPanel
-            // 
-            SidebarPanel.BorderStyle = BorderStyle.FixedSingle;
-            SidebarPanel.Controls.Add(AccountsLabel);
-            SidebarPanel.Controls.Add(DashboardLabel);
-            SidebarPanel.Location = new Point(-3, -6);
-            SidebarPanel.Name = "SidebarPanel";
-            SidebarPanel.Size = new Size(196, 530);
-            SidebarPanel.TabIndex = 0;
-            // 
-            // AccountsLabel
-            // 
-            AccountsLabel.AutoSize = true;
-            AccountsLabel.ForeColor = Color.FromArgb(172, 172, 172);
-            AccountsLabel.Location = new Point(30, 178);
-            AccountsLabel.Name = "AccountsLabel";
-            AccountsLabel.Size = new Size(73, 21);
-            AccountsLabel.TabIndex = 2;
-            AccountsLabel.Text = "Accounts";
-            AccountsLabel.Click += AccountsLabel_Click;
-            // 
-            // DashboardLabel
-            // 
-            DashboardLabel.AutoSize = true;
-            DashboardLabel.BackColor = Color.FromArgb(45, 45, 45);
-            DashboardLabel.ForeColor = Color.FromArgb(172, 172, 172);
-            DashboardLabel.Location = new Point(30, 130);
-            DashboardLabel.Name = "DashboardLabel";
-            DashboardLabel.Size = new Size(86, 21);
-            DashboardLabel.TabIndex = 1;
-            DashboardLabel.Text = "Dashboard";
-            DashboardLabel.Click += DashboardLabel_Click;
             // 
             // AccountsPanel
             // 
-            AccountsPanel.Controls.Add(AccountsListBox);
-            AccountsPanel.Controls.Add(PasswordArrowPictureBox);
-            AccountsPanel.Controls.Add(AccountsListPictureBox);
-            AccountsPanel.Controls.Add(PasswordTextBox);
-            AccountsPanel.Controls.Add(PasswordPictureBox);
-            AccountsPanel.Controls.Add(PasswordLabel);
-            AccountsPanel.Controls.Add(AccountsPictureBox);
+            AccountsPanel.Controls.Add(AccountsPanelListBox);
+            AccountsPanel.Controls.Add(AccountsPanelPasswordArrowPictureBox);
+            AccountsPanel.Controls.Add(AccountsPanelListPictureBox);
+            AccountsPanel.Controls.Add(AccountsPanelPasswordTextBox);
+            AccountsPanel.Controls.Add(AccountsPanelPasswordPictureBox);
+            AccountsPanel.Controls.Add(AccountsPanelPasswordLabel);
+            AccountsPanel.Controls.Add(AccountsPanelAccountsPictureBox);
             AccountsPanel.Location = new Point(195, -6);
             AccountsPanel.Name = "AccountsPanel";
-            AccountsPanel.Size = new Size(987, 530);
+            AccountsPanel.Size = new Size(987, 732);
             AccountsPanel.TabIndex = 10;
             // 
-            // AccountsListBox
+            // AccountsPanelListBox
             // 
-            AccountsListBox.BackColor = Color.FromArgb(79, 79, 79);
-            AccountsListBox.BorderStyle = BorderStyle.None;
-            AccountsListBox.DrawMode = DrawMode.OwnerDrawVariable;
-            AccountsListBox.ForeColor = Color.Silver;
-            AccountsListBox.FormattingEnabled = true;
-            AccountsListBox.ItemHeight = 21;
-            AccountsListBox.Location = new Point(223, 171);
-            AccountsListBox.Name = "AccountsListBox";
-            AccountsListBox.Size = new Size(520, 315);
-            AccountsListBox.TabIndex = 14;
-            AccountsListBox.DrawItem += AccountsListBox_DrawItem;
-            AccountsListBox.MeasureItem += AccountsListBox_MeasureItem;
+            AccountsPanelListBox.BackColor = Color.FromArgb(79, 79, 79);
+            AccountsPanelListBox.BorderStyle = BorderStyle.None;
+            AccountsPanelListBox.DrawMode = DrawMode.OwnerDrawVariable;
+            AccountsPanelListBox.ForeColor = Color.Silver;
+            AccountsPanelListBox.FormattingEnabled = true;
+            AccountsPanelListBox.ItemHeight = 21;
+            AccountsPanelListBox.Location = new Point(223, 171);
+            AccountsPanelListBox.Name = "AccountsPanelListBox";
+            AccountsPanelListBox.Size = new Size(520, 525);
+            AccountsPanelListBox.TabIndex = 14;
+            AccountsPanelListBox.DrawItem += AccountsListBox_DrawItem;
+            AccountsPanelListBox.MeasureItem += AccountsListBox_MeasureItem;
             // 
-            // PasswordArrowPictureBox
+            // AccountsPanelPasswordArrowPictureBox
             // 
-            PasswordArrowPictureBox.Image = (Image)resources.GetObject("PasswordArrowPictureBox.Image");
-            PasswordArrowPictureBox.Location = new Point(723, 104);
-            PasswordArrowPictureBox.Name = "PasswordArrowPictureBox";
-            PasswordArrowPictureBox.Size = new Size(20, 20);
-            PasswordArrowPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            PasswordArrowPictureBox.TabIndex = 13;
-            PasswordArrowPictureBox.TabStop = false;
-            PasswordArrowPictureBox.Click += PasswordArrowPictureBox_Click;
+            AccountsPanelPasswordArrowPictureBox.Image = (Image)resources.GetObject("AccountsPanelPasswordArrowPictureBox.Image");
+            AccountsPanelPasswordArrowPictureBox.Location = new Point(723, 104);
+            AccountsPanelPasswordArrowPictureBox.Name = "AccountsPanelPasswordArrowPictureBox";
+            AccountsPanelPasswordArrowPictureBox.Size = new Size(20, 20);
+            AccountsPanelPasswordArrowPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountsPanelPasswordArrowPictureBox.TabIndex = 13;
+            AccountsPanelPasswordArrowPictureBox.TabStop = false;
+            AccountsPanelPasswordArrowPictureBox.Click += PasswordArrowPictureBox_Click;
             // 
-            // AccountsListPictureBox
+            // AccountsPanelListPictureBox
             // 
-            AccountsListPictureBox.Image = (Image)resources.GetObject("AccountsListPictureBox.Image");
-            AccountsListPictureBox.Location = new Point(210, 160);
-            AccountsListPictureBox.Name = "AccountsListPictureBox";
-            AccountsListPictureBox.Size = new Size(544, 346);
-            AccountsListPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            AccountsListPictureBox.TabIndex = 12;
-            AccountsListPictureBox.TabStop = false;
+            AccountsPanelListPictureBox.Image = (Image)resources.GetObject("AccountsPanelListPictureBox.Image");
+            AccountsPanelListPictureBox.Location = new Point(210, 160);
+            AccountsPanelListPictureBox.Name = "AccountsPanelListPictureBox";
+            AccountsPanelListPictureBox.Size = new Size(551, 546);
+            AccountsPanelListPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            AccountsPanelListPictureBox.TabIndex = 12;
+            AccountsPanelListPictureBox.TabStop = false;
             // 
-            // PasswordTextBox
+            // AccountsPanelPasswordTextBox
             // 
-            PasswordTextBox.BackColor = Color.FromArgb(45, 45, 45);
-            PasswordTextBox.BorderStyle = BorderStyle.None;
-            PasswordTextBox.ForeColor = Color.White;
-            PasswordTextBox.Location = new Point(507, 103);
-            PasswordTextBox.Name = "PasswordTextBox";
-            PasswordTextBox.Size = new Size(239, 22);
-            PasswordTextBox.TabIndex = 10;
-            PasswordTextBox.UseSystemPasswordChar = true;
+            AccountsPanelPasswordTextBox.BackColor = Color.FromArgb(45, 45, 45);
+            AccountsPanelPasswordTextBox.BorderStyle = BorderStyle.None;
+            AccountsPanelPasswordTextBox.ForeColor = Color.White;
+            AccountsPanelPasswordTextBox.Location = new Point(507, 103);
+            AccountsPanelPasswordTextBox.Name = "AccountsPanelPasswordTextBox";
+            AccountsPanelPasswordTextBox.Size = new Size(239, 22);
+            AccountsPanelPasswordTextBox.TabIndex = 10;
+            AccountsPanelPasswordTextBox.UseSystemPasswordChar = true;
             // 
-            // PasswordPictureBox
+            // AccountsPanelPasswordPictureBox
             // 
-            PasswordPictureBox.Image = (Image)resources.GetObject("PasswordPictureBox.Image");
-            PasswordPictureBox.Location = new Point(497, 88);
-            PasswordPictureBox.Name = "PasswordPictureBox";
-            PasswordPictureBox.Size = new Size(257, 55);
-            PasswordPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            PasswordPictureBox.TabIndex = 11;
-            PasswordPictureBox.TabStop = false;
+            AccountsPanelPasswordPictureBox.Image = (Image)resources.GetObject("AccountsPanelPasswordPictureBox.Image");
+            AccountsPanelPasswordPictureBox.Location = new Point(497, 88);
+            AccountsPanelPasswordPictureBox.Name = "AccountsPanelPasswordPictureBox";
+            AccountsPanelPasswordPictureBox.Size = new Size(257, 55);
+            AccountsPanelPasswordPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountsPanelPasswordPictureBox.TabIndex = 11;
+            AccountsPanelPasswordPictureBox.TabStop = false;
             // 
-            // PasswordLabel
+            // AccountsPanelPasswordLabel
             // 
-            PasswordLabel.AutoSize = true;
-            PasswordLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            PasswordLabel.ForeColor = Color.Silver;
-            PasswordLabel.Location = new Point(493, 65);
-            PasswordLabel.Name = "PasswordLabel";
-            PasswordLabel.Size = new Size(76, 21);
-            PasswordLabel.TabIndex = 9;
-            PasswordLabel.Text = "Password";
+            AccountsPanelPasswordLabel.AutoSize = true;
+            AccountsPanelPasswordLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            AccountsPanelPasswordLabel.ForeColor = Color.Silver;
+            AccountsPanelPasswordLabel.Location = new Point(493, 65);
+            AccountsPanelPasswordLabel.Name = "AccountsPanelPasswordLabel";
+            AccountsPanelPasswordLabel.Size = new Size(76, 21);
+            AccountsPanelPasswordLabel.TabIndex = 9;
+            AccountsPanelPasswordLabel.Text = "Password";
             // 
-            // AccountsPictureBox
+            // AccountsPanelAccountsPictureBox
             // 
-            AccountsPictureBox.Image = (Image)resources.GetObject("AccountsPictureBox.Image");
-            AccountsPictureBox.Location = new Point(210, 55);
-            AccountsPictureBox.Name = "AccountsPictureBox";
-            AccountsPictureBox.Size = new Size(257, 81);
-            AccountsPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            AccountsPictureBox.TabIndex = 2;
-            AccountsPictureBox.TabStop = false;
-            AccountsPictureBox.Paint += AccountsPictureBox_Paint;
+            AccountsPanelAccountsPictureBox.Image = (Image)resources.GetObject("AccountsPanelAccountsPictureBox.Image");
+            AccountsPanelAccountsPictureBox.Location = new Point(210, 55);
+            AccountsPanelAccountsPictureBox.Name = "AccountsPanelAccountsPictureBox";
+            AccountsPanelAccountsPictureBox.Size = new Size(257, 81);
+            AccountsPanelAccountsPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountsPanelAccountsPictureBox.TabIndex = 2;
+            AccountsPanelAccountsPictureBox.TabStop = false;
+            AccountsPanelAccountsPictureBox.Paint += AccountsPictureBox_Paint;
             // 
             // AccountDetailsPanel
             // 
-            AccountDetailsPanel.Controls.Add(ChartPanel);
-            AccountDetailsPanel.Controls.Add(SwitchViewPictureBox);
-            AccountDetailsPanel.Controls.Add(TransactionsNumberPictureBox);
-            AccountDetailsPanel.Controls.Add(TransactionsListPictureBox);
-            AccountDetailsPanel.Controls.Add(BalancePictureBox);
-            AccountDetailsPanel.Controls.Add(ChartPictureBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelbutton1);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelDoughnutChartPanel);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelTransactionsListBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelTranasctionsListPictureBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelBlockchainPictureBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelTransactionsPictureBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelMainChartPanel);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelDoughnutChartPictureBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelBalancePictureBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelChartPictureBox);
+            AccountDetailsPanel.ForeColor = Color.Black;
             AccountDetailsPanel.Location = new Point(195, -6);
             AccountDetailsPanel.Name = "AccountDetailsPanel";
-            AccountDetailsPanel.Size = new Size(987, 530);
+            AccountDetailsPanel.Size = new Size(987, 735);
             AccountDetailsPanel.TabIndex = 1;
             // 
-            // ChartPanel
+            // AccountDetailsPanelbutton1
             // 
-            ChartPanel.Location = new Point(58, 142);
-            ChartPanel.Name = "ChartPanel";
-            ChartPanel.Size = new Size(602, 300);
-            ChartPanel.TabIndex = 7;
+            AccountDetailsPanelbutton1.Location = new Point(810, 622);
+            AccountDetailsPanelbutton1.Name = "AccountDetailsPanelbutton1";
+            AccountDetailsPanelbutton1.Size = new Size(90, 38);
+            AccountDetailsPanelbutton1.TabIndex = 16;
+            AccountDetailsPanelbutton1.Text = "Transact";
+            AccountDetailsPanelbutton1.UseVisualStyleBackColor = true;
+            AccountDetailsPanelbutton1.Click += button1_Click;
             // 
-            // SwitchViewPictureBox
+            // AccountDetailsPanelDoughnutChartPanel
             // 
-            SwitchViewPictureBox.Image = (Image)resources.GetObject("SwitchViewPictureBox.Image");
-            SwitchViewPictureBox.Location = new Point(547, 29);
-            SwitchViewPictureBox.Name = "SwitchViewPictureBox";
-            SwitchViewPictureBox.Size = new Size(422, 61);
-            SwitchViewPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            SwitchViewPictureBox.TabIndex = 6;
-            SwitchViewPictureBox.TabStop = false;
+            AccountDetailsPanelDoughnutChartPanel.BackColor = Color.FromArgb(45, 45, 45);
+            AccountDetailsPanelDoughnutChartPanel.Location = new Point(749, 173);
+            AccountDetailsPanelDoughnutChartPanel.Name = "AccountDetailsPanelDoughnutChartPanel";
+            AccountDetailsPanelDoughnutChartPanel.Size = new Size(201, 304);
+            AccountDetailsPanelDoughnutChartPanel.TabIndex = 8;
             // 
-            // TransactionsNumberPictureBox
+            // AccountDetailsPanelTransactionsListBox
             // 
-            TransactionsNumberPictureBox.Image = (Image)resources.GetObject("TransactionsNumberPictureBox.Image");
-            TransactionsNumberPictureBox.Location = new Point(334, 29);
-            TransactionsNumberPictureBox.Name = "TransactionsNumberPictureBox";
-            TransactionsNumberPictureBox.Size = new Size(184, 61);
-            TransactionsNumberPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            TransactionsNumberPictureBox.TabIndex = 5;
-            TransactionsNumberPictureBox.TabStop = false;
+            AccountDetailsPanelTransactionsListBox.BackColor = Color.FromArgb(79, 79, 79);
+            AccountDetailsPanelTransactionsListBox.BorderStyle = BorderStyle.None;
+            AccountDetailsPanelTransactionsListBox.DrawMode = DrawMode.OwnerDrawVariable;
+            AccountDetailsPanelTransactionsListBox.ForeColor = Color.Silver;
+            AccountDetailsPanelTransactionsListBox.FormattingEnabled = true;
+            AccountDetailsPanelTransactionsListBox.ItemHeight = 21;
+            AccountDetailsPanelTransactionsListBox.Location = new Point(41, 484);
+            AccountDetailsPanelTransactionsListBox.Name = "AccountDetailsPanelTransactionsListBox";
+            AccountDetailsPanelTransactionsListBox.Size = new Size(654, 210);
+            AccountDetailsPanelTransactionsListBox.TabIndex = 15;
+            AccountDetailsPanelTransactionsListBox.DrawItem += TransactionsListBox_DrawItem;
+            AccountDetailsPanelTransactionsListBox.MeasureItem += TransactionsListBox_MeasureItem;
             // 
-            // TransactionsListPictureBox
+            // AccountDetailsPanelTranasctionsListPictureBox
             // 
-            TransactionsListPictureBox.Image = (Image)resources.GetObject("TransactionsListPictureBox.Image");
-            TransactionsListPictureBox.Location = new Point(696, 108);
-            TransactionsListPictureBox.Name = "TransactionsListPictureBox";
-            TransactionsListPictureBox.Size = new Size(275, 406);
-            TransactionsListPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            TransactionsListPictureBox.TabIndex = 4;
-            TransactionsListPictureBox.TabStop = false;
+            AccountDetailsPanelTranasctionsListPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelTranasctionsListPictureBox.Image");
+            AccountDetailsPanelTranasctionsListPictureBox.Location = new Point(28, 444);
+            AccountDetailsPanelTranasctionsListPictureBox.Name = "AccountDetailsPanelTranasctionsListPictureBox";
+            AccountDetailsPanelTranasctionsListPictureBox.Size = new Size(686, 262);
+            AccountDetailsPanelTranasctionsListPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            AccountDetailsPanelTranasctionsListPictureBox.TabIndex = 11;
+            AccountDetailsPanelTranasctionsListPictureBox.TabStop = false;
+            AccountDetailsPanelTranasctionsListPictureBox.Paint += TranasctionsPictureBox_Paint;
             // 
-            // BalancePictureBox
+            // AccountDetailsPanelBlockchainPictureBox
             // 
-            BalancePictureBox.Image = (Image)resources.GetObject("BalancePictureBox.Image");
-            BalancePictureBox.Location = new Point(38, 29);
-            BalancePictureBox.Name = "BalancePictureBox";
-            BalancePictureBox.Size = new Size(275, 61);
-            BalancePictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            BalancePictureBox.TabIndex = 0;
-            BalancePictureBox.TabStop = false;
+            AccountDetailsPanelBlockchainPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelBlockchainPictureBox.Image");
+            AccountDetailsPanelBlockchainPictureBox.Location = new Point(738, 26);
+            AccountDetailsPanelBlockchainPictureBox.Name = "AccountDetailsPanelBlockchainPictureBox";
+            AccountDetailsPanelBlockchainPictureBox.Size = new Size(223, 61);
+            AccountDetailsPanelBlockchainPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountDetailsPanelBlockchainPictureBox.TabIndex = 10;
+            AccountDetailsPanelBlockchainPictureBox.TabStop = false;
+            AccountDetailsPanelBlockchainPictureBox.Paint += BlockchainPictureBox_Paint;
             // 
-            // ChartPictureBox
+            // AccountDetailsPanelTransactionsPictureBox
             // 
-            ChartPictureBox.Image = (Image)resources.GetObject("ChartPictureBox.Image");
-            ChartPictureBox.Location = new Point(38, 108);
-            ChartPictureBox.Name = "ChartPictureBox";
-            ChartPictureBox.Size = new Size(643, 369);
-            ChartPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            ChartPictureBox.TabIndex = 8;
-            ChartPictureBox.TabStop = false;
+            AccountDetailsPanelTransactionsPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelTransactionsPictureBox.Image");
+            AccountDetailsPanelTransactionsPictureBox.Location = new Point(491, 26);
+            AccountDetailsPanelTransactionsPictureBox.Name = "AccountDetailsPanelTransactionsPictureBox";
+            AccountDetailsPanelTransactionsPictureBox.Size = new Size(223, 61);
+            AccountDetailsPanelTransactionsPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountDetailsPanelTransactionsPictureBox.TabIndex = 9;
+            AccountDetailsPanelTransactionsPictureBox.TabStop = false;
+            AccountDetailsPanelTransactionsPictureBox.Paint += TransactionsPictureBox_Paint;
+            // 
+            // AccountDetailsPanelMainChartPanel
+            // 
+            AccountDetailsPanelMainChartPanel.Location = new Point(31, 149);
+            AccountDetailsPanelMainChartPanel.Name = "AccountDetailsPanelMainChartPanel";
+            AccountDetailsPanelMainChartPanel.Size = new Size(667, 252);
+            AccountDetailsPanelMainChartPanel.TabIndex = 7;
+            // 
+            // AccountDetailsPanelDoughnutChartPictureBox
+            // 
+            AccountDetailsPanelDoughnutChartPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelDoughnutChartPictureBox.Image");
+            AccountDetailsPanelDoughnutChartPictureBox.Location = new Point(738, 134);
+            AccountDetailsPanelDoughnutChartPictureBox.Name = "AccountDetailsPanelDoughnutChartPictureBox";
+            AccountDetailsPanelDoughnutChartPictureBox.Size = new Size(223, 410);
+            AccountDetailsPanelDoughnutChartPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            AccountDetailsPanelDoughnutChartPictureBox.TabIndex = 4;
+            AccountDetailsPanelDoughnutChartPictureBox.TabStop = false;
+            AccountDetailsPanelDoughnutChartPictureBox.Paint += DoughnutChartPictureBox_Paint;
+            // 
+            // AccountDetailsPanelBalancePictureBox
+            // 
+            AccountDetailsPanelBalancePictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelBalancePictureBox.Image");
+            AccountDetailsPanelBalancePictureBox.Location = new Point(234, 26);
+            AccountDetailsPanelBalancePictureBox.Name = "AccountDetailsPanelBalancePictureBox";
+            AccountDetailsPanelBalancePictureBox.Size = new Size(223, 61);
+            AccountDetailsPanelBalancePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountDetailsPanelBalancePictureBox.TabIndex = 0;
+            AccountDetailsPanelBalancePictureBox.TabStop = false;
+            AccountDetailsPanelBalancePictureBox.Paint += BalancePictureBox_Paint;
+            // 
+            // AccountDetailsPanelChartPictureBox
+            // 
+            AccountDetailsPanelChartPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelChartPictureBox.Image");
+            AccountDetailsPanelChartPictureBox.Location = new Point(28, 133);
+            AccountDetailsPanelChartPictureBox.Name = "AccountDetailsPanelChartPictureBox";
+            AccountDetailsPanelChartPictureBox.Size = new Size(686, 290);
+            AccountDetailsPanelChartPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            AccountDetailsPanelChartPictureBox.TabIndex = 8;
+            AccountDetailsPanelChartPictureBox.TabStop = false;
             // 
             // DashboardPanel
             // 
-            DashboardPanel.Controls.Add(MakeTransactionLabel);
-            DashboardPanel.Controls.Add(MakeTransactionIconPictureBox);
-            DashboardPanel.Controls.Add(MakeTransactionPictureBox);
-            DashboardPanel.Controls.Add(CreateAccountLabel);
-            DashboardPanel.Controls.Add(CreateAccountIconPictureBox);
-            DashboardPanel.Controls.Add(CreateAccountPictureBox);
-            DashboardPanel.Controls.Add(LogsLabel);
-            DashboardPanel.Controls.Add(LogsIconPictureBox);
-            DashboardPanel.Controls.Add(LogsPictureBox);
-            DashboardPanel.Controls.Add(UserGuideLabel);
-            DashboardPanel.Controls.Add(UserGuideIconPictureBox);
-            DashboardPanel.Controls.Add(UserGuidePictureBox);
+            DashboardPanel.Controls.Add(DashboardPanelCreateAccountLabel);
+            DashboardPanel.Controls.Add(DashboardPanelCreateAccountIconPictureBox);
+            DashboardPanel.Controls.Add(DashboardPanelCreateAccountPictureBox);
+            DashboardPanel.Controls.Add(DashboardPanelLogsLabel);
+            DashboardPanel.Controls.Add(DashboardPanelLogsIconPictureBox);
+            DashboardPanel.Controls.Add(DashboardPanelLogsPictureBox);
+            DashboardPanel.Controls.Add(DashboardPanelUserGuideLabel);
+            DashboardPanel.Controls.Add(DashboardPanelUserGuideIconPictureBox);
+            DashboardPanel.Controls.Add(DashboardPanelUserGuidePictureBox);
             DashboardPanel.Location = new Point(195, -6);
             DashboardPanel.Name = "DashboardPanel";
-            DashboardPanel.Size = new Size(987, 530);
+            DashboardPanel.Size = new Size(987, 735);
             DashboardPanel.TabIndex = 9;
             // 
-            // MakeTransactionLabel
+            // DashboardPanelCreateAccountLabel
             // 
-            MakeTransactionLabel.AutoSize = true;
-            MakeTransactionLabel.ForeColor = Color.FromArgb(146, 146, 146);
-            MakeTransactionLabel.Location = new Point(519, 380);
-            MakeTransactionLabel.Name = "MakeTransactionLabel";
-            MakeTransactionLabel.Size = new Size(129, 21);
-            MakeTransactionLabel.TabIndex = 15;
-            MakeTransactionLabel.Text = "Make transaction";
+            DashboardPanelCreateAccountLabel.AutoSize = true;
+            DashboardPanelCreateAccountLabel.ForeColor = Color.FromArgb(146, 146, 146);
+            DashboardPanelCreateAccountLabel.Location = new Point(334, 476);
+            DashboardPanelCreateAccountLabel.Name = "DashboardPanelCreateAccountLabel";
+            DashboardPanelCreateAccountLabel.Size = new Size(113, 21);
+            DashboardPanelCreateAccountLabel.TabIndex = 12;
+            DashboardPanelCreateAccountLabel.Text = "Create account";
             // 
-            // MakeTransactionIconPictureBox
+            // DashboardPanelCreateAccountIconPictureBox
             // 
-            MakeTransactionIconPictureBox.Image = (Image)resources.GetObject("MakeTransactionIconPictureBox.Image");
-            MakeTransactionIconPictureBox.Location = new Point(553, 311);
-            MakeTransactionIconPictureBox.Name = "MakeTransactionIconPictureBox";
-            MakeTransactionIconPictureBox.Size = new Size(61, 57);
-            MakeTransactionIconPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            MakeTransactionIconPictureBox.TabIndex = 14;
-            MakeTransactionIconPictureBox.TabStop = false;
+            DashboardPanelCreateAccountIconPictureBox.Image = (Image)resources.GetObject("DashboardPanelCreateAccountIconPictureBox.Image");
+            DashboardPanelCreateAccountIconPictureBox.Location = new Point(367, 416);
+            DashboardPanelCreateAccountIconPictureBox.Name = "DashboardPanelCreateAccountIconPictureBox";
+            DashboardPanelCreateAccountIconPictureBox.Size = new Size(47, 39);
+            DashboardPanelCreateAccountIconPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            DashboardPanelCreateAccountIconPictureBox.TabIndex = 11;
+            DashboardPanelCreateAccountIconPictureBox.TabStop = false;
             // 
-            // MakeTransactionPictureBox
+            // DashboardPanelCreateAccountPictureBox
             // 
-            MakeTransactionPictureBox.Image = (Image)resources.GetObject("MakeTransactionPictureBox.Image");
-            MakeTransactionPictureBox.Location = new Point(507, 278);
-            MakeTransactionPictureBox.Name = "MakeTransactionPictureBox";
-            MakeTransactionPictureBox.Size = new Size(153, 153);
-            MakeTransactionPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            MakeTransactionPictureBox.TabIndex = 13;
-            MakeTransactionPictureBox.TabStop = false;
+            DashboardPanelCreateAccountPictureBox.Image = (Image)resources.GetObject("DashboardPanelCreateAccountPictureBox.Image");
+            DashboardPanelCreateAccountPictureBox.Location = new Point(314, 374);
+            DashboardPanelCreateAccountPictureBox.Name = "DashboardPanelCreateAccountPictureBox";
+            DashboardPanelCreateAccountPictureBox.Size = new Size(153, 153);
+            DashboardPanelCreateAccountPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            DashboardPanelCreateAccountPictureBox.TabIndex = 10;
+            DashboardPanelCreateAccountPictureBox.TabStop = false;
             // 
-            // CreateAccountLabel
+            // DashboardPanelLogsLabel
             // 
-            CreateAccountLabel.AutoSize = true;
-            CreateAccountLabel.ForeColor = Color.FromArgb(146, 146, 146);
-            CreateAccountLabel.Location = new Point(334, 380);
-            CreateAccountLabel.Name = "CreateAccountLabel";
-            CreateAccountLabel.Size = new Size(113, 21);
-            CreateAccountLabel.TabIndex = 12;
-            CreateAccountLabel.Text = "Create account";
+            DashboardPanelLogsLabel.AutoSize = true;
+            DashboardPanelLogsLabel.ForeColor = Color.FromArgb(146, 146, 146);
+            DashboardPanelLogsLabel.Location = new Point(562, 287);
+            DashboardPanelLogsLabel.Name = "DashboardPanelLogsLabel";
+            DashboardPanelLogsLabel.Size = new Size(43, 21);
+            DashboardPanelLogsLabel.TabIndex = 9;
+            DashboardPanelLogsLabel.Text = "Logs";
             // 
-            // CreateAccountIconPictureBox
+            // DashboardPanelLogsIconPictureBox
             // 
-            CreateAccountIconPictureBox.Image = (Image)resources.GetObject("CreateAccountIconPictureBox.Image");
-            CreateAccountIconPictureBox.Location = new Point(367, 320);
-            CreateAccountIconPictureBox.Name = "CreateAccountIconPictureBox";
-            CreateAccountIconPictureBox.Size = new Size(47, 39);
-            CreateAccountIconPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            CreateAccountIconPictureBox.TabIndex = 11;
-            CreateAccountIconPictureBox.TabStop = false;
+            DashboardPanelLogsIconPictureBox.Image = (Image)resources.GetObject("DashboardPanelLogsIconPictureBox.Image");
+            DashboardPanelLogsIconPictureBox.Location = new Point(560, 227);
+            DashboardPanelLogsIconPictureBox.Name = "DashboardPanelLogsIconPictureBox";
+            DashboardPanelLogsIconPictureBox.Size = new Size(47, 39);
+            DashboardPanelLogsIconPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            DashboardPanelLogsIconPictureBox.TabIndex = 8;
+            DashboardPanelLogsIconPictureBox.TabStop = false;
             // 
-            // CreateAccountPictureBox
+            // DashboardPanelLogsPictureBox
             // 
-            CreateAccountPictureBox.Image = (Image)resources.GetObject("CreateAccountPictureBox.Image");
-            CreateAccountPictureBox.Location = new Point(314, 278);
-            CreateAccountPictureBox.Name = "CreateAccountPictureBox";
-            CreateAccountPictureBox.Size = new Size(153, 153);
-            CreateAccountPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            CreateAccountPictureBox.TabIndex = 10;
-            CreateAccountPictureBox.TabStop = false;
+            DashboardPanelLogsPictureBox.Image = (Image)resources.GetObject("DashboardPanelLogsPictureBox.Image");
+            DashboardPanelLogsPictureBox.Location = new Point(507, 185);
+            DashboardPanelLogsPictureBox.Name = "DashboardPanelLogsPictureBox";
+            DashboardPanelLogsPictureBox.Size = new Size(153, 153);
+            DashboardPanelLogsPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            DashboardPanelLogsPictureBox.TabIndex = 7;
+            DashboardPanelLogsPictureBox.TabStop = false;
             // 
-            // LogsLabel
+            // DashboardPanelUserGuideLabel
             // 
-            LogsLabel.AutoSize = true;
-            LogsLabel.ForeColor = Color.FromArgb(146, 146, 146);
-            LogsLabel.Location = new Point(562, 191);
-            LogsLabel.Name = "LogsLabel";
-            LogsLabel.Size = new Size(43, 21);
-            LogsLabel.TabIndex = 9;
-            LogsLabel.Text = "Logs";
+            DashboardPanelUserGuideLabel.AutoSize = true;
+            DashboardPanelUserGuideLabel.ForeColor = Color.FromArgb(146, 146, 146);
+            DashboardPanelUserGuideLabel.Location = new Point(347, 287);
+            DashboardPanelUserGuideLabel.Name = "DashboardPanelUserGuideLabel";
+            DashboardPanelUserGuideLabel.Size = new Size(87, 21);
+            DashboardPanelUserGuideLabel.TabIndex = 6;
+            DashboardPanelUserGuideLabel.Text = "User Guide";
             // 
-            // LogsIconPictureBox
+            // DashboardPanelUserGuideIconPictureBox
             // 
-            LogsIconPictureBox.Image = (Image)resources.GetObject("LogsIconPictureBox.Image");
-            LogsIconPictureBox.Location = new Point(560, 131);
-            LogsIconPictureBox.Name = "LogsIconPictureBox";
-            LogsIconPictureBox.Size = new Size(47, 39);
-            LogsIconPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            LogsIconPictureBox.TabIndex = 8;
-            LogsIconPictureBox.TabStop = false;
+            DashboardPanelUserGuideIconPictureBox.Image = (Image)resources.GetObject("DashboardPanelUserGuideIconPictureBox.Image");
+            DashboardPanelUserGuideIconPictureBox.Location = new Point(367, 227);
+            DashboardPanelUserGuideIconPictureBox.Name = "DashboardPanelUserGuideIconPictureBox";
+            DashboardPanelUserGuideIconPictureBox.Size = new Size(47, 39);
+            DashboardPanelUserGuideIconPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            DashboardPanelUserGuideIconPictureBox.TabIndex = 5;
+            DashboardPanelUserGuideIconPictureBox.TabStop = false;
             // 
-            // LogsPictureBox
+            // DashboardPanelUserGuidePictureBox
             // 
-            LogsPictureBox.Image = (Image)resources.GetObject("LogsPictureBox.Image");
-            LogsPictureBox.Location = new Point(507, 89);
-            LogsPictureBox.Name = "LogsPictureBox";
-            LogsPictureBox.Size = new Size(153, 153);
-            LogsPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            LogsPictureBox.TabIndex = 7;
-            LogsPictureBox.TabStop = false;
+            DashboardPanelUserGuidePictureBox.Image = (Image)resources.GetObject("DashboardPanelUserGuidePictureBox.Image");
+            DashboardPanelUserGuidePictureBox.Location = new Point(314, 185);
+            DashboardPanelUserGuidePictureBox.Name = "DashboardPanelUserGuidePictureBox";
+            DashboardPanelUserGuidePictureBox.Size = new Size(153, 153);
+            DashboardPanelUserGuidePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            DashboardPanelUserGuidePictureBox.TabIndex = 1;
+            DashboardPanelUserGuidePictureBox.TabStop = false;
             // 
-            // UserGuideLabel
+            // SidebarListBox
             // 
-            UserGuideLabel.AutoSize = true;
-            UserGuideLabel.ForeColor = Color.FromArgb(146, 146, 146);
-            UserGuideLabel.Location = new Point(347, 191);
-            UserGuideLabel.Name = "UserGuideLabel";
-            UserGuideLabel.Size = new Size(87, 21);
-            UserGuideLabel.TabIndex = 6;
-            UserGuideLabel.Text = "User Guide";
+            SidebarListBox.BackColor = Color.FromArgb(45, 45, 45);
+            SidebarListBox.BorderStyle = BorderStyle.None;
+            SidebarListBox.DrawMode = DrawMode.OwnerDrawFixed;
+            SidebarListBox.ForeColor = Color.FromArgb(172, 172, 172);
+            SidebarListBox.FormattingEnabled = true;
+            SidebarListBox.ItemHeight = 35;
+            SidebarListBox.Items.AddRange(new object[] { "🏠 Dashboard", "💳 Accounts" });
+            SidebarListBox.Location = new Point(0, 168);
+            SidebarListBox.Name = "SidebarListBox";
+            SidebarListBox.Size = new Size(194, 140);
+            SidebarListBox.TabIndex = 16;
+            SidebarListBox.DrawItem += SidebarListBox_DrawItem;
+            SidebarListBox.SelectedIndexChanged += SidebarListBox_SelectedIndexChanged;
             // 
-            // UserGuideIconPictureBox
+            // TransactPanel
             // 
-            UserGuideIconPictureBox.Image = (Image)resources.GetObject("UserGuideIconPictureBox.Image");
-            UserGuideIconPictureBox.Location = new Point(367, 131);
-            UserGuideIconPictureBox.Name = "UserGuideIconPictureBox";
-            UserGuideIconPictureBox.Size = new Size(47, 39);
-            UserGuideIconPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            UserGuideIconPictureBox.TabIndex = 5;
-            UserGuideIconPictureBox.TabStop = false;
+            TransactPanel.Controls.Add(TransactPanelDollarSignLabel);
+            TransactPanel.Controls.Add(TransactPanelConfirmPictureBox);
+            TransactPanel.Controls.Add(TransactPanelAmountTextBox);
+            TransactPanel.Controls.Add(TransactPanelAmountPictureBox);
+            TransactPanel.Controls.Add(TransactPanelAmountLabel);
+            TransactPanel.Controls.Add(TransactPanelWithdrawLabel);
+            TransactPanel.Controls.Add(TransactPanelDepositLabel);
+            TransactPanel.Controls.Add(TransactPanelTransactLabel);
+            TransactPanel.Controls.Add(TransactPanelDepositPictureBox);
+            TransactPanel.Controls.Add(TransactPanelWithdrawPictureBox);
+            TransactPanel.Location = new Point(195, -6);
+            TransactPanel.Name = "TransactPanel";
+            TransactPanel.Size = new Size(987, 735);
+            TransactPanel.TabIndex = 16;
             // 
-            // UserGuidePictureBox
+            // TransactPanelDollarSignLabel
             // 
-            UserGuidePictureBox.Image = (Image)resources.GetObject("UserGuidePictureBox.Image");
-            UserGuidePictureBox.Location = new Point(314, 89);
-            UserGuidePictureBox.Name = "UserGuidePictureBox";
-            UserGuidePictureBox.Size = new Size(153, 153);
-            UserGuidePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            UserGuidePictureBox.TabIndex = 1;
-            UserGuidePictureBox.TabStop = false;
+            TransactPanelDollarSignLabel.AutoSize = true;
+            TransactPanelDollarSignLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            TransactPanelDollarSignLabel.ForeColor = Color.Silver;
+            TransactPanelDollarSignLabel.Location = new Point(353, 329);
+            TransactPanelDollarSignLabel.Name = "TransactPanelDollarSignLabel";
+            TransactPanelDollarSignLabel.Size = new Size(19, 21);
+            TransactPanelDollarSignLabel.TabIndex = 18;
+            TransactPanelDollarSignLabel.Text = "$";
+            // 
+            // TransactPanelConfirmPictureBox
+            // 
+            TransactPanelConfirmPictureBox.Image = (Image)resources.GetObject("TransactPanelConfirmPictureBox.Image");
+            TransactPanelConfirmPictureBox.Location = new Point(414, 391);
+            TransactPanelConfirmPictureBox.Name = "TransactPanelConfirmPictureBox";
+            TransactPanelConfirmPictureBox.Size = new Size(123, 36);
+            TransactPanelConfirmPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            TransactPanelConfirmPictureBox.TabIndex = 17;
+            TransactPanelConfirmPictureBox.TabStop = false;
+            TransactPanelConfirmPictureBox.Click += ConfirmPictureBox_Click;
+            TransactPanelConfirmPictureBox.Paint += ConfirmPictureBox_Paint;
+            // 
+            // TransactPanelAmountTextBox
+            // 
+            TransactPanelAmountTextBox.BackColor = Color.FromArgb(45, 45, 45);
+            TransactPanelAmountTextBox.BorderStyle = BorderStyle.None;
+            TransactPanelAmountTextBox.ForeColor = Color.White;
+            TransactPanelAmountTextBox.Location = new Point(356, 329);
+            TransactPanelAmountTextBox.Name = "TransactPanelAmountTextBox";
+            TransactPanelAmountTextBox.RightToLeft = RightToLeft.Yes;
+            TransactPanelAmountTextBox.Size = new Size(239, 22);
+            TransactPanelAmountTextBox.TabIndex = 15;
+            // 
+            // TransactPanelAmountPictureBox
+            // 
+            TransactPanelAmountPictureBox.Image = (Image)resources.GetObject("TransactPanelAmountPictureBox.Image");
+            TransactPanelAmountPictureBox.Location = new Point(346, 314);
+            TransactPanelAmountPictureBox.Name = "TransactPanelAmountPictureBox";
+            TransactPanelAmountPictureBox.Size = new Size(257, 55);
+            TransactPanelAmountPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            TransactPanelAmountPictureBox.TabIndex = 16;
+            TransactPanelAmountPictureBox.TabStop = false;
+            // 
+            // TransactPanelAmountLabel
+            // 
+            TransactPanelAmountLabel.AutoSize = true;
+            TransactPanelAmountLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            TransactPanelAmountLabel.ForeColor = Color.Silver;
+            TransactPanelAmountLabel.Location = new Point(342, 291);
+            TransactPanelAmountLabel.Name = "TransactPanelAmountLabel";
+            TransactPanelAmountLabel.Size = new Size(66, 21);
+            TransactPanelAmountLabel.TabIndex = 14;
+            TransactPanelAmountLabel.Text = "Amount";
+            // 
+            // TransactPanelWithdrawLabel
+            // 
+            TransactPanelWithdrawLabel.AutoSize = true;
+            TransactPanelWithdrawLabel.BackColor = Color.FromArgb(45, 45, 45);
+            TransactPanelWithdrawLabel.ForeColor = Color.Silver;
+            TransactPanelWithdrawLabel.Location = new Point(473, 249);
+            TransactPanelWithdrawLabel.Name = "TransactPanelWithdrawLabel";
+            TransactPanelWithdrawLabel.Size = new Size(78, 21);
+            TransactPanelWithdrawLabel.TabIndex = 8;
+            TransactPanelWithdrawLabel.Text = "Withdraw";
+            TransactPanelWithdrawLabel.Click += TransactPanelWithdrawLabel_Click;
+            // 
+            // TransactPanelDepositLabel
+            // 
+            TransactPanelDepositLabel.AutoSize = true;
+            TransactPanelDepositLabel.BackColor = Color.FromArgb(79, 79, 79);
+            TransactPanelDepositLabel.ForeColor = Color.Silver;
+            TransactPanelDepositLabel.Location = new Point(384, 249);
+            TransactPanelDepositLabel.Name = "TransactPanelDepositLabel";
+            TransactPanelDepositLabel.Size = new Size(63, 21);
+            TransactPanelDepositLabel.TabIndex = 7;
+            TransactPanelDepositLabel.Text = "Deposit";
+            TransactPanelDepositLabel.Click += DepositLabel_Click;
+            // 
+            // TransactPanelTransactLabel
+            // 
+            TransactPanelTransactLabel.Anchor = AnchorStyles.None;
+            TransactPanelTransactLabel.AutoSize = true;
+            TransactPanelTransactLabel.Font = new Font("Segoe UI Emoji", 24F);
+            TransactPanelTransactLabel.ForeColor = Color.White;
+            TransactPanelTransactLabel.Location = new Point(407, 91);
+            TransactPanelTransactLabel.Name = "TransactPanelTransactLabel";
+            TransactPanelTransactLabel.Size = new Size(137, 43);
+            TransactPanelTransactLabel.TabIndex = 1;
+            TransactPanelTransactLabel.Text = "Transact";
+            // 
+            // TransactPanelDepositPictureBox
+            // 
+            TransactPanelDepositPictureBox.Image = (Image)resources.GetObject("TransactPanelDepositPictureBox.Image");
+            TransactPanelDepositPictureBox.Location = new Point(367, 243);
+            TransactPanelDepositPictureBox.Name = "TransactPanelDepositPictureBox";
+            TransactPanelDepositPictureBox.Size = new Size(97, 36);
+            TransactPanelDepositPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            TransactPanelDepositPictureBox.TabIndex = 20;
+            TransactPanelDepositPictureBox.TabStop = false;
+            // 
+            // TransactPanelWithdrawPictureBox
+            // 
+            TransactPanelWithdrawPictureBox.Image = (Image)resources.GetObject("TransactPanelWithdrawPictureBox.Image");
+            TransactPanelWithdrawPictureBox.Location = new Point(462, 243);
+            TransactPanelWithdrawPictureBox.Name = "TransactPanelWithdrawPictureBox";
+            TransactPanelWithdrawPictureBox.Size = new Size(97, 36);
+            TransactPanelWithdrawPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            TransactPanelWithdrawPictureBox.TabIndex = 21;
+            TransactPanelWithdrawPictureBox.TabStop = false;
+            TransactPanelWithdrawPictureBox.Visible = false;
             // 
             // DashboardForm
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(45, 45, 45);
-            ClientSize = new Size(1176, 520);
-            Controls.Add(SidebarPanel);
+            ClientSize = new Size(1176, 725);
+            Controls.Add(SidebarListBox);
             Controls.Add(AccountsPanel);
+            Controls.Add(TransactPanel);
             Controls.Add(DashboardPanel);
             Controls.Add(AccountDetailsPanel);
-            Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Font = new Font("Segoe UI Emoji", 12F);
             Margin = new Padding(4);
             Name = "DashboardForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "ZeroBank";
             Load += DashboardForm_Load;
-            SidebarPanel.ResumeLayout(false);
-            SidebarPanel.PerformLayout();
+            Paint += DashboardForm_Paint;
             AccountsPanel.ResumeLayout(false);
             AccountsPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)PasswordArrowPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)AccountsListPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)PasswordPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)AccountsPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountsPanelPasswordArrowPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountsPanelListPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountsPanelPasswordPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountsPanelAccountsPictureBox).EndInit();
             AccountDetailsPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)SwitchViewPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)TransactionsNumberPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)TransactionsListPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)BalancePictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ChartPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTranasctionsListPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelBlockchainPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactionsPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelDoughnutChartPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelBalancePictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelChartPictureBox).EndInit();
             DashboardPanel.ResumeLayout(false);
             DashboardPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)MakeTransactionIconPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)MakeTransactionPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)CreateAccountIconPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)CreateAccountPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)LogsIconPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)LogsPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)UserGuideIconPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)UserGuidePictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DashboardPanelCreateAccountIconPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DashboardPanelCreateAccountPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DashboardPanelLogsIconPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DashboardPanelLogsPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DashboardPanelUserGuideIconPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DashboardPanelUserGuidePictureBox).EndInit();
+            TransactPanel.ResumeLayout(false);
+            TransactPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)TransactPanelConfirmPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)TransactPanelAmountPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)TransactPanelDepositPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)TransactPanelWithdrawPictureBox).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
-
-        private Panel SidebarPanel;
-        private Label AccountsLabel;
-        private Label DashboardLabel;
         private Panel AccountDetailsPanel;
-        private PictureBox SwitchViewPictureBox;
-        private PictureBox TransactionsNumberPictureBox;
-        private PictureBox TransactionsListPictureBox;
-        private PictureBox BalancePictureBox;
-        private Panel ChartPanel;
-        private PictureBox ChartPictureBox;
+        private PictureBox AccountDetailsPanelDoughnutChartPictureBox;
+        private PictureBox AccountDetailsPanelBalancePictureBox;
+        private Panel AccountDetailsPanelMainChartPanel;
+        private PictureBox AccountDetailsPanelChartPictureBox;
         private Panel DashboardPanel;
         private Panel AccountsPanel;
-        private PictureBox UserGuidePictureBox;
-        private Label UserGuideLabel;
-        private PictureBox UserGuideIconPictureBox;
-        private Label MakeTransactionLabel;
-        private PictureBox MakeTransactionIconPictureBox;
-        private PictureBox MakeTransactionPictureBox;
-        private Label CreateAccountLabel;
-        private PictureBox CreateAccountIconPictureBox;
-        private PictureBox CreateAccountPictureBox;
-        private Label LogsLabel;
-        private PictureBox LogsIconPictureBox;
-        private PictureBox LogsPictureBox;
-        private PictureBox AccountsPictureBox;
-        private TextBox PasswordTextBox;
-        private PictureBox PasswordPictureBox;
-        private Label PasswordLabel;
-        private PictureBox AccountsListPictureBox;
-        private PictureBox PasswordArrowPictureBox;
-        private ListBox AccountsListBox;
+        private PictureBox DashboardPanelUserGuidePictureBox;
+        private Label DashboardPanelUserGuideLabel;
+        private PictureBox DashboardPanelUserGuideIconPictureBox;
+        private Label DashboardPanelCreateAccountLabel;
+        private PictureBox DashboardPanelCreateAccountIconPictureBox;
+        private PictureBox DashboardPanelCreateAccountPictureBox;
+        private Label DashboardPanelLogsLabel;
+        private PictureBox DashboardPanelLogsIconPictureBox;
+        private PictureBox DashboardPanelLogsPictureBox;
+        private PictureBox AccountsPanelAccountsPictureBox;
+        private TextBox AccountsPanelPasswordTextBox;
+        private PictureBox AccountsPanelPasswordPictureBox;
+        private Label AccountsPanelPasswordLabel;
+        private PictureBox AccountsPanelListPictureBox;
+        private PictureBox AccountsPanelPasswordArrowPictureBox;
+        private ListBox AccountsPanelListBox;
+        private PictureBox AccountDetailsPanelBlockchainPictureBox;
+        private PictureBox AccountDetailsPanelTransactionsPictureBox;
+        private PictureBox AccountDetailsPanelTranasctionsListPictureBox;
+        private ListBox AccountDetailsPanelTransactionsListBox;
+        private Panel AccountDetailsPanelDoughnutChartPanel;
+        private ListBox SidebarListBox;
+        private Panel TransactPanel;
+        private Label TransactPanelTransactLabel;
+        private Label TransactPanelDepositLabel;
+        private Label TransactPanelWithdrawLabel;
+        private TextBox TransactPanelAmountTextBox;
+        private PictureBox TransactPanelAmountPictureBox;
+        private Label TransactPanelAmountLabel;
+        private Label TransactPanelDollarSignLabel;
+        private PictureBox TransactPanelConfirmPictureBox;
+        private Button AccountDetailsPanelbutton1;
+        private PictureBox TransactPanelDepositPictureBox;
+        private PictureBox TransactPanelWithdrawPictureBox;
     }
 }

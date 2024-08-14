@@ -1,7 +1,8 @@
-using ClientLibrary;
+﻿using ClientLibrary;
 using ClientLibrary.Models;
-using Microsoft.Identity.Client;
 using SharedLibrary.Models;
+using System.Globalization;
+using System.Transactions;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -9,55 +10,143 @@ namespace WinFormsUI
 {
     public partial class DashboardForm : Form
     {
-        private int accountsCount = 0;
         private List<Account> accounts = new();
+        private string selectedAccountPassword;
+        private Account selectedAccount;
+        private long selectedAccountBalance;
+        private List<PlaintextTransaction> selectedAccountPlaintextTransactions;
 
         public DashboardForm()
         {
             InitializeComponent();
-            PopulateForm();
-            ShowDashboardPanel();
+
+            // show the dashboard
+            SidebarListBox.SelectedIndex = 0;
         }
 
-        private void PopulateForm()
+        private async Task GetData()
         {
-            AccountsListBox.DataSource = accounts;
-
-            //LoadChart();
+            accounts = await ClientConfig.ApiAccessor.GetAccounts();
         }
 
-        private void LoadChart()
+        private void LoadMainChart(List<PlaintextTransaction> plaintextTransactions)
         {
-            Chart chart = new()
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.FromArgb(79, 79, 79)
-            };
+            // dummy data for testing
+            //List<PlaintextTransaction> list = new List<PlaintextTransaction>
+            //{
+            //    new PlaintextTransaction { Amount = 10500, AccountId = 1, Timestamp = DateTime.Now.AddDays(-1) },
+            //    new PlaintextTransaction { Amount = -5000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-2) },
+            //    new PlaintextTransaction { Amount = 15000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-3) },
+            //    new PlaintextTransaction { Amount = 7500, AccountId = 1, Timestamp = DateTime.Now.AddDays(-4) },
+            //    new PlaintextTransaction { Amount = -2500, AccountId = 1, Timestamp = DateTime.Now.AddDays(-5) },
+            //    new PlaintextTransaction { Amount = 12000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-6) },
+            //    new PlaintextTransaction { Amount = -3000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-7) },
+            //    new PlaintextTransaction { Amount = 18000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-8) },
+            //    new PlaintextTransaction { Amount = 9500, AccountId = 1, Timestamp = DateTime.Now.AddDays(-9) },
+            //    new PlaintextTransaction { Amount = -4500, AccountId = 1, Timestamp = DateTime.Now.AddDays(-10) } 
+            //};
 
-            ChartArea chartArea = new("MainArea");
-            chart.ChartAreas.Add(chartArea);
+            // calculate the balance as it changes over time
+            long cumulativeBalance = 0;
+            var balanceOverTime = plaintextTransactions
+                    .OrderBy(pt => pt.Timestamp)
+                    .Select(pt =>
+                    {
+                        cumulativeBalance += pt.Amount;
+                        return new { pt.Timestamp, Balance = cumulativeBalance / 100.0 };
+                    })
+                    .ToList();
 
-            Series series = new()
-            {
-                Name = "SplineAreaSeries",
-                ChartType = SeriesChartType.SplineArea,
-                BorderWidth = 2
-            };
+            // filter the data to include only the last 7 days
+            DateTime now = DateTime.Now;
+            DateTime sevenDaysAgo = now.AddDays(-7);
+            var filteredData = balanceOverTime
+                .Where(data => data.Timestamp >= sevenDaysAgo && data.Timestamp <= now)
+                .ToList();
 
-            series.Points.AddXY(1, 10);
-            series.Points.AddXY(2, 25);
-            series.Points.AddXY(3, 15);
-            series.Points.AddXY(4, 35);
-            series.Points.AddXY(5, 25);
+            Chart chart = new();
+            chart.DataSource = filteredData;
+            chart.Dock = DockStyle.Fill;
+            chart.BackColor = Color.FromArgb(79, 79, 79);
+
+            ChartArea chartArea = new();
+            chartArea.AxisX.Minimum = sevenDaysAgo.ToOADate();
+            chartArea.AxisX.Maximum = now.ToOADate();
+            chartArea.BackColor = Color.FromArgb(79, 79, 79);
+            chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(145, 145, 145);
+            chartArea.AxisX.LineWidth = 0;
+            chartArea.AxisX.MajorGrid.LineWidth = 0;
+            chartArea.AxisX.MajorTickMark.LineColor = Color.FromArgb(145, 145, 145);
+            chartArea.AxisX.IsMarginVisible = false;
+            chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(145, 145, 145);
+            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(145, 145, 145);
+            chartArea.AxisY.LineWidth = 0;
+            chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(145, 145, 145);
+            chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(145, 145, 145);
+
+            // TODO: update to formet better and set the horizontal lines to be a more muted color
+            chartArea.AxisY.LabelStyle.Format = "${}";
+
+
+            Series series = new();
+            series.ChartType = SeriesChartType.Area;
+            series.BorderWidth = 2;
             series.Color = Color.Purple;
             series.BackSecondaryColor = Color.DarkRed;
             series.BackGradientStyle = GradientStyle.LeftRight;
             series.BorderDashStyle = ChartDashStyle.Solid;
+            series.XValueMember = "Timestamp";
+            series.YValueMembers = "Balance";
 
+            chart.ChartAreas.Add(chartArea);
             chart.Series.Add(series);
-            chart.Titles.Add("Account Balance");
 
-            ChartPanel.Controls.Add(chart);
+            AccountDetailsPanelMainChartPanel.Controls.Add(chart);
+        }
+
+        private void LoadDoughnutChart(List<PlaintextTransaction> plaintextTransactions)
+        {
+            // get number of deposits and withdrawals
+            int numberOfDeposits = plaintextTransactions.Count(pt => pt.Amount <= 0);
+            int numberOfWithdrawals = plaintextTransactions.Count(pt => pt.Amount > 0);
+
+            Chart chart = new();
+            chart.Dock = DockStyle.Fill;
+            chart.BackColor = Color.FromArgb(79, 79, 79);
+
+            ChartArea chartArea = new();
+            chartArea.BackColor = Color.FromArgb(79, 79, 79);
+            chart.ChartAreas.Add(chartArea);
+
+            Series series = new();
+            series.IsValueShownAsLabel = true;
+            series.ChartType = SeriesChartType.Doughnut;
+            series.BorderWidth = 8;
+            series.BorderColor = Color.FromArgb(79, 79, 79);
+            series.BackSecondaryColor = Color.FromArgb(197, 197, 197);
+            series.BackGradientStyle = GradientStyle.DiagonalRight;
+            series["PieLabelStyle"] = "Inside";
+            series["PieStartAngle"] = "270";
+
+            DataPoint depositPoint = new();
+            depositPoint.SetValueXY("Deposits", numberOfDeposits);
+            depositPoint.Color = Color.FromArgb(0, 112, 4);
+            series.Points.Add(depositPoint);
+
+            DataPoint withdrawalPoint = new();
+            withdrawalPoint.SetValueXY("Withdrawals", numberOfWithdrawals);
+            withdrawalPoint.Color = Color.FromArgb(176, 0, 0);
+            series.Points.Add(withdrawalPoint);
+            chart.Series.Add(series);
+
+            Legend legend = new();
+            legend.Docking = Docking.Bottom;
+            legend.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            legend.BackColor = Color.FromArgb(79, 79, 79);
+            legend.ForeColor = Color.White;
+            chart.Legends.Add(legend);
+
+            AccountDetailsPanelDoughnutChartPanel.Controls.Add(chart);
         }
 
         private void ShowDashboardPanel()
@@ -65,91 +154,218 @@ namespace WinFormsUI
             DashboardPanel.Visible = true;
             AccountsPanel.Visible = false;
             AccountDetailsPanel.Visible = false;
+            TransactPanel.Visible = false;
         }
 
         private void ShowAccountsPanel()
         {
+            AccountsPanelListBox.DataSource = accounts;
+
             DashboardPanel.Visible = false;
             AccountsPanel.Visible = true;
             AccountDetailsPanel.Visible = false;
+            TransactPanel.Visible = false;
         }
 
-        private async void ShowAccountDetailsPanel()
+        private void ShowTransactPanel()
         {
-            if (string.IsNullOrWhiteSpace(PasswordTextBox.Text))
+            DashboardPanel.Visible = false;
+            AccountsPanel.Visible = false;
+            AccountDetailsPanel.Visible = false;
+            TransactPanel.Visible = true;
+        }
+
+        private void ShowAccountDetailsPanel()
+        {
+            DashboardPanel.Visible = false;
+            AccountsPanel.Visible = false;
+            AccountDetailsPanel.Visible = true;
+            TransactPanel.Visible = false;
+
+            AccountDetailsPanelTransactionsListBox.DataSource = selectedAccountPlaintextTransactions;
+            AccountsPanelPasswordTextBox.Text = "";
+            LoadDoughnutChart(selectedAccountPlaintextTransactions);
+            LoadMainChart(selectedAccountPlaintextTransactions);
+        }
+
+        private void AccountsPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            // draw "Accounts"
+            string smallText = "Accounts";
+
+            using Font smallTextFont = new("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
+            using Brush brush = new SolidBrush(Color.White);
+            SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
+
+            float smallTextX = (AccountsPanelAccountsPictureBox.ClientSize.Width - smallTextSize.Width) / 2;
+            float smallTextY = (AccountsPanelAccountsPictureBox.ClientSize.Height - smallTextSize.Height) / 2;
+
+            float smallTextOffsetX = 15;  // shift n pixels left
+            float smallTextOffsetY = 15;   // shift n pixels up
+            smallTextX -= smallTextOffsetX;
+            smallTextY -= smallTextOffsetY;
+
+            e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));
+
+            // draw number of accounts
+            string largeText = accounts.Count.ToString();
+
+            using Font largeTextFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
+            SizeF largeTextSize = e.Graphics.MeasureString(largeText, largeTextFont);
+
+            // same location initially
+            float largeTextX = smallTextX;
+            float largeTextY = smallTextY;
+
+            float largeTextOffsetY = -18;   // shift -n pixels down
+            largeTextY -= largeTextOffsetY;
+
+            e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
+        }
+
+        private async void DashboardForm_Load(object sender, EventArgs e)
+        {
+            await GetData();
+        }
+
+        private async void PasswordArrowPictureBox_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(AccountsPanelPasswordTextBox.Text))
             {
                 return;
             }
 
             try
             {
-                Account account = (Account)AccountsListBox.SelectedItem;
-                List<PlaintextTransaction> plainTransactions = await ClientConfig.GetPlaintextTransactions(account.Id, PasswordTextBox.Text);
+                selectedAccountPassword = AccountsPanelPasswordTextBox.Text;
+                selectedAccount = (Account)AccountsPanelListBox.SelectedItem;
 
-                // TODO: populate the panel
+                await GetAccountData(selectedAccount, selectedAccountPassword);
 
-                DashboardPanel.Visible = false;
-                AccountsPanel.Visible = false;
-                AccountDetailsPanel.Visible = true;
+                ShowAccountDetailsPanel();
             }
             catch (Exception ex)
             {
+                // TODO: display error
                 MessageBox.Show(ex.Message);
             }
         }
 
-        private void AccountsLabel_Click(object sender, EventArgs e)
+        private async Task GetAccountData(Account account, string password)
         {
-            ShowAccountsPanel();
+            // populate variables
+            selectedAccount = account;
+            selectedAccountPassword = password;
+            selectedAccountBalance = await ClientConfig.GetBalance(selectedAccount.Id, selectedAccountPassword);
+
+            // order transactions by date (most recent first)
+            List<PlaintextTransaction> plaintextTransactions = await ClientConfig.GetPlaintextTransactions(selectedAccount.Id, selectedAccountPassword);
+            selectedAccountPlaintextTransactions = plaintextTransactions.OrderByDescending(transaction => transaction.Timestamp).ToList();
         }
 
-        private void DashboardLabel_Click(object sender, EventArgs e)
+        private void BalancePictureBox_Paint(object sender, PaintEventArgs e)
         {
-            ShowDashboardPanel();
-        }
+            // draw "Name"
+            string smallText = "Name";
 
-        private void AccountsPictureBox_Paint(object sender, PaintEventArgs e)
-        {
-            // draw "Accounts"
-            string accountsText = "Accounts";
+            using Font smallTextFont = new("Segoe UI", 10, FontStyle.Regular, GraphicsUnit.Point);
+            using SolidBrush brush = new(Color.White);
+            SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
 
-            using Font accountsFont = new("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
-            using Brush brush = new SolidBrush(Color.White);
-            SizeF accountsTextSize = e.Graphics.MeasureString(accountsText, accountsFont);
+            float smallTextX = (AccountsPanelAccountsPictureBox.ClientSize.Width - smallTextSize.Width) / 2;
+            float smallTextY = (AccountsPanelAccountsPictureBox.ClientSize.Height - smallTextSize.Height) / 2;
 
-            float accountsX = (AccountsPictureBox.ClientSize.Width - accountsTextSize.Width) / 2;
-            float accountsY = (AccountsPictureBox.ClientSize.Height - accountsTextSize.Height) / 2;
+            float smallTextOffsetX = 58;  // shift n pixels left
+            float smallTextOffsetY = 24;   // shift m pixels up
+            smallTextX -= smallTextOffsetX;
+            smallTextY -= smallTextOffsetY;
 
-            float accountsOffsetX = 15;  // shift n pixels left
-            float accountsOffsetY = 15;   // shift n pixels up
-            accountsX -= accountsOffsetX;
-            accountsY -= accountsOffsetY;
+            e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));
 
-            e.Graphics.DrawString(accountsText, accountsFont, brush, new PointF(accountsX, accountsY));
+            // draw actual name of account
+            string largeText = selectedAccount.Name;
 
-            // draw number of accounts
-            string numberOfAccountsText = accountsCount.ToString();
-
-            using Font numberOfAccountsFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
-            SizeF numberOfAccountsTextSize = e.Graphics.MeasureString(numberOfAccountsText, numberOfAccountsFont);
+            using Font largeTextFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
+            SizeF largeTextSize = e.Graphics.MeasureString(largeText, largeTextFont);
 
             // same location initially
-            float numberOfAccountsX = accountsX;
-            float numberOfAccountsY = accountsY;
+            float largeTextX = smallTextX;
+            float largeTextY = smallTextY;
 
-            float numberOfAccountsOffsetY = -18;   // shift -n pixels down
-            numberOfAccountsY -= numberOfAccountsOffsetY;
+            float largeTextOffsetY = -14;   // shift -n pixels down
+            largeTextY -= largeTextOffsetY;
 
-            e.Graphics.DrawString(numberOfAccountsText, numberOfAccountsFont, brush, new PointF(accountsX, numberOfAccountsY));
+            e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
         }
 
-        private async void DashboardForm_Load(object sender, EventArgs e)
+        private void TransactionsPictureBox_Paint(object sender, PaintEventArgs e)
         {
-            // get async data
-            accounts = await ClientConfig.ApiAccessor.GetAccounts();
-            accountsCount = accounts.Count;
+            // draw "Transactions"
+            string smallText = "Transactions";
 
-            PopulateForm();
+            using Font smallTextFont = new("Segoe UI", 10, FontStyle.Regular, GraphicsUnit.Point);
+            using SolidBrush brush = new(Color.White);
+            SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
+
+            float smallTextX = (AccountsPanelAccountsPictureBox.ClientSize.Width - smallTextSize.Width) / 2;
+            float smallTextY = (AccountsPanelAccountsPictureBox.ClientSize.Height - smallTextSize.Height) / 2;
+
+            float smallTextOffsetX = 41;  // shift n pixels left
+            float smallTextOffsetY = 24;   // shift m pixels up
+            smallTextX -= smallTextOffsetX;
+            smallTextY -= smallTextOffsetY;
+
+            e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));
+
+            // draw number of transactions
+            string largeText = selectedAccount.Transactions.Count.ToString();
+
+            using Font largeTextFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
+            SizeF largeTextSize = e.Graphics.MeasureString(largeText, largeTextFont);
+
+            // same location initially
+            float largeTextX = smallTextX;
+            float largeTextY = smallTextY;
+
+            float largeTextOffsetY = -14;   // shift -n pixels down
+            largeTextY -= largeTextOffsetY;
+
+            e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
+        }
+
+        private void BlockchainPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            // draw "Switch To"
+            string smallText = "Switch To";
+
+            using Font smallTextFont = new("Segoe UI", 10, FontStyle.Regular, GraphicsUnit.Point);
+            using SolidBrush brush = new(Color.White);
+            SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
+
+            float smallTextX = (AccountsPanelAccountsPictureBox.ClientSize.Width - smallTextSize.Width) / 2;
+            float smallTextY = (AccountsPanelAccountsPictureBox.ClientSize.Height - smallTextSize.Height) / 2;
+
+            float smallTextOffsetX = 50;  // shift n pixels left
+            float smallTextOffsetY = 24;   // shift m pixels up
+            smallTextX -= smallTextOffsetX;
+            smallTextY -= smallTextOffsetY;
+
+            e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));
+
+            // draw "Blockchain View"
+            string largeText = "Blockchain View";
+
+            using Font largeTextFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
+            SizeF largeTextSize = e.Graphics.MeasureString(largeText, largeTextFont);
+
+            // same location initially
+            float largeTextX = smallTextX;
+            float largeTextY = smallTextY;
+
+            float largeTextOffsetY = -14;   // shift -n pixels down
+            largeTextY -= largeTextOffsetY;
+
+            e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
         }
 
         private void AccountsListBox_DrawItem(object sender, DrawItemEventArgs e)
@@ -159,13 +375,13 @@ namespace WinFormsUI
                 return;
             }
 
-            Account account = (Account)AccountsListBox.Items[e.Index];
+            Account account = (Account)AccountsPanelListBox.Items[e.Index];
 
-            // set the background color of the selected item
-            bool isSelected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
-            Color backgroundColor = isSelected ? Color.FromArgb(163, 6, 64) : e.BackColor;
-            Color textColor = isSelected ? Color.White : e.ForeColor;
-            using Brush backgroundBrush = new SolidBrush(backgroundColor);
+            // get the background color if selected or not
+            Color backgroundColor = e.State.HasFlag(DrawItemState.Selected) ? Color.FromArgb(163, 6, 64) : e.BackColor;
+
+            // draw background
+            using SolidBrush backgroundBrush = new(backgroundColor);
             e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
 
             // draw line to separate rows
@@ -187,12 +403,10 @@ namespace WinFormsUI
             // draw date created
             string dateCreatedText = "Created " + account.DateCreated.ToShortDateString();
             using Font dateCreatedFont = new(e.Font.FontFamily, 8, FontStyle.Regular);
-            using Brush dateCreatedBrush = new SolidBrush(Color.FromArgb(145, 145, 145));
+            using SolidBrush dateCreatedBrush = new(Color.FromArgb(145, 145, 145));
             SizeF dateCreatedTextSize = e.Graphics.MeasureString(dateCreatedText, dateCreatedFont);
             float dateCreatedX = e.Bounds.Right - dateCreatedTextSize.Width - 5;
             e.Graphics.DrawString(dateCreatedText, dateCreatedFont, dateCreatedBrush, dateCreatedX, e.Bounds.Y + 22);
-
-            e.DrawFocusRectangle();
         }
 
         private void AccountsListBox_MeasureItem(object sender, MeasureItemEventArgs e)
@@ -200,9 +414,222 @@ namespace WinFormsUI
             e.ItemHeight = 40;
         }
 
-        private async void PasswordArrowPictureBox_Click(object sender, EventArgs e)
+        private void TransactionsListBox_DrawItem(object sender, DrawItemEventArgs e)
         {
-            ShowAccountDetailsPanel();
+            if (e.Index < 0)
+            {
+                return;
+            }
+
+            PlaintextTransaction plaintextTransaction = (PlaintextTransaction)AccountDetailsPanelTransactionsListBox.Items[e.Index];
+
+            // get the background color if selected or not
+            Color backgroundColor = e.State.HasFlag(DrawItemState.Selected) ? Color.FromArgb(163, 6, 64) : e.BackColor;
+
+            // draw background
+            using SolidBrush backgroundBrush = new(backgroundColor);
+            e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
+
+            // draw line to separate rows
+            using Pen linePen = new(Color.Gray, 1);
+            e.Graphics.DrawLine(linePen, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
+
+            // draw type
+            string type = "Deposit";
+            if (plaintextTransaction.Amount < 0)
+            {
+                type = "Withdrawal";
+            }
+
+            using Font typeFont = new(e.Font.FontFamily, 12, FontStyle.Regular);
+            SizeF typeSize = e.Graphics.MeasureString(type, typeFont);
+            float typeY = e.Bounds.Y + (e.Bounds.Height - typeSize.Height) / 2;
+            e.Graphics.DrawString(type, typeFont, Brushes.White, e.Bounds.X + 5, typeY);
+
+            // draw amount
+            using Font amountFont = new(e.Font.FontFamily, 12, FontStyle.Regular);
+            SizeF amountTextSize = e.Graphics.MeasureString(plaintextTransaction.FormattedAmount, typeFont);
+            float amountX = e.Bounds.Right - amountTextSize.Width - 5;
+            e.Graphics.DrawString(plaintextTransaction.FormattedAmount, amountFont, Brushes.White, amountX, e.Bounds.Y);
+
+            // draw date
+            using Font dateFont = new(e.Font.FontFamily, 8, FontStyle.Regular);
+            using SolidBrush dateBrush = new(Color.FromArgb(145, 145, 145));
+            SizeF dateTextSize = e.Graphics.MeasureString(plaintextTransaction.Timestamp.ToString(), dateFont);
+            float dateX = e.Bounds.Right - dateTextSize.Width - 5;
+            e.Graphics.DrawString(plaintextTransaction.Timestamp.ToString(), dateFont, dateBrush, dateX, e.Bounds.Y + 22);
+        }
+
+        private void TransactionsListBox_MeasureItem(object sender, MeasureItemEventArgs e)
+        {
+            e.ItemHeight = 40;
+        }
+
+        private void TranasctionsPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            // draw "History"
+            string text = "History";
+
+            using Font textFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
+            using SolidBrush brush = new(Color.White);
+            SizeF textSize = e.Graphics.MeasureString(text, textFont);
+
+            float textX = 12;  // n pixels from the left side
+            float textY = 7;  // m pixels from the top
+
+            e.Graphics.DrawString(text, textFont, brush, new PointF(textX, textY));
+        }
+
+        private void DoughnutChartPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            // draw "Transactions"
+            string transactionsText = "Transactions";
+
+            using Font transactionsFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
+            using Brush transactionsBrush = new SolidBrush(Color.White);
+            SizeF transactionsSize = e.Graphics.MeasureString(transactionsText, transactionsFont);
+
+            float transactionsTextX = 12;  // n pixels from the left side
+            float transactionsTextY = 7;  // m pixels from the top
+
+            e.Graphics.DrawString(transactionsText, transactionsFont, transactionsBrush, new PointF(transactionsTextX, transactionsTextY));
+
+            // draw balance
+            NumberFormatInfo customFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
+            customFormat.CurrencyNegativePattern = 1;
+            string balanceText = (selectedAccountBalance * .01).ToString("C", customFormat);
+
+            using Font balanceFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
+            using Brush balanceBrush = new SolidBrush(Color.White);
+            SizeF balanceSize = e.Graphics.MeasureString(transactionsText, transactionsFont);
+
+            float balanceX = ((sender as Control).ClientSize.Width / 2 - balanceSize.Width / 2) + 30;
+            float balanceY = 350;  // m pixels from the top
+
+            e.Graphics.DrawString(balanceText, balanceFont, balanceBrush, new PointF(balanceX, balanceY));
+        }
+
+        private void SidebarListBox_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            string text = SidebarListBox.Items[e.Index].ToString();
+            Color backgroundColor;
+
+            if (e.State.HasFlag(DrawItemState.Selected))
+            {
+                backgroundColor = Color.FromArgb(79, 79, 79);
+            }
+            else
+            {
+                backgroundColor = Color.FromArgb(45, 45, 45);
+            }
+
+            using SolidBrush backgroundBrush = new(backgroundColor);
+            e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
+
+            SizeF textSize = e.Graphics.MeasureString(text, e.Font);
+            float textY = e.Bounds.Y + (e.Bounds.Height - textSize.Height) / 2;
+
+            using SolidBrush foregroundBrush = new(e.ForeColor);
+            e.Graphics.DrawString(text, e.Font, foregroundBrush, e.Bounds.X, textY);
+        }
+
+        private void SidebarListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListBox listBox = (ListBox)sender;
+
+            if (listBox == null || listBox.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            string selectedItem = listBox.SelectedItem.ToString();
+            if (selectedItem == "🏠 Dashboard")
+            {
+                ShowDashboardPanel();
+            }
+            else if (selectedItem == "💳 Accounts")
+            {
+                ShowAccountsPanel();
+            }
+        }
+
+        private void DashboardForm_Paint(object sender, PaintEventArgs e)
+        {
+            // draw the line separating the sidebar
+            using Pen pen = new(Color.FromArgb(79, 79, 79), 2);
+            int xPosition = 195;
+            e.Graphics.DrawLine(pen, new Point(xPosition, 0), new Point(xPosition, this.ClientSize.Height));
+        }
+
+        private void MakeTransactionPictureBox_Click(object sender, EventArgs e)
+        {
+            ShowTransactPanel();
+        }
+
+        private void ConfirmPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            string text = "Confirm";
+
+            using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular, GraphicsUnit.Point);
+            using Brush brush = new SolidBrush(Color.White);
+            SizeF textSize = e.Graphics.MeasureString(text, font);
+
+            float x = (TransactPanelConfirmPictureBox.ClientSize.Width - textSize.Width) / 2;
+            float y = (TransactPanelConfirmPictureBox.ClientSize.Height - textSize.Height) / 2;
+
+            e.Graphics.DrawString(text, font, brush, new PointF(x, y));
+        }
+
+        private async void ConfirmPictureBox_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // TODO: make AmountTextBox.Text have .00 add add error message for incorrect password (also check if null or whitespace)
+                long amount;
+                if (!long.TryParse(TransactPanelAmountTextBox.Text, out amount))
+                {
+                    return;
+                }
+
+                // if it's a withdrawal, make negative
+                if (TransactPanelWithdrawPictureBox.Visible == true)
+                {
+                    amount *= -1;
+                }
+
+                await ClientConfig.AddTransaction(selectedAccount.Id, amount, selectedAccountPassword);
+                TransactPanelAmountTextBox.Text = "";
+                await GetAccountData(selectedAccount, selectedAccountPassword);
+            }
+            catch (Exception ex)
+            {
+                // TODO: display error
+            }
+            finally
+            {
+                ShowAccountDetailsPanel();
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ShowTransactPanel();
+        }
+
+        private void DepositLabel_Click(object sender, EventArgs e)
+        {
+            TransactPanelDepositPictureBox.Visible = true;
+            TransactPanelWithdrawPictureBox.Visible = false;
+            TransactPanelDepositLabel.BackColor = Color.FromArgb(79, 79, 79);
+            TransactPanelWithdrawLabel.BackColor = Color.FromArgb(45, 45, 45);
+        }
+
+        private void TransactPanelWithdrawLabel_Click(object sender, EventArgs e)
+        {
+            TransactPanelDepositPictureBox.Visible = false;
+            TransactPanelWithdrawPictureBox.Visible = true;
+            TransactPanelDepositLabel.BackColor = Color.FromArgb(45, 45, 45);
+            TransactPanelWithdrawLabel.BackColor = Color.FromArgb(79, 79, 79);
         }
     }
 }

@@ -120,7 +120,7 @@ namespace WinFormsUI.Forms
         {
             string text = "Log In";
 
-            using Font font = new("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
+            using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular, GraphicsUnit.Point);
             using Brush brush = new SolidBrush(Color.White);
             SizeF textSize = e.Graphics.MeasureString(text, font);
 
@@ -134,7 +134,7 @@ namespace WinFormsUI.Forms
         {
             string text = "Sign Up";
 
-            using Font font = new("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
+            using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular, GraphicsUnit.Point);
             using Brush brush = new SolidBrush(Color.White);
             SizeF textSize = e.Graphics.MeasureString(text, font);
 
@@ -148,7 +148,7 @@ namespace WinFormsUI.Forms
         {
             string text = "Enroll";
 
-            using Font font = new("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
+            using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular, GraphicsUnit.Point);
             using Brush brush = new SolidBrush(Color.White);
             SizeF textSize = e.Graphics.MeasureString(text, font);
 

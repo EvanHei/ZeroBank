@@ -14,20 +14,19 @@ internal static class Program
     {
         string username1 = "Evan";
         string password1 = "password";
-        string encryptionPassword1 = "Password123";
+        string encryptionPassword1 = "p";
 
         try
         {
-            // user 1
             //await ClientConfig.ApiAccessor.SignUp(username1, password1);
             await ClientConfig.ApiAccessor.Login(username1, password1);
             //await ClientConfig.CreateAccount("Account 1", AccountType.Checking, encryptionPassword1);
             //await ClientConfig.CreateAccount("Account 2", AccountType.Savings, encryptionPassword1);
-            //await ClientConfig.AddTransaction(1, 15, encryptionPassword1);
-            //await ClientConfig.AddTransaction(1, -20, encryptionPassword1);
+            //await ClientConfig.AddTransaction(1, 5, encryptionPassword1); // balance is 5
+            //await ClientConfig.AddTransaction(1, 10, encryptionPassword1); // balance is 15
+            //await ClientConfig.AddTransaction(1, -10, encryptionPassword1); // balance is 5
+            //await ClientConfig.AddTransaction(1, -10, encryptionPassword1); // balance is -5
             //long result = await ClientConfig.GetBalance(1, encryptionPassword1);
-            //List<Account> accounts = await ClientConfig.ApiAccessor.GetAccounts();
-            //List<PlaintextTransaction> plainTransactions = await ClientConfig.GetPlaintextTransactions(1, encryptionPassword1);
             //await ClientConfig.DeleteAccount(1);
         }
         catch (Exception ex)

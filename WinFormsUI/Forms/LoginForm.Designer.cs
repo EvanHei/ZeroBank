@@ -202,7 +202,7 @@
             Controls.Add(UsernamePictureBox);
             Controls.Add(UsernameLabel);
             Controls.Add(HeaderLabel);
-            Font = new Font("Segoe UI", 12F);
+            Font = new Font("Segoe UI Emoji", 12F);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4);
             Name = "LoginForm";
