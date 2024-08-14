@@ -29,49 +29,98 @@ namespace WinFormsUI
             accounts = await ClientConfig.ApiAccessor.GetAccounts();
         }
 
+        private class DailyBalance
+        {
+            public DateTime Date { get; set; }
+            public double Balance { get; set; }
+        }
+
         private void LoadMainChart(List<PlaintextTransaction> plaintextTransactions)
         {
             // dummy data for testing
-            //List<PlaintextTransaction> list = new List<PlaintextTransaction>
-            //{
-            //    new PlaintextTransaction { Amount = 10500, AccountId = 1, Timestamp = DateTime.Now.AddDays(-1) },
-            //    new PlaintextTransaction { Amount = -5000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-2) },
-            //    new PlaintextTransaction { Amount = 15000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-3) },
-            //    new PlaintextTransaction { Amount = 7500, AccountId = 1, Timestamp = DateTime.Now.AddDays(-4) },
-            //    new PlaintextTransaction { Amount = -2500, AccountId = 1, Timestamp = DateTime.Now.AddDays(-5) },
-            //    new PlaintextTransaction { Amount = 12000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-6) },
-            //    new PlaintextTransaction { Amount = -3000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-7) },
-            //    new PlaintextTransaction { Amount = 18000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-8) },
-            //    new PlaintextTransaction { Amount = 9500, AccountId = 1, Timestamp = DateTime.Now.AddDays(-9) },
-            //    new PlaintextTransaction { Amount = -4500, AccountId = 1, Timestamp = DateTime.Now.AddDays(-10) } 
-            //};
+            List<PlaintextTransaction> list = new List<PlaintextTransaction>
+            {
+                new PlaintextTransaction { Amount = 1000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-1) },
+                new PlaintextTransaction { Amount = 5000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-5) },
+                new PlaintextTransaction { Amount = 1000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-10) },
+                new PlaintextTransaction { Amount = 2000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-15) },
+                new PlaintextTransaction { Amount = 3000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-20) },
+                new PlaintextTransaction { Amount = -1000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-25) },
+                new PlaintextTransaction { Amount = 4000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-30) },
+                new PlaintextTransaction { Amount = 4000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-40) },
+                new PlaintextTransaction { Amount = 2000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-50) },
+                new PlaintextTransaction { Amount = 1000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-60) },
+                new PlaintextTransaction { Amount = -4000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-70) },
+                new PlaintextTransaction { Amount = 3000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-80) },
+                new PlaintextTransaction { Amount = 5000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-90) },
+                new PlaintextTransaction { Amount = 6000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-100) },
+                new PlaintextTransaction { Amount = 7000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-110) },
+                new PlaintextTransaction { Amount = 1000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-365) }
+            };
 
             // calculate the balance as it changes over time
             long cumulativeBalance = 0;
-            var balanceOverTime = plaintextTransactions
-                    .OrderBy(pt => pt.Timestamp)
-                    .Select(pt =>
-                    {
-                        cumulativeBalance += pt.Amount;
-                        return new { pt.Timestamp, Balance = cumulativeBalance / 100.0 };
-                    })
-                    .ToList();
-
-            // filter the data to include only the last 7 days
-            DateTime now = DateTime.Now;
-            DateTime sevenDaysAgo = now.AddDays(-7);
-            var filteredData = balanceOverTime
-                .Where(data => data.Timestamp >= sevenDaysAgo && data.Timestamp <= now)
+            var balanceOverTime = list
+                .OrderBy(pt => pt.Timestamp)
+                .Select(pt =>
+                {
+                    cumulativeBalance += pt.Amount;
+                    return new { pt.Timestamp, Balance = cumulativeBalance / 100.0 };
+                })
                 .ToList();
 
+            // determine time range
+            int previousDays = -7;
+            if (AccountDetailsPanelLastMonthPictureBox.Visible)
+            {
+                previousDays = -30;
+            }
+            else if (AccountDetailsPanelLastYearPictureBox.Visible)
+            {
+                previousDays = -365;
+            }
+            DateTime currentDate = DateTime.Now;
+            DateTime previousDate = currentDate.AddDays(previousDays);
+
+            // filter data within the range
+            var filteredData = balanceOverTime
+                .Where(data => data.Timestamp >= previousDate && data.Timestamp <= currentDate)
+                .ToList();
+
+            // find the data point just before the range
+            var pointBeforeRange = balanceOverTime
+                .Where(data => data.Timestamp < previousDate)
+                .OrderByDescending(data => data.Timestamp)
+                .FirstOrDefault();
+
+            // add the point before the range (if it exists) to fill in the area before the transaction farthest back
+            if (pointBeforeRange != null)
+            {
+                filteredData.Insert(0, pointBeforeRange);
+            }
+
+            // extrapolate the most recent balance to the current date to fill in the area after the lastest transaction
+            if (filteredData.Count != 0)
+            {
+                var lastDataPoint = filteredData.Last();
+
+                // add today's date with the most recent balance
+                filteredData.Add(new { Timestamp = currentDate, Balance = lastDataPoint.Balance });
+            }
+
+            // remove the existing chart
+            AccountDetailsPanelMainChartPanel.Controls.Clear();
+
+            // create a new chart
             Chart chart = new();
             chart.DataSource = filteredData;
             chart.Dock = DockStyle.Fill;
             chart.BackColor = Color.FromArgb(79, 79, 79);
 
+            // define chart area
             ChartArea chartArea = new();
-            chartArea.AxisX.Minimum = sevenDaysAgo.ToOADate();
-            chartArea.AxisX.Maximum = now.ToOADate();
+            chartArea.AxisX.Minimum = previousDate.ToOADate();
+            chartArea.AxisX.Maximum = currentDate.ToOADate();
             chartArea.BackColor = Color.FromArgb(79, 79, 79);
             chartArea.AxisX.LabelStyle.ForeColor = Color.FromArgb(145, 145, 145);
             chartArea.AxisX.LineWidth = 0;
@@ -87,7 +136,7 @@ namespace WinFormsUI
             // TODO: update to formet better and set the horizontal lines to be a more muted color
             chartArea.AxisY.LabelStyle.Format = "${}";
 
-
+            // define series
             Series series = new();
             series.ChartType = SeriesChartType.Area;
             series.BorderWidth = 2;
@@ -98,9 +147,9 @@ namespace WinFormsUI
             series.XValueMember = "Timestamp";
             series.YValueMembers = "Balance";
 
+            // add controls
             chart.ChartAreas.Add(chartArea);
             chart.Series.Add(series);
-
             AccountDetailsPanelMainChartPanel.Controls.Add(chart);
         }
 
@@ -630,6 +679,42 @@ namespace WinFormsUI
             TransactPanelWithdrawPictureBox.Visible = true;
             TransactPanelDepositLabel.BackColor = Color.FromArgb(45, 45, 45);
             TransactPanelWithdrawLabel.BackColor = Color.FromArgb(79, 79, 79);
+        }
+
+        private void AccountDetailsPanelLastWeekLabel_Click(object sender, EventArgs e)
+        {
+            AccountDetailsPanelLastWeekPictureBox.Visible = true;
+            AccountDetailsPanelLastMonthPictureBox.Visible = false;
+            AccountDetailsPanelLastYearPictureBox.Visible = false;
+            AccountDetailsPanelLastWeekLabel.BackColor = Color.FromArgb(79, 79, 79);
+            AccountDetailsPanelLastMonthLabel.BackColor = Color.FromArgb(45, 45, 45);
+            AccountDetailsPanelLastYearLabel.BackColor = Color.FromArgb(45, 45, 45);
+
+            LoadMainChart(selectedAccountPlaintextTransactions);
+        }
+
+        private void AccountDetailsPanelLastMonthLabel_Click(object sender, EventArgs e)
+        {
+            AccountDetailsPanelLastWeekPictureBox.Visible = false;
+            AccountDetailsPanelLastMonthPictureBox.Visible = true;
+            AccountDetailsPanelLastYearPictureBox.Visible = false;
+            AccountDetailsPanelLastWeekLabel.BackColor = Color.FromArgb(45, 45, 45);
+            AccountDetailsPanelLastMonthLabel.BackColor = Color.FromArgb(79, 79, 79);
+            AccountDetailsPanelLastYearLabel.BackColor = Color.FromArgb(45, 45, 45);
+
+            LoadMainChart(selectedAccountPlaintextTransactions);
+        }
+
+        private void AccountDetailsPanelLastYearLabel_Click(object sender, EventArgs e)
+        {
+            AccountDetailsPanelLastWeekPictureBox.Visible = false;
+            AccountDetailsPanelLastMonthPictureBox.Visible = false;
+            AccountDetailsPanelLastYearPictureBox.Visible = true;
+            AccountDetailsPanelLastWeekLabel.BackColor = Color.FromArgb(45, 45, 45);
+            AccountDetailsPanelLastMonthLabel.BackColor = Color.FromArgb(45, 45, 45);
+            AccountDetailsPanelLastYearLabel.BackColor = Color.FromArgb(79, 79, 79);
+
+            LoadMainChart(selectedAccountPlaintextTransactions);
         }
     }
 }

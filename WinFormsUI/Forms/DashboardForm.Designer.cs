@@ -38,6 +38,12 @@
             AccountsPanelPasswordLabel = new Label();
             AccountsPanelAccountsPictureBox = new PictureBox();
             AccountDetailsPanel = new Panel();
+            AccountDetailsPanelLastYearLabel = new Label();
+            AccountDetailsPanelLastYearPictureBox = new PictureBox();
+            AccountDetailsPanelLastMonthLabel = new Label();
+            AccountDetailsPanelLastWeekLabel = new Label();
+            AccountDetailsPanelLastWeekPictureBox = new PictureBox();
+            AccountDetailsPanelLastMonthPictureBox = new PictureBox();
             AccountDetailsPanelbutton1 = new Button();
             AccountDetailsPanelDoughnutChartPanel = new Panel();
             AccountDetailsPanelTransactionsListBox = new ListBox();
@@ -76,6 +82,9 @@
             ((System.ComponentModel.ISupportInitialize)AccountsPanelPasswordPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelAccountsPictureBox).BeginInit();
             AccountDetailsPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelLastYearPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelLastWeekPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelLastMonthPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTranasctionsListPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelBlockchainPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactionsPictureBox).BeginInit();
@@ -191,6 +200,12 @@
             // 
             // AccountDetailsPanel
             // 
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelLastYearLabel);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelLastYearPictureBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelLastMonthLabel);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelLastWeekLabel);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelLastWeekPictureBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelLastMonthPictureBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelbutton1);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelDoughnutChartPanel);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelTransactionsListBox);
@@ -206,6 +221,74 @@
             AccountDetailsPanel.Name = "AccountDetailsPanel";
             AccountDetailsPanel.Size = new Size(987, 735);
             AccountDetailsPanel.TabIndex = 1;
+            // 
+            // AccountDetailsPanelLastYearLabel
+            // 
+            AccountDetailsPanelLastYearLabel.AutoSize = true;
+            AccountDetailsPanelLastYearLabel.BackColor = Color.FromArgb(45, 45, 45);
+            AccountDetailsPanelLastYearLabel.ForeColor = Color.Silver;
+            AccountDetailsPanelLastYearLabel.Location = new Point(230, 104);
+            AccountDetailsPanelLastYearLabel.Name = "AccountDetailsPanelLastYearLabel";
+            AccountDetailsPanelLastYearLabel.Size = new Size(73, 21);
+            AccountDetailsPanelLastYearLabel.TabIndex = 26;
+            AccountDetailsPanelLastYearLabel.Text = "Last Year";
+            AccountDetailsPanelLastYearLabel.Click += AccountDetailsPanelLastYearLabel_Click;
+            // 
+            // AccountDetailsPanelLastYearPictureBox
+            // 
+            AccountDetailsPanelLastYearPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelLastYearPictureBox.Image");
+            AccountDetailsPanelLastYearPictureBox.Location = new Point(222, 98);
+            AccountDetailsPanelLastYearPictureBox.Name = "AccountDetailsPanelLastYearPictureBox";
+            AccountDetailsPanelLastYearPictureBox.Size = new Size(89, 36);
+            AccountDetailsPanelLastYearPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountDetailsPanelLastYearPictureBox.TabIndex = 27;
+            AccountDetailsPanelLastYearPictureBox.TabStop = false;
+            AccountDetailsPanelLastYearPictureBox.Visible = false;
+            // 
+            // AccountDetailsPanelLastMonthLabel
+            // 
+            AccountDetailsPanelLastMonthLabel.AutoSize = true;
+            AccountDetailsPanelLastMonthLabel.BackColor = Color.FromArgb(45, 45, 45);
+            AccountDetailsPanelLastMonthLabel.ForeColor = Color.Silver;
+            AccountDetailsPanelLastMonthLabel.Location = new Point(129, 104);
+            AccountDetailsPanelLastMonthLabel.Name = "AccountDetailsPanelLastMonthLabel";
+            AccountDetailsPanelLastMonthLabel.Size = new Size(88, 21);
+            AccountDetailsPanelLastMonthLabel.TabIndex = 23;
+            AccountDetailsPanelLastMonthLabel.Text = "Last Month";
+            AccountDetailsPanelLastMonthLabel.Click += AccountDetailsPanelLastMonthLabel_Click;
+            // 
+            // AccountDetailsPanelLastWeekLabel
+            // 
+            AccountDetailsPanelLastWeekLabel.AutoSize = true;
+            AccountDetailsPanelLastWeekLabel.BackColor = Color.FromArgb(79, 79, 79);
+            AccountDetailsPanelLastWeekLabel.ForeColor = Color.Silver;
+            AccountDetailsPanelLastWeekLabel.Location = new Point(37, 104);
+            AccountDetailsPanelLastWeekLabel.Name = "AccountDetailsPanelLastWeekLabel";
+            AccountDetailsPanelLastWeekLabel.Size = new Size(81, 21);
+            AccountDetailsPanelLastWeekLabel.TabIndex = 22;
+            AccountDetailsPanelLastWeekLabel.Text = "Last Week";
+            AccountDetailsPanelLastWeekLabel.Click += AccountDetailsPanelLastWeekLabel_Click;
+            // 
+            // AccountDetailsPanelLastWeekPictureBox
+            // 
+            AccountDetailsPanelLastWeekPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelLastWeekPictureBox.Image");
+            AccountDetailsPanelLastWeekPictureBox.Location = new Point(28, 98);
+            AccountDetailsPanelLastWeekPictureBox.Name = "AccountDetailsPanelLastWeekPictureBox";
+            AccountDetailsPanelLastWeekPictureBox.Size = new Size(97, 36);
+            AccountDetailsPanelLastWeekPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountDetailsPanelLastWeekPictureBox.TabIndex = 24;
+            AccountDetailsPanelLastWeekPictureBox.TabStop = false;
+            // 
+            // AccountDetailsPanelLastMonthPictureBox
+            // 
+            AccountDetailsPanelLastMonthPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelLastMonthPictureBox.Image");
+            AccountDetailsPanelLastMonthPictureBox.Location = new Point(123, 98);
+            AccountDetailsPanelLastMonthPictureBox.Name = "AccountDetailsPanelLastMonthPictureBox";
+            AccountDetailsPanelLastMonthPictureBox.Size = new Size(97, 36);
+            AccountDetailsPanelLastMonthPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountDetailsPanelLastMonthPictureBox.TabIndex = 25;
+            AccountDetailsPanelLastMonthPictureBox.TabStop = false;
+            AccountDetailsPanelLastMonthPictureBox.Visible = false;
             // 
             // AccountDetailsPanelbutton1
             // 
@@ -570,10 +653,10 @@
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 725);
             Controls.Add(SidebarListBox);
+            Controls.Add(AccountDetailsPanel);
             Controls.Add(AccountsPanel);
             Controls.Add(TransactPanel);
             Controls.Add(DashboardPanel);
-            Controls.Add(AccountDetailsPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Margin = new Padding(4);
             Name = "DashboardForm";
@@ -588,6 +671,10 @@
             ((System.ComponentModel.ISupportInitialize)AccountsPanelPasswordPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelAccountsPictureBox).EndInit();
             AccountDetailsPanel.ResumeLayout(false);
+            AccountDetailsPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelLastYearPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelLastWeekPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelLastMonthPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTranasctionsListPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelBlockchainPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactionsPictureBox).EndInit();
@@ -653,5 +740,11 @@
         private Button AccountDetailsPanelbutton1;
         private PictureBox TransactPanelDepositPictureBox;
         private PictureBox TransactPanelWithdrawPictureBox;
+        private Label AccountDetailsPanelLastYearLabel;
+        private PictureBox AccountDetailsPanelLastYearPictureBox;
+        private Label AccountDetailsPanelLastMonthLabel;
+        private Label AccountDetailsPanelLastWeekLabel;
+        private PictureBox AccountDetailsPanelLastWeekPictureBox;
+        private PictureBox AccountDetailsPanelLastMonthPictureBox;
     }
 }
