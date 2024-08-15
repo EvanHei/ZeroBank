@@ -871,7 +871,7 @@ namespace WinFormsUI
         private async void AccountsPanelDeletePictureBox_Click(object sender, EventArgs e)
         {
             Account account = (Account)AccountsPanelListBox.SelectedItem;
-            
+
             if (account.Transactions.Count > 0)
             {
                 // TODO: add error msg
@@ -907,6 +907,16 @@ namespace WinFormsUI
             float y = (pictureBox.ClientSize.Height - textSize.Height) / 2;
 
             e.Graphics.DrawString(text, font, brush, new PointF(x, y));
+        }
+
+        private void CreateAccountPanelBackArrowPictureBox_Click(object sender, EventArgs e)
+        {
+            ShowAccountsPanel();
+        }
+
+        private void TransactPanelBackArrowPictureBox_Click(object sender, EventArgs e)
+        {
+            ShowAccountDetailsPanel();
         }
     }
 }
