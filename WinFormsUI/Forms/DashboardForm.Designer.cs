@@ -89,6 +89,7 @@
             CreateAccountPanelHeaderLabel = new Label();
             CreateAccountPanelTypePictureBox = new PictureBox();
             CreateAccountPanelTypeComboBox = new ComboBox();
+            AccountsPanelDeletePictureBox = new PictureBox();
             AccountsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelCreateNewPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelPasswordArrowPictureBox).BeginInit();
@@ -122,10 +123,12 @@
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelPasswordPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelCreatePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelTypePictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountsPanelDeletePictureBox).BeginInit();
             SuspendLayout();
             // 
             // AccountsPanel
             // 
+            AccountsPanel.Controls.Add(AccountsPanelDeletePictureBox);
             AccountsPanel.Controls.Add(AccountsPanelCreateNewPictureBox);
             AccountsPanel.Controls.Add(AccountsPanelListBox);
             AccountsPanel.Controls.Add(AccountsPanelPasswordArrowPictureBox);
@@ -142,7 +145,7 @@
             // AccountsPanelCreateNewPictureBox
             // 
             AccountsPanelCreateNewPictureBox.Image = (Image)resources.GetObject("AccountsPanelCreateNewPictureBox.Image");
-            AccountsPanelCreateNewPictureBox.Location = new Point(424, 679);
+            AccountsPanelCreateNewPictureBox.Location = new Point(344, 679);
             AccountsPanelCreateNewPictureBox.Name = "AccountsPanelCreateNewPictureBox";
             AccountsPanelCreateNewPictureBox.Size = new Size(123, 36);
             AccountsPanelCreateNewPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -819,6 +822,18 @@
             CreateAccountPanelTypeComboBox.TabIndex = 24;
             CreateAccountPanelTypeComboBox.SelectedIndexChanged += CreateAccountPanelTypeComboBox_SelectedIndexChanged;
             // 
+            // AccountsPanelDeletePictureBox
+            // 
+            AccountsPanelDeletePictureBox.Image = (Image)resources.GetObject("AccountsPanelDeletePictureBox.Image");
+            AccountsPanelDeletePictureBox.Location = new Point(497, 679);
+            AccountsPanelDeletePictureBox.Name = "AccountsPanelDeletePictureBox";
+            AccountsPanelDeletePictureBox.Size = new Size(123, 36);
+            AccountsPanelDeletePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountsPanelDeletePictureBox.TabIndex = 19;
+            AccountsPanelDeletePictureBox.TabStop = false;
+            AccountsPanelDeletePictureBox.Click += AccountsPanelDeletePictureBox_Click;
+            AccountsPanelDeletePictureBox.Paint += AccountsPanelDeletePictureBox_Paint;
+            // 
             // DashboardForm
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
@@ -826,11 +841,11 @@
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 725);
             Controls.Add(SidebarListBox);
+            Controls.Add(AccountsPanel);
             Controls.Add(CreateAccountPanel);
             Controls.Add(TransactPanel);
             Controls.Add(DashboardPanel);
             Controls.Add(AccountDetailsPanel);
-            Controls.Add(AccountsPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Margin = new Padding(4);
             Name = "DashboardForm";
@@ -876,6 +891,7 @@
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelPasswordPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelCreatePictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelTypePictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountsPanelDeletePictureBox).EndInit();
             ResumeLayout(false);
         }
 
@@ -946,5 +962,6 @@
         private PictureBox CreateAccountPanelNamePictureBox;
         private Label CreateAccountPanelNameLabel;
         private PictureBox AccountsPanelCreateNewPictureBox;
+        private PictureBox AccountsPanelDeletePictureBox;
     }
 }

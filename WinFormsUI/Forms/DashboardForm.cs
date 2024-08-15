@@ -28,6 +28,7 @@ namespace WinFormsUI
         private async Task GetData()
         {
             accounts = await ClientConfig.ApiAccessor.GetAccounts();
+            this.Refresh();
         }
 
         private class DailyBalance
@@ -256,15 +257,17 @@ namespace WinFormsUI
 
         private void AccountsPictureBox_Paint(object sender, PaintEventArgs e)
         {
+            PictureBox pictureBox = (PictureBox)sender;
+
             // draw "Accounts"
             string smallText = "Accounts";
 
-            using Font smallTextFont = new("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
-            using Brush brush = new SolidBrush(Color.White);
+            using Font smallTextFont = new("Segoe UI Emoji", 12, FontStyle.Regular, GraphicsUnit.Point);
+            using SolidBrush brush = new(Color.White);
             SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
 
-            float smallTextX = (AccountsPanelAccountsPictureBox.ClientSize.Width - smallTextSize.Width) / 2;
-            float smallTextY = (AccountsPanelAccountsPictureBox.ClientSize.Height - smallTextSize.Height) / 2;
+            float smallTextX = (pictureBox.ClientSize.Width - smallTextSize.Width) / 2;
+            float smallTextY = (pictureBox.ClientSize.Height - smallTextSize.Height) / 2;
 
             float smallTextOffsetX = 15;  // shift n pixels left
             float smallTextOffsetY = 15;   // shift n pixels up
@@ -557,8 +560,8 @@ namespace WinFormsUI
             // draw "Transactions"
             string transactionsText = "Transactions";
 
-            using Font transactionsFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
-            using Brush transactionsBrush = new SolidBrush(Color.White);
+            using Font transactionsFont = new("Segoe UI Emoji", 16, FontStyle.Regular, GraphicsUnit.Point);
+            using SolidBrush transactionsBrush = new(Color.White);
             SizeF transactionsSize = e.Graphics.MeasureString(transactionsText, transactionsFont);
 
             float transactionsTextX = 12;  // n pixels from the left side
@@ -571,8 +574,8 @@ namespace WinFormsUI
             customFormat.CurrencyNegativePattern = 1;
             string balanceText = (selectedAccountBalance * .01).ToString("C", customFormat);
 
-            using Font balanceFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
-            using Brush balanceBrush = new SolidBrush(Color.White);
+            using Font balanceFont = new("Segoe UI Emoji", 16, FontStyle.Regular, GraphicsUnit.Point);
+            using SolidBrush balanceBrush = new(Color.White);
             SizeF balanceSize = e.Graphics.MeasureString(transactionsText, transactionsFont);
 
             float balanceX = ((sender as Control).ClientSize.Width / 2 - balanceSize.Width / 2) + 30;
@@ -854,6 +857,47 @@ namespace WinFormsUI
             PictureBox pictureBox = (PictureBox)sender;
 
             string text = "Create New";
+
+            using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular, GraphicsUnit.Point);
+            using SolidBrush brush = new(Color.White);
+            SizeF textSize = e.Graphics.MeasureString(text, font);
+
+            float x = (pictureBox.ClientSize.Width - textSize.Width) / 2;
+            float y = (pictureBox.ClientSize.Height - textSize.Height) / 2;
+
+            e.Graphics.DrawString(text, font, brush, new PointF(x, y));
+        }
+
+        private async void AccountsPanelDeletePictureBox_Click(object sender, EventArgs e)
+        {
+            Account account = (Account)AccountsPanelListBox.SelectedItem;
+            
+            if (account.Transactions.Count > 0)
+            {
+                // TODO: add error msg
+                MessageBox.Show("Cannot delete an account with transactions.");
+                return;
+            }
+
+            try
+            {
+                await ClientConfig.DeleteAccount(account.Id);
+            }
+            catch (Exception ex)
+            {
+                // TODO: display error
+                MessageBox.Show(ex.Message);
+            }
+
+            await GetData();
+            ShowAccountsPanel();
+        }
+
+        private void AccountsPanelDeletePictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            PictureBox pictureBox = (PictureBox)sender;
+
+            string text = "Delete";
 
             using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular, GraphicsUnit.Point);
             using SolidBrush brush = new(Color.White);
