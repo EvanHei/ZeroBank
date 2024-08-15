@@ -167,7 +167,7 @@
             AccountsPanelCreateNewPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             AccountsPanelCreateNewPictureBox.TabIndex = 18;
             AccountsPanelCreateNewPictureBox.TabStop = false;
-            AccountsPanelCreateNewPictureBox.Click += AccountsPanelCreateNewButton_Click;
+            AccountsPanelCreateNewPictureBox.Click += AccountsPanelCreateNewPictureBox_Click;
             AccountsPanelCreateNewPictureBox.Paint += AccountsPanelCreateNewPictureBox_Paint;
             // 
             // AccountsPanelListBox
@@ -182,8 +182,8 @@
             AccountsPanelListBox.Name = "AccountsPanelListBox";
             AccountsPanelListBox.Size = new Size(520, 483);
             AccountsPanelListBox.TabIndex = 14;
-            AccountsPanelListBox.DrawItem += AccountsListBox_DrawItem;
-            AccountsPanelListBox.MeasureItem += AccountsListBox_MeasureItem;
+            AccountsPanelListBox.DrawItem += AccountsPanelListBox_DrawItem;
+            AccountsPanelListBox.MeasureItem += AccountsPanelListBox_MeasureItem;
             // 
             // AccountsPanelPasswordArrowPictureBox
             // 
@@ -194,7 +194,7 @@
             AccountsPanelPasswordArrowPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             AccountsPanelPasswordArrowPictureBox.TabIndex = 13;
             AccountsPanelPasswordArrowPictureBox.TabStop = false;
-            AccountsPanelPasswordArrowPictureBox.Click += PasswordArrowPictureBox_Click;
+            AccountsPanelPasswordArrowPictureBox.Click += AccountsPanelPasswordArrowPictureBox_Click;
             // 
             // AccountsPanelListPictureBox
             // 
@@ -247,7 +247,7 @@
             AccountsPanelAccountsPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             AccountsPanelAccountsPictureBox.TabIndex = 2;
             AccountsPanelAccountsPictureBox.TabStop = false;
-            AccountsPanelAccountsPictureBox.Paint += AccountsPictureBox_Paint;
+            AccountsPanelAccountsPictureBox.Paint += AccountsPanelAccountsPictureBox_Paint;
             // 
             // AccountDetailsPanel
             // 
@@ -371,8 +371,8 @@
             AccountDetailsPanelTransactionsListBox.Name = "AccountDetailsPanelTransactionsListBox";
             AccountDetailsPanelTransactionsListBox.Size = new Size(654, 210);
             AccountDetailsPanelTransactionsListBox.TabIndex = 15;
-            AccountDetailsPanelTransactionsListBox.DrawItem += TransactionsListBox_DrawItem;
-            AccountDetailsPanelTransactionsListBox.MeasureItem += TransactionsListBox_MeasureItem;
+            AccountDetailsPanelTransactionsListBox.DrawItem += AccountDetailsPanelTransactionsListBox_DrawItem;
+            AccountDetailsPanelTransactionsListBox.MeasureItem += AccountDetailsPanelTransactionsListBox_MeasureItem;
             // 
             // AccountDetailsPanelTranasctionsListPictureBox
             // 
@@ -383,7 +383,7 @@
             AccountDetailsPanelTranasctionsListPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             AccountDetailsPanelTranasctionsListPictureBox.TabIndex = 11;
             AccountDetailsPanelTranasctionsListPictureBox.TabStop = false;
-            AccountDetailsPanelTranasctionsListPictureBox.Paint += TranasctionsPictureBox_Paint;
+            AccountDetailsPanelTranasctionsListPictureBox.Paint += AccountDetailsPanelTranasctionsListPictureBox_Paint;
             // 
             // AccountDetailsPanelBlockchainPictureBox
             // 
@@ -394,7 +394,7 @@
             AccountDetailsPanelBlockchainPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             AccountDetailsPanelBlockchainPictureBox.TabIndex = 10;
             AccountDetailsPanelBlockchainPictureBox.TabStop = false;
-            AccountDetailsPanelBlockchainPictureBox.Paint += BlockchainPictureBox_Paint;
+            AccountDetailsPanelBlockchainPictureBox.Paint += AccountDetailsPanelBlockchainPictureBox_Paint;
             // 
             // AccountDetailsPanelTransactionsPictureBox
             // 
@@ -405,7 +405,7 @@
             AccountDetailsPanelTransactionsPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             AccountDetailsPanelTransactionsPictureBox.TabIndex = 9;
             AccountDetailsPanelTransactionsPictureBox.TabStop = false;
-            AccountDetailsPanelTransactionsPictureBox.Paint += TransactionsPictureBox_Paint;
+            AccountDetailsPanelTransactionsPictureBox.Paint += AccountDetailsPanelTransactionsPictureBox_Paint;
             // 
             // AccountDetailsPanelMainChartPanel
             // 
@@ -423,7 +423,7 @@
             AccountDetailsPanelDoughnutChartPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             AccountDetailsPanelDoughnutChartPictureBox.TabIndex = 4;
             AccountDetailsPanelDoughnutChartPictureBox.TabStop = false;
-            AccountDetailsPanelDoughnutChartPictureBox.Paint += DoughnutChartPictureBox_Paint;
+            AccountDetailsPanelDoughnutChartPictureBox.Paint += AccountDetailsPanelDoughnutChartPictureBox_Paint;
             // 
             // AccountDetailsPanelNamePictureBox
             // 
@@ -434,7 +434,7 @@
             AccountDetailsPanelNamePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             AccountDetailsPanelNamePictureBox.TabIndex = 0;
             AccountDetailsPanelNamePictureBox.TabStop = false;
-            AccountDetailsPanelNamePictureBox.Paint += BalancePictureBox_Paint;
+            AccountDetailsPanelNamePictureBox.Paint += AccountsDetailsPanelNamePictureBox_Paint;
             // 
             // AccountDetailsPanelChartPictureBox
             // 
@@ -606,8 +606,8 @@
             TransactPanelConfirmPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             TransactPanelConfirmPictureBox.TabIndex = 17;
             TransactPanelConfirmPictureBox.TabStop = false;
-            TransactPanelConfirmPictureBox.Click += ConfirmPictureBox_Click;
-            TransactPanelConfirmPictureBox.Paint += ConfirmPictureBox_Paint;
+            TransactPanelConfirmPictureBox.Click += TransactPanelConfirmPictureBox_Click;
+            TransactPanelConfirmPictureBox.Paint += TransactPanelConfirmPictureBox_Paint;
             // 
             // TransactPanelAmountTextBox
             // 
@@ -663,7 +663,7 @@
             TransactPanelDepositLabel.Size = new Size(63, 21);
             TransactPanelDepositLabel.TabIndex = 7;
             TransactPanelDepositLabel.Text = "Deposit";
-            TransactPanelDepositLabel.Click += DepositLabel_Click;
+            TransactPanelDepositLabel.Click += TransactPanelDepositLabel_Click;
             // 
             // TransactPanelHeaderLabel
             // 

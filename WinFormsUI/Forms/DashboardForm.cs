@@ -3,8 +3,6 @@ using ClientLibrary.Models;
 using SharedLibrary;
 using SharedLibrary.Models;
 using System.Globalization;
-using System.Transactions;
-using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace WinFormsUI
@@ -255,7 +253,7 @@ namespace WinFormsUI
             CreateAccountPanel.Visible = true;
         }
 
-        private void AccountsPictureBox_Paint(object sender, PaintEventArgs e)
+        private void AccountsPanelAccountsPictureBox_Paint(object sender, PaintEventArgs e)
         {
             PictureBox pictureBox = (PictureBox)sender;
 
@@ -297,7 +295,7 @@ namespace WinFormsUI
             await GetData();
         }
 
-        private async void PasswordArrowPictureBox_Click(object sender, EventArgs e)
+        private async void AccountsPanelPasswordArrowPictureBox_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(AccountsPanelPasswordTextBox.Text))
             {
@@ -309,7 +307,7 @@ namespace WinFormsUI
                 selectedAccountPassword = AccountsPanelPasswordTextBox.Text;
                 selectedAccount = (Account)AccountsPanelListBox.SelectedItem;
 
-                await GetAccountData(selectedAccount, selectedAccountPassword);
+                await GetSelectedAccountData(selectedAccount, selectedAccountPassword);
 
                 ShowAccountDetailsPanel();
             }
@@ -320,7 +318,7 @@ namespace WinFormsUI
             }
         }
 
-        private async Task GetAccountData(Account account, string password)
+        private async Task GetSelectedAccountData(Account account, string password)
         {
             // populate variables
             selectedAccount = account;
@@ -332,7 +330,7 @@ namespace WinFormsUI
             selectedAccountPlaintextTransactions = plaintextTransactions.OrderByDescending(transaction => transaction.Timestamp).ToList();
         }
 
-        private void BalancePictureBox_Paint(object sender, PaintEventArgs e)
+        private void AccountsDetailsPanelNamePictureBox_Paint(object sender, PaintEventArgs e)
         {
             PictureBox pictureBox = (PictureBox)sender;
 
@@ -369,7 +367,7 @@ namespace WinFormsUI
             e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
         }
 
-        private void TransactionsPictureBox_Paint(object sender, PaintEventArgs e)
+        private void AccountDetailsPanelTransactionsPictureBox_Paint(object sender, PaintEventArgs e)
         {
             PictureBox pictureBox = (PictureBox)sender;
 
@@ -406,7 +404,7 @@ namespace WinFormsUI
             e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
         }
 
-        private void BlockchainPictureBox_Paint(object sender, PaintEventArgs e)
+        private void AccountDetailsPanelBlockchainPictureBox_Paint(object sender, PaintEventArgs e)
         {
             PictureBox pictureBox = (PictureBox)sender;
 
@@ -443,7 +441,7 @@ namespace WinFormsUI
             e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
         }
 
-        private void AccountsListBox_DrawItem(object sender, DrawItemEventArgs e)
+        private void AccountsPanelListBox_DrawItem(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0)
             {
@@ -484,12 +482,12 @@ namespace WinFormsUI
             e.Graphics.DrawString(dateCreatedText, dateCreatedFont, dateCreatedBrush, dateCreatedX, e.Bounds.Y + 22);
         }
 
-        private void AccountsListBox_MeasureItem(object sender, MeasureItemEventArgs e)
+        private void AccountsPanelListBox_MeasureItem(object sender, MeasureItemEventArgs e)
         {
             e.ItemHeight = 40;
         }
 
-        private void TransactionsListBox_DrawItem(object sender, DrawItemEventArgs e)
+        private void AccountDetailsPanelTransactionsListBox_DrawItem(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0)
             {
@@ -535,12 +533,12 @@ namespace WinFormsUI
             e.Graphics.DrawString(plaintextTransaction.Timestamp.ToString(), dateFont, dateBrush, dateX, e.Bounds.Y + 22);
         }
 
-        private void TransactionsListBox_MeasureItem(object sender, MeasureItemEventArgs e)
+        private void AccountDetailsPanelTransactionsListBox_MeasureItem(object sender, MeasureItemEventArgs e)
         {
             e.ItemHeight = 40;
         }
 
-        private void TranasctionsPictureBox_Paint(object sender, PaintEventArgs e)
+        private void AccountDetailsPanelTranasctionsListPictureBox_Paint(object sender, PaintEventArgs e)
         {
             // draw "History"
             string text = "History";
@@ -555,7 +553,7 @@ namespace WinFormsUI
             e.Graphics.DrawString(text, textFont, brush, new PointF(textX, textY));
         }
 
-        private void DoughnutChartPictureBox_Paint(object sender, PaintEventArgs e)
+        private void AccountDetailsPanelDoughnutChartPictureBox_Paint(object sender, PaintEventArgs e)
         {
             // draw "Transactions"
             string transactionsText = "Transactions";
@@ -636,12 +634,7 @@ namespace WinFormsUI
             e.Graphics.DrawLine(pen, new Point(xPosition, 0), new Point(xPosition, this.ClientSize.Height));
         }
 
-        private void MakeTransactionPictureBox_Click(object sender, EventArgs e)
-        {
-            ShowTransactPanel();
-        }
-
-        private void ConfirmPictureBox_Paint(object sender, PaintEventArgs e)
+        private void TransactPanelConfirmPictureBox_Paint(object sender, PaintEventArgs e)
         {
             string text = "Confirm";
 
@@ -655,7 +648,7 @@ namespace WinFormsUI
             e.Graphics.DrawString(text, font, brush, new PointF(x, y));
         }
 
-        private async void ConfirmPictureBox_Click(object sender, EventArgs e)
+        private async void TransactPanelConfirmPictureBox_Click(object sender, EventArgs e)
         {
             try
             {
@@ -674,7 +667,7 @@ namespace WinFormsUI
 
                 await ClientConfig.AddTransaction(selectedAccount.Id, amount, selectedAccountPassword);
                 TransactPanelAmountTextBox.Text = "";
-                await GetAccountData(selectedAccount, selectedAccountPassword);
+                await GetSelectedAccountData(selectedAccount, selectedAccountPassword);
             }
             catch (Exception ex)
             {
@@ -691,7 +684,7 @@ namespace WinFormsUI
             ShowTransactPanel();
         }
 
-        private void DepositLabel_Click(object sender, EventArgs e)
+        private void TransactPanelDepositLabel_Click(object sender, EventArgs e)
         {
             TransactPanelDepositPictureBox.Visible = true;
             TransactPanelWithdrawPictureBox.Visible = false;
@@ -847,7 +840,7 @@ namespace WinFormsUI
             e.Graphics.DrawString(text, font, brush, x, y);
         }
 
-        private void AccountsPanelCreateNewButton_Click(object sender, EventArgs e)
+        private void AccountsPanelCreateNewPictureBox_Click(object sender, EventArgs e)
         {
             ShowCreateAccountPanel();
         }
