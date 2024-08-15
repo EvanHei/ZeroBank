@@ -16,4 +16,5 @@ public static class Constants
     public static readonly string ParmsUrl = "https://localhost:7188/api/Parms";
     public static readonly string AccountsBaseUrl = "https://localhost:7188/api/Accounts";
     public static readonly string UsersBaseUrl = "https://localhost:7188/api/Users";
+    public static readonly string GitHubReadmeUrl = "https://github.com/EvanHei/ZeroBank/blob/main/README.md";
 }

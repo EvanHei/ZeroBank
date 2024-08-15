@@ -68,6 +68,7 @@
             DashboardPanelUserGuidePictureBox = new PictureBox();
             SidebarListBox = new ListBox();
             TransactPanel = new Panel();
+            TransactPanelBackArrowPictureBox = new PictureBox();
             TransactPanelDollarSignLabel = new Label();
             TransactPanelConfirmPictureBox = new PictureBox();
             TransactPanelAmountTextBox = new TextBox();
@@ -91,7 +92,6 @@
             CreateAccountPanelHeaderLabel = new Label();
             CreateAccountPanelTypePictureBox = new PictureBox();
             CreateAccountPanelTypeComboBox = new ComboBox();
-            TransactPanelBackArrowPictureBox = new PictureBox();
             AccountsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelDeletePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelCreateNewPictureBox).BeginInit();
@@ -117,6 +117,7 @@
             ((System.ComponentModel.ISupportInitialize)DashboardPanelUserGuideIconPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DashboardPanelUserGuidePictureBox).BeginInit();
             TransactPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)TransactPanelBackArrowPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TransactPanelConfirmPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TransactPanelAmountPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TransactPanelDepositPictureBox).BeginInit();
@@ -127,7 +128,6 @@
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelPasswordPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelCreatePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelTypePictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)TransactPanelBackArrowPictureBox).BeginInit();
             SuspendLayout();
             // 
             // AccountsPanel
@@ -531,6 +531,7 @@
             DashboardPanelUserGuideLabel.Size = new Size(87, 21);
             DashboardPanelUserGuideLabel.TabIndex = 6;
             DashboardPanelUserGuideLabel.Text = "User Guide";
+            DashboardPanelUserGuideLabel.Click += DashboardPanelUserGuideLabel_Click;
             // 
             // DashboardPanelUserGuideIconPictureBox
             // 
@@ -541,6 +542,7 @@
             DashboardPanelUserGuideIconPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             DashboardPanelUserGuideIconPictureBox.TabIndex = 5;
             DashboardPanelUserGuideIconPictureBox.TabStop = false;
+            DashboardPanelUserGuideIconPictureBox.Click += DashboardPanelUserGuideIconPictureBox_Click;
             // 
             // DashboardPanelUserGuidePictureBox
             // 
@@ -551,6 +553,7 @@
             DashboardPanelUserGuidePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             DashboardPanelUserGuidePictureBox.TabIndex = 1;
             DashboardPanelUserGuidePictureBox.TabStop = false;
+            DashboardPanelUserGuidePictureBox.Click += DashboardPanelUserGuidePictureBox_Click;
             // 
             // SidebarListBox
             // 
@@ -585,6 +588,17 @@
             TransactPanel.Name = "TransactPanel";
             TransactPanel.Size = new Size(987, 735);
             TransactPanel.TabIndex = 16;
+            // 
+            // TransactPanelBackArrowPictureBox
+            // 
+            TransactPanelBackArrowPictureBox.Image = (Image)resources.GetObject("TransactPanelBackArrowPictureBox.Image");
+            TransactPanelBackArrowPictureBox.Location = new Point(12, 12);
+            TransactPanelBackArrowPictureBox.Name = "TransactPanelBackArrowPictureBox";
+            TransactPanelBackArrowPictureBox.Size = new Size(38, 36);
+            TransactPanelBackArrowPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            TransactPanelBackArrowPictureBox.TabIndex = 29;
+            TransactPanelBackArrowPictureBox.TabStop = false;
+            TransactPanelBackArrowPictureBox.Click += TransactPanelBackArrowPictureBox_Click;
             // 
             // TransactPanelDollarSignLabel
             // 
@@ -851,17 +865,6 @@
             CreateAccountPanelTypeComboBox.TabIndex = 24;
             CreateAccountPanelTypeComboBox.SelectedIndexChanged += CreateAccountPanelTypeComboBox_SelectedIndexChanged;
             // 
-            // TransactPanelBackArrowPictureBox
-            // 
-            TransactPanelBackArrowPictureBox.Image = (Image)resources.GetObject("TransactPanelBackArrowPictureBox.Image");
-            TransactPanelBackArrowPictureBox.Location = new Point(12, 12);
-            TransactPanelBackArrowPictureBox.Name = "TransactPanelBackArrowPictureBox";
-            TransactPanelBackArrowPictureBox.Size = new Size(38, 36);
-            TransactPanelBackArrowPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            TransactPanelBackArrowPictureBox.TabIndex = 29;
-            TransactPanelBackArrowPictureBox.TabStop = false;
-            TransactPanelBackArrowPictureBox.Click += TransactPanelBackArrowPictureBox_Click;
-            // 
             // DashboardForm
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
@@ -869,11 +872,11 @@
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 725);
             Controls.Add(SidebarListBox);
+            Controls.Add(CreateAccountPanel);
             Controls.Add(TransactPanel);
             Controls.Add(DashboardPanel);
             Controls.Add(AccountDetailsPanel);
             Controls.Add(AccountsPanel);
-            Controls.Add(CreateAccountPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Margin = new Padding(4);
             Name = "DashboardForm";
@@ -910,6 +913,7 @@
             ((System.ComponentModel.ISupportInitialize)DashboardPanelUserGuidePictureBox).EndInit();
             TransactPanel.ResumeLayout(false);
             TransactPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)TransactPanelBackArrowPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)TransactPanelConfirmPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)TransactPanelAmountPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)TransactPanelDepositPictureBox).EndInit();
@@ -921,7 +925,6 @@
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelPasswordPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelCreatePictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelTypePictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)TransactPanelBackArrowPictureBox).EndInit();
             ResumeLayout(false);
         }
 

@@ -2,7 +2,9 @@
 using ClientLibrary.Models;
 using SharedLibrary;
 using SharedLibrary.Models;
+using System.Diagnostics;
 using System.Globalization;
+using System.Security.Policy;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace WinFormsUI
@@ -25,7 +27,16 @@ namespace WinFormsUI
 
         private async Task GetData()
         {
-            accounts = await ClientConfig.ApiAccessor.GetAccounts();
+            // TODO: display error msg
+            try
+            {
+                accounts = await ClientConfig.ApiAccessor.GetAccounts();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+
             this.Refresh();
         }
 
@@ -297,7 +308,7 @@ namespace WinFormsUI
 
         private async void AccountsPanelPasswordArrowPictureBox_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(AccountsPanelPasswordTextBox.Text))
+            if (!ValidateAccountsPanelFields())
             {
                 return;
             }
@@ -650,14 +661,17 @@ namespace WinFormsUI
 
         private async void TransactPanelConfirmPictureBox_Click(object sender, EventArgs e)
         {
+            if (!ValidateTransactPanelFields())
+            {
+                // TODO: display error msg
+                TransactPanelAmountTextBox.Text = "";
+                return;
+            }
+
             try
             {
                 // TODO: make AmountTextBox.Text have .00 add add error message for incorrect password (also check if null or whitespace)
-                long amount;
-                if (!long.TryParse(TransactPanelAmountTextBox.Text, out amount))
-                {
-                    return;
-                }
+                long.TryParse(TransactPanelAmountTextBox.Text, out long amount);
 
                 // if it's a withdrawal, make negative
                 if (TransactPanelWithdrawPictureBox.Visible == true)
@@ -758,31 +772,12 @@ namespace WinFormsUI
 
         private async void CreateAccountPanelCreatePictureBox_Click(object sender, EventArgs e)
         {
-            // TODO: create error msg
-            if (string.IsNullOrWhiteSpace(CreateAccountPanelNameTextBox.Text))
+            if (!ValidateCreateAccountPanelFields())
             {
-                MessageBox.Show("Please enter a name for the account.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (CreateAccountPanelTypeComboBox.SelectedItem == null)
-            {
-                MessageBox.Show("Please select an account type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(CreateAccountPanelPasswordTextBox.Text))
-            {
-                MessageBox.Show("Please enter a password.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string selectedType = CreateAccountPanelTypeComboBox.SelectedItem.ToString();
-            if (!Enum.TryParse<AccountType>(selectedType, out AccountType type))
-            {
-                MessageBox.Show("The selected account type is invalid.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            Enum.TryParse(CreateAccountPanelTypeComboBox.SelectedItem.ToString(), out AccountType type);
 
             try
             {
@@ -910,6 +905,98 @@ namespace WinFormsUI
         private void TransactPanelBackArrowPictureBox_Click(object sender, EventArgs e)
         {
             ShowAccountDetailsPanel();
+        }
+
+        private void DashboardPanelUserGuidePictureBox_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = Constants.GitHubReadmeUrl,
+                UseShellExecute = true
+            });
+        }
+
+        private void DashboardPanelUserGuideIconPictureBox_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = Constants.GitHubReadmeUrl,
+                UseShellExecute = true
+            });
+        }
+
+        private void DashboardPanelUserGuideLabel_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = Constants.GitHubReadmeUrl,
+                UseShellExecute = true
+            });
+        }
+
+        private bool ValidateAccountsPanelFields()
+        {
+            bool output = true;
+
+            if (string.IsNullOrWhiteSpace(AccountsPanelPasswordTextBox.Text))
+            {
+                output = false;
+            }
+
+            return output;
+        }
+
+        private bool ValidateCreateAccountPanelFields()
+        {
+            bool output = true;
+
+            // TODO: create error msg
+            if (string.IsNullOrWhiteSpace(CreateAccountPanelNameTextBox.Text))
+            {
+                output = false;
+            }
+            if (accounts.Any(a => a.Name == CreateAccountPanelNameTextBox.Text))
+            {
+                output = false;
+            }
+            if (CreateAccountPanelTypeComboBox.SelectedItem == null)
+            {
+                output = false;
+            }
+            // TODO: ensure this meets the minimum password requirements
+            if (string.IsNullOrWhiteSpace(CreateAccountPanelPasswordTextBox.Text))
+            {
+                output = false;
+            }
+            string selectedType = CreateAccountPanelTypeComboBox.SelectedItem.ToString();
+            if (!Enum.TryParse(selectedType, out AccountType type))
+            {
+                output = false;
+            }
+
+            return output;
+        }
+
+        private bool ValidateTransactPanelFields()
+        {
+            bool output = true;
+            string amount = TransactPanelAmountTextBox.Text;
+
+            if (string.IsNullOrWhiteSpace(amount))
+            {
+                output = false;
+            }
+            if (!double.TryParse(amount, out double value))
+            {
+                output = false;
+            }
+            int decimalPlaces = BitConverter.GetBytes(decimal.GetBits((decimal)value)[3])[2];
+            if (decimalPlaces > 2)
+            {
+                output = false;
+            }
+
+            return output;
         }
     }
 }
