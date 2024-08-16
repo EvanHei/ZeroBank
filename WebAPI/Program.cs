@@ -57,18 +57,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseHttpsRedirection();
-
-//User user = new();
-//user.Username = "Evan";
-//user.Password = "Password";
-//ServerConfig.DataAccessor.CreateUser(user);
-
-//UserLogin userLogin = new();
-//userLogin.Username = "Evan";
-//userLogin.Password = "Password";
-
-//User u = ServerConfig.DataAccessor.LoadUser(userLogin);
-
 app.MapControllers();
 app.Run();

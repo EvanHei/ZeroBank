@@ -49,7 +49,7 @@ namespace WinFormsUI
         private void LoadMainChart(DateTime previousDate)
         {
             // dummy data for testing
-            List<PlaintextTransaction> list = new List<PlaintextTransaction>
+            List<PlaintextTransaction> dummyTransactions = new List<PlaintextTransaction>
             {
                 new PlaintextTransaction { Amount = 1000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-1) },
                 new PlaintextTransaction { Amount = 5000, AccountId = 1, Timestamp = DateTime.Now.AddDays(-5) },
@@ -71,7 +71,9 @@ namespace WinFormsUI
 
             // calculate the balance as it changes over time
             long cumulativeBalance = 0;
-            var balanceOverTime = selectedAccountPlaintextTransactions
+
+            // change to dummyTransactions for testing purposes
+            var balanceOverTime = dummyTransactions
                 .OrderBy(pt => pt.Timestamp)
                 .Select(pt =>
                 {
@@ -132,16 +134,27 @@ namespace WinFormsUI
             chartArea.AxisY.LineWidth = 0;
             chartArea.AxisY.MajorTickMark.LineColor = Color.FromArgb(145, 145, 145);
             chartArea.AxisY.LabelStyle.ForeColor = Color.FromArgb(145, 145, 145);
-
-            // TODO: update to formet better
             chartArea.AxisY.LabelStyle.Format = "$#,##0.00;- $#,##0.00";
+
+            // get the time range and format the x-axis labels
+            TimeSpan timeRange = currentDate - previousDate;
+            if (timeRange.TotalHours <= 25)
+            {
+                // ex. 3:00 PM for ranges of 1 hour or day
+                chartArea.AxisX.LabelStyle.Format = "hh:mm tt";
+            }
+            else
+            {
+                // ex. Mar 1 for ranges of 1 week, month, or year
+                chartArea.AxisX.LabelStyle.Format = "MMM d";
+            }
 
             // define series
             Series series = new();
             series.ChartType = SeriesChartType.Area;
             series.BorderWidth = 2;
-            series.Color = Color.Purple;
-            series.BackSecondaryColor = Color.DarkRed;
+            series.Color = Color.White;
+            series.BackSecondaryColor = Color.SteelBlue;
             series.BackGradientStyle = GradientStyle.LeftRight;
             series.BorderDashStyle = ChartDashStyle.Solid;
             series.XValueMember = "Timestamp";
@@ -987,6 +1000,54 @@ namespace WinFormsUI
             else if (selectedItem == "Year")
             {
                 LoadMainChart(DateTime.Now.AddYears(-1));
+            }
+
+            AccountDetailsPanelChartTypeComboBox_SelectedIndexChanged(null, null);
+        }
+
+        private void AccountDetailsPanelChartTypePictureBox_Click(object sender, EventArgs e)
+        {
+            AccountDetailsPanelChartTypeComboBox.DroppedDown = true;
+        }
+
+        private void AccountDetailsPanelChartTypePictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            PictureBox pictureBox = (PictureBox)sender;
+
+            string text = (string)AccountDetailsPanelChartTypeComboBox.SelectedItem;
+            using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular);
+            using SolidBrush brush = new(Color.White);
+            SizeF textSize = e.Graphics.MeasureString(text, font);
+
+            float x = 10;
+            float y = (pictureBox.Height - textSize.Height) / 2;
+
+            e.Graphics.DrawString(text, font, brush, x, y);
+        }
+
+        private void AccountDetailsPanelChartTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AccountDetailsPanelChartTypePictureBox.Invalidate();
+
+            string selectedItem = (string)AccountDetailsPanelChartTypeComboBox.SelectedItem;
+
+            Chart chart = AccountDetailsPanelMainChartPanel.Controls.OfType<Chart>().FirstOrDefault();
+            if (chart == null)
+            {
+                return;
+            }
+
+            if (selectedItem == "Area")
+            {
+                chart.Series[0].ChartType = SeriesChartType.Area;
+            }
+            else if (selectedItem == "Line")
+            {
+                chart.Series[0].ChartType = SeriesChartType.Line;
+            }
+            else if (selectedItem == "Point")
+            {
+                chart.Series[0].ChartType = SeriesChartType.Point;
             }
         }
     }

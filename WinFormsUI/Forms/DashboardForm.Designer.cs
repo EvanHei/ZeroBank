@@ -40,6 +40,8 @@
             AccountsPanelPasswordLabel = new Label();
             AccountsPanelAccountsPictureBox = new PictureBox();
             AccountDetailsPanel = new Panel();
+            AccountDetailsPanelChartLabel = new Label();
+            AccountDetailsPanelChartTypeComboBox = new ComboBox();
             AccountDetailsPanelLastLabel = new Label();
             AccountDetailsPanelbutton1 = new Button();
             AccountDetailsPanelDoughnutChartPanel = new Panel();
@@ -51,8 +53,9 @@
             AccountDetailsPanelDoughnutChartPictureBox = new PictureBox();
             AccountDetailsPanelNamePictureBox = new PictureBox();
             AccountDetailsPanelChartPictureBox = new PictureBox();
-            AccountDetailsPanelLastIntervalComboBox = new ComboBox();
             AccountDetailsPanelLastIntervalPictureBox = new PictureBox();
+            AccountDetailsPanelChartTypePictureBox = new PictureBox();
+            AccountDetailsPanelLastIntervalComboBox = new ComboBox();
             DashboardPanel = new Panel();
             DashboardPanelCreateAccountLabel = new Label();
             DashboardPanelCreateAccountIconPictureBox = new PictureBox();
@@ -104,6 +107,7 @@
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelNamePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelChartPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelLastIntervalPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelChartTypePictureBox).BeginInit();
             DashboardPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DashboardPanelCreateAccountIconPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DashboardPanelCreateAccountPictureBox).BeginInit();
@@ -246,6 +250,7 @@
             // 
             // AccountDetailsPanel
             // 
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelChartLabel);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelLastLabel);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelbutton1);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelDoughnutChartPanel);
@@ -257,13 +262,40 @@
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelDoughnutChartPictureBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelNamePictureBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelChartPictureBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelChartTypePictureBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelLastIntervalPictureBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelLastIntervalComboBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelChartTypeComboBox);
             AccountDetailsPanel.ForeColor = Color.Black;
             AccountDetailsPanel.Location = new Point(195, -6);
             AccountDetailsPanel.Name = "AccountDetailsPanel";
             AccountDetailsPanel.Size = new Size(987, 735);
             AccountDetailsPanel.TabIndex = 1;
+            // 
+            // AccountDetailsPanelChartLabel
+            // 
+            AccountDetailsPanelChartLabel.AutoSize = true;
+            AccountDetailsPanelChartLabel.BackColor = Color.FromArgb(45, 45, 45);
+            AccountDetailsPanelChartLabel.ForeColor = Color.Silver;
+            AccountDetailsPanelChartLabel.Location = new Point(191, 95);
+            AccountDetailsPanelChartLabel.Name = "AccountDetailsPanelChartLabel";
+            AccountDetailsPanelChartLabel.Size = new Size(51, 21);
+            AccountDetailsPanelChartLabel.TabIndex = 31;
+            AccountDetailsPanelChartLabel.Tag = "";
+            AccountDetailsPanelChartLabel.Text = "Chart:";
+            // 
+            // AccountDetailsPanelChartTypeComboBox
+            // 
+            AccountDetailsPanelChartTypeComboBox.BackColor = Color.FromArgb(79, 79, 79);
+            AccountDetailsPanelChartTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            AccountDetailsPanelChartTypeComboBox.ForeColor = Color.White;
+            AccountDetailsPanelChartTypeComboBox.FormattingEnabled = true;
+            AccountDetailsPanelChartTypeComboBox.Items.AddRange(new object[] { "Area", "Line", "Point" });
+            AccountDetailsPanelChartTypeComboBox.Location = new Point(244, 90);
+            AccountDetailsPanelChartTypeComboBox.Name = "AccountDetailsPanelChartTypeComboBox";
+            AccountDetailsPanelChartTypeComboBox.Size = new Size(109, 29);
+            AccountDetailsPanelChartTypeComboBox.TabIndex = 33;
+            AccountDetailsPanelChartTypeComboBox.SelectedIndexChanged += AccountDetailsPanelChartTypeComboBox_SelectedIndexChanged;
             // 
             // AccountDetailsPanelLastLabel
             // 
@@ -289,7 +321,7 @@
             // AccountDetailsPanelDoughnutChartPanel
             // 
             AccountDetailsPanelDoughnutChartPanel.BackColor = Color.FromArgb(45, 45, 45);
-            AccountDetailsPanelDoughnutChartPanel.Location = new Point(749, 173);
+            AccountDetailsPanelDoughnutChartPanel.Location = new Point(748, 173);
             AccountDetailsPanelDoughnutChartPanel.Name = "AccountDetailsPanelDoughnutChartPanel";
             AccountDetailsPanelDoughnutChartPanel.Size = new Size(201, 304);
             AccountDetailsPanelDoughnutChartPanel.TabIndex = 8;
@@ -381,6 +413,30 @@
             AccountDetailsPanelChartPictureBox.TabIndex = 8;
             AccountDetailsPanelChartPictureBox.TabStop = false;
             // 
+            // AccountDetailsPanelLastIntervalPictureBox
+            // 
+            AccountDetailsPanelLastIntervalPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelLastIntervalPictureBox.Image");
+            AccountDetailsPanelLastIntervalPictureBox.Location = new Point(78, 82);
+            AccountDetailsPanelLastIntervalPictureBox.Name = "AccountDetailsPanelLastIntervalPictureBox";
+            AccountDetailsPanelLastIntervalPictureBox.Size = new Size(109, 52);
+            AccountDetailsPanelLastIntervalPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountDetailsPanelLastIntervalPictureBox.TabIndex = 29;
+            AccountDetailsPanelLastIntervalPictureBox.TabStop = false;
+            AccountDetailsPanelLastIntervalPictureBox.Click += AccountDetailsPanelLastIntervalPictureBox_Click;
+            AccountDetailsPanelLastIntervalPictureBox.Paint += AccountDetailsPanelLastIntervalPictureBox_Paint;
+            // 
+            // AccountDetailsPanelChartTypePictureBox
+            // 
+            AccountDetailsPanelChartTypePictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelChartTypePictureBox.Image");
+            AccountDetailsPanelChartTypePictureBox.Location = new Point(244, 82);
+            AccountDetailsPanelChartTypePictureBox.Name = "AccountDetailsPanelChartTypePictureBox";
+            AccountDetailsPanelChartTypePictureBox.Size = new Size(109, 52);
+            AccountDetailsPanelChartTypePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountDetailsPanelChartTypePictureBox.TabIndex = 32;
+            AccountDetailsPanelChartTypePictureBox.TabStop = false;
+            AccountDetailsPanelChartTypePictureBox.Click += AccountDetailsPanelChartTypePictureBox_Click;
+            AccountDetailsPanelChartTypePictureBox.Paint += AccountDetailsPanelChartTypePictureBox_Paint;
+            // 
             // AccountDetailsPanelLastIntervalComboBox
             // 
             AccountDetailsPanelLastIntervalComboBox.BackColor = Color.FromArgb(79, 79, 79);
@@ -393,18 +449,6 @@
             AccountDetailsPanelLastIntervalComboBox.Size = new Size(109, 29);
             AccountDetailsPanelLastIntervalComboBox.TabIndex = 30;
             AccountDetailsPanelLastIntervalComboBox.SelectedIndexChanged += AccountDetailsPanelLastIntervalComboBox_SelectedIndexChanged;
-            // 
-            // AccountDetailsPanelLastIntervalPictureBox
-            // 
-            AccountDetailsPanelLastIntervalPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelLastIntervalPictureBox.Image");
-            AccountDetailsPanelLastIntervalPictureBox.Location = new Point(78, 82);
-            AccountDetailsPanelLastIntervalPictureBox.Name = "AccountDetailsPanelLastIntervalPictureBox";
-            AccountDetailsPanelLastIntervalPictureBox.Size = new Size(109, 52);
-            AccountDetailsPanelLastIntervalPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            AccountDetailsPanelLastIntervalPictureBox.TabIndex = 29;
-            AccountDetailsPanelLastIntervalPictureBox.TabStop = false;
-            AccountDetailsPanelLastIntervalPictureBox.Click += AccountDetailsPanelLastIntervalPictureBox_Click;
-            AccountDetailsPanelLastIntervalPictureBox.Paint += AccountDetailsPanelLastIntervalPictureBox_Paint;
             // 
             // DashboardPanel
             // 
@@ -861,6 +905,7 @@
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelNamePictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelChartPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelLastIntervalPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelChartTypePictureBox).EndInit();
             DashboardPanel.ResumeLayout(false);
             DashboardPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)DashboardPanelCreateAccountIconPictureBox).EndInit();
@@ -929,7 +974,7 @@
         private PictureBox TransactPanelDepositPictureBox;
         private PictureBox TransactPanelWithdrawPictureBox;
         private Panel CreateAccountPanel;
-        private Label label1;
+        private Label AccountDetailsPanelChartLabel;
         private PictureBox CreateAccountPanelCreatePictureBox;
         private PictureBox pictureBox2;
         private Label label3;
@@ -953,5 +998,7 @@
         private Label AccountDetailsPanelLastLabel;
         private ComboBox AccountDetailsPanelLastIntervalComboBox;
         private PictureBox AccountDetailsPanelLastIntervalPictureBox;
+        private PictureBox AccountDetailsPanelChartTypePictureBox;
+        private ComboBox AccountDetailsPanelChartTypeComboBox;
     }
 }
