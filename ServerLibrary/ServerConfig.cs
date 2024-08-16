@@ -122,7 +122,12 @@ public static class ServerConfig
 
         List<Ciphertext> transactions = DataAccessor.LoadTransactionsById(accountId);
         using RelinKeys relinKeys = DataAccessor.LoadRelinKeysById(accountId);
-        using Ciphertext balance = EncryptionHelper.GetBalance(transactions, relinKeys) ?? throw new NullReferenceException("There are no transactions.");
+        using Ciphertext balance = EncryptionHelper.GetBalance(transactions, relinKeys);
+
+        if (balance == null)
+        {
+            return null;
+        }
 
         MemoryStream stream = new();
         balance.Save(stream);

@@ -26,10 +26,10 @@ public static class ClientConfig
         parms.Save(parmsStream);
 
         // generate keys
-        (PublicKey SEALPublicKey, 
+        (PublicKey SEALPublicKey,
          SecretKey SEALSecretKey,
-         Serializable<RelinKeys> SEALRelinKeys, 
-         byte[] clientSigningPublicKey, 
+         Serializable<RelinKeys> SEALRelinKeys,
+         byte[] clientSigningPublicKey,
          byte[] clientSigningPrivateKey) = EncryptionHelper.GenerateKeys(parms);
 
         // save SEAL keys to streams
@@ -82,9 +82,18 @@ public static class ClientConfig
     public static async Task AddTransaction(int accountId, long amount, string password)
     {
         Account account = DataAccessor.LoadAccount(accountId);
+        long balance = await GetBalance(accountId, password);
+        long newBalance = balance + amount;
+
+        // ensure the amount is within the cryptographic range
+        using EncryptionParameters parms = DataAccessor.LoadParms(accountId);
+        int maxValue = (int)((parms.PlainModulus.Value - 1) / 2);
+        if (Math.Abs(newBalance) > maxValue)
+        {
+            throw new ArgumentOutOfRangeException(nameof(amount), amount, $"The amount must be in range of ±{maxValue}.");
+        }
 
         // get encryption data
-        using EncryptionParameters parms = DataAccessor.LoadParms(accountId);
         using SEALContext context = new(parms);
         using PublicKey publicKey = DataAccessor.LoadPublicKeyById(accountId, context);
         using SecretKey secretKey = DataAccessor.LoadSecretKey(accountId, context, password);
@@ -97,7 +106,7 @@ public static class ClientConfig
 
         // generate ciphertext and create transaction
         using MemoryStream ciphertextStream = new();
-        EncryptionHelper.EncryptById(accountId, amount, context, publicKey, secretKey).Save(ciphertextStream);
+        EncryptionHelper.Encrypt(amount, context, publicKey, secretKey).Save(ciphertextStream);
         CiphertextTransaction transaction = new(ciphertextStream.ToArray(), accountId);
 
         // sign
@@ -126,17 +135,17 @@ public static class ClientConfig
         using SEALContext context = new(parms);
         using SecretKey secretKey = DataAccessor.LoadSecretKey(accountId, context, password);
 
-        Stream stream = await ApiAccessor.GetBalanceStream(accountId);
+        using Stream stream = await ApiAccessor.GetBalanceStream(accountId);
 
         using MemoryStream memStream = new();
         stream.CopyTo(memStream);
         if (memStream.Length == 0)
         {
-            throw new InvalidOperationException("The balance does not contain any data.");
+            return 0L;
         }
         memStream.Seek(0, SeekOrigin.Begin);
 
-        Ciphertext ciphertext = new();
+        using Ciphertext ciphertext = new();
         ciphertext.Load(context, memStream);
 
         long balance = EncryptionHelper.Decrypt(ciphertext, context, secretKey);

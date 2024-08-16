@@ -872,11 +872,11 @@
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 725);
             Controls.Add(SidebarListBox);
-            Controls.Add(CreateAccountPanel);
             Controls.Add(TransactPanel);
             Controls.Add(DashboardPanel);
             Controls.Add(AccountDetailsPanel);
             Controls.Add(AccountsPanel);
+            Controls.Add(CreateAccountPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Margin = new Padding(4);
             Name = "DashboardForm";

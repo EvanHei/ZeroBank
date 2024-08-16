@@ -21,13 +21,15 @@ public class EncryptionHelper
         Parms.PolyModulusDegree = polyModulusDegree;
         Parms.CoeffModulus = CoeffModulus.BFVDefault(polyModulusDegree);
 
-        // adjust as needed
-        Parms.PlainModulus = PlainModulus.Batching(Parms.PolyModulusDegree, 30);
+        // PlainModulus: 40961
+        // Max plaintext value: (40961 - 1)/2 = 20480
+        // Transaction range: ±$204.80
+        Parms.PlainModulus = PlainModulus.Batching(Parms.PolyModulusDegree, 16);
         Context = new SEALContext(Parms);
         Evaluator = new Evaluator(Context);
     }
 
-    public Ciphertext? GetBalance(List<Ciphertext> transactions, RelinKeys? relinKeys = null)
+    public Ciphertext GetBalance(List<Ciphertext> transactions, RelinKeys relinKeys = null)
     {
         if (transactions == null || transactions.Count == 0)
         {

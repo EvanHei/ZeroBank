@@ -71,7 +71,7 @@ namespace WinFormsUI
 
             // calculate the balance as it changes over time
             long cumulativeBalance = 0;
-            var balanceOverTime = list
+            var balanceOverTime = plaintextTransactions
                 .OrderBy(pt => pt.Timestamp)
                 .Select(pt =>
                 {
@@ -231,6 +231,9 @@ namespace WinFormsUI
 
         private void ShowTransactPanel()
         {
+            TransactPanelDepositLabel_Click(null, null);
+            TransactPanelAmountTextBox.Text = "";
+
             DashboardPanel.Visible = false;
             AccountsPanel.Visible = false;
             AccountDetailsPanel.Visible = false;
@@ -554,7 +557,7 @@ namespace WinFormsUI
             // draw "History"
             string text = "History";
 
-            using Font textFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
+            using Font textFont = new("Segoe UI Emoji", 16, FontStyle.Regular, GraphicsUnit.Point);
             using SolidBrush brush = new(Color.White);
             SizeF textSize = e.Graphics.MeasureString(text, textFont);
 
@@ -670,16 +673,18 @@ namespace WinFormsUI
 
             try
             {
-                // TODO: make AmountTextBox.Text have .00 add add error message for incorrect password (also check if null or whitespace)
-                long.TryParse(TransactPanelAmountTextBox.Text, out long amount);
+                // TODO: make it easier to input an amount
+                double.TryParse(TransactPanelAmountTextBox.Text, out double amountDouble);
 
                 // if it's a withdrawal, make negative
                 if (TransactPanelWithdrawPictureBox.Visible == true)
                 {
-                    amount *= -1;
+                    amountDouble *= -1;
                 }
 
-                await ClientConfig.AddTransaction(selectedAccount.Id, amount, selectedAccountPassword);
+                long amountLong = (long)(amountDouble * 100);
+
+                await ClientConfig.AddTransaction(selectedAccount.Id, amountLong, selectedAccountPassword);
                 TransactPanelAmountTextBox.Text = "";
                 await GetSelectedAccountData(selectedAccount, selectedAccountPassword);
             }

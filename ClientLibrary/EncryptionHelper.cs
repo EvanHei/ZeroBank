@@ -5,7 +5,7 @@ namespace ClientLibrary;
 
 public class EncryptionHelper
 {
-    public Serializable<Ciphertext> EncryptById(int id, long amount, SEALContext context, PublicKey publicKey, SecretKey secretKey)
+    public Serializable<Ciphertext> Encrypt(long amount, SEALContext context, PublicKey publicKey, SecretKey secretKey)
     {
         if (context == null)
         {
@@ -24,8 +24,6 @@ public class EncryptionHelper
 
         using BatchEncoder encoder = new(context);
         using Evaluator evaluator = new(context);
-        using Plaintext absPlaintext = new();
-        using Ciphertext absCiphertext = new();
         using Encryptor secretEncryptor = new(context, secretKey);
         using Encryptor publicEncryptor = new(context, publicKey);
         using Decryptor decryptor = new(context, secretKey);
@@ -33,6 +31,8 @@ public class EncryptionHelper
         // convert to positive number
         ulong absNum = (ulong)Math.Abs(amount);
 
+        using Plaintext absPlaintext = new();
+        using Ciphertext absCiphertext = new();
         encoder.Encode(new ulong[] { absNum }, absPlaintext);
         publicEncryptor.Encrypt(absPlaintext, absCiphertext);
 
