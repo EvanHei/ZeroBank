@@ -185,4 +185,12 @@ public static class ClientConfig
 
         return plaintextTransactions;
     }
+
+    public static (int max, int min) GetMaxAndMinValues(int accountId)
+    {
+        using EncryptionParameters parms = DataAccessor.LoadParms(accountId);
+        int max = (int)((parms.PlainModulus.Value - 1) / 2);
+        int min = -(int)((parms.PlainModulus.Value - 1) / 2);
+        return (max, min);
+    }
 }
