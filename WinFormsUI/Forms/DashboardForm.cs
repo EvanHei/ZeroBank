@@ -46,7 +46,7 @@ namespace WinFormsUI
             public double Balance { get; set; }
         }
 
-        private void LoadMainChart(List<PlaintextTransaction> plaintextTransactions)
+        private void LoadMainChart(DateTime previousDate)
         {
             // dummy data for testing
             List<PlaintextTransaction> list = new List<PlaintextTransaction>
@@ -71,7 +71,7 @@ namespace WinFormsUI
 
             // calculate the balance as it changes over time
             long cumulativeBalance = 0;
-            var balanceOverTime = plaintextTransactions
+            var balanceOverTime = selectedAccountPlaintextTransactions
                 .OrderBy(pt => pt.Timestamp)
                 .Select(pt =>
                 {
@@ -80,20 +80,9 @@ namespace WinFormsUI
                 })
                 .ToList();
 
-            // determine time range
-            int previousDays = -7;
-            if (AccountDetailsPanelLastMonthPictureBox.Visible)
-            {
-                previousDays = -30;
-            }
-            else if (AccountDetailsPanelLastYearPictureBox.Visible)
-            {
-                previousDays = -365;
-            }
-            DateTime currentDate = DateTime.Now;
-            DateTime previousDate = currentDate.AddDays(previousDays);
 
-            // filter data within the range
+            // filter data within the time range
+            DateTime currentDate = DateTime.Now;
             var filteredData = balanceOverTime
                 .Where(data => data.Timestamp >= previousDate && data.Timestamp <= currentDate)
                 .ToList();
@@ -243,16 +232,17 @@ namespace WinFormsUI
 
         private void ShowAccountDetailsPanel()
         {
+            AccountDetailsPanelLastIntervalComboBox.SelectedIndex = 0;
+            AccountDetailsPanelTransactionsListBox.DataSource = selectedAccountPlaintextTransactions;
+            AccountsPanelPasswordTextBox.Text = "";
+            LoadDoughnutChart(selectedAccountPlaintextTransactions);
+            LoadMainChart(DateTime.Now.AddYears(-1));
+
             DashboardPanel.Visible = false;
             AccountsPanel.Visible = false;
             AccountDetailsPanel.Visible = true;
             TransactPanel.Visible = false;
             CreateAccountPanel.Visible = false;
-
-            AccountDetailsPanelTransactionsListBox.DataSource = selectedAccountPlaintextTransactions;
-            AccountsPanelPasswordTextBox.Text = "";
-            LoadDoughnutChart(selectedAccountPlaintextTransactions);
-            LoadMainChart(selectedAccountPlaintextTransactions);
         }
 
         private void ShowCreateAccountPanel()
@@ -719,57 +709,6 @@ namespace WinFormsUI
             TransactPanelWithdrawLabel.BackColor = Color.FromArgb(79, 79, 79);
         }
 
-        private void AccountDetailsPanelLastWeekLabel_Click(object sender, EventArgs e)
-        {
-            if (AccountDetailsPanelLastWeekPictureBox.Visible == true)
-            {
-                return;
-            }
-
-            AccountDetailsPanelLastWeekPictureBox.Visible = true;
-            AccountDetailsPanelLastMonthPictureBox.Visible = false;
-            AccountDetailsPanelLastYearPictureBox.Visible = false;
-            AccountDetailsPanelLastWeekLabel.BackColor = Color.FromArgb(79, 79, 79);
-            AccountDetailsPanelLastMonthLabel.BackColor = Color.FromArgb(45, 45, 45);
-            AccountDetailsPanelLastYearLabel.BackColor = Color.FromArgb(45, 45, 45);
-
-            LoadMainChart(selectedAccountPlaintextTransactions);
-        }
-
-        private void AccountDetailsPanelLastMonthLabel_Click(object sender, EventArgs e)
-        {
-            if (AccountDetailsPanelLastMonthPictureBox.Visible == true)
-            {
-                return;
-            }
-
-            AccountDetailsPanelLastWeekPictureBox.Visible = false;
-            AccountDetailsPanelLastMonthPictureBox.Visible = true;
-            AccountDetailsPanelLastYearPictureBox.Visible = false;
-            AccountDetailsPanelLastWeekLabel.BackColor = Color.FromArgb(45, 45, 45);
-            AccountDetailsPanelLastMonthLabel.BackColor = Color.FromArgb(79, 79, 79);
-            AccountDetailsPanelLastYearLabel.BackColor = Color.FromArgb(45, 45, 45);
-
-            LoadMainChart(selectedAccountPlaintextTransactions);
-        }
-
-        private void AccountDetailsPanelLastYearLabel_Click(object sender, EventArgs e)
-        {
-            if (AccountDetailsPanelLastYearPictureBox.Visible == true)
-            {
-                return;
-            }
-
-            AccountDetailsPanelLastWeekPictureBox.Visible = false;
-            AccountDetailsPanelLastMonthPictureBox.Visible = false;
-            AccountDetailsPanelLastYearPictureBox.Visible = true;
-            AccountDetailsPanelLastWeekLabel.BackColor = Color.FromArgb(45, 45, 45);
-            AccountDetailsPanelLastMonthLabel.BackColor = Color.FromArgb(45, 45, 45);
-            AccountDetailsPanelLastYearLabel.BackColor = Color.FromArgb(79, 79, 79);
-
-            LoadMainChart(selectedAccountPlaintextTransactions);
-        }
-
         private void CreateAccountPanelTypePictureBox_Click(object sender, EventArgs e)
         {
             CreateAccountPanelTypeComboBox.DroppedDown = true;
@@ -829,7 +768,7 @@ namespace WinFormsUI
         {
             PictureBox pictureBox = (PictureBox)sender;
 
-            string text = CreateAccountPanelTypeComboBox.SelectedItem as string;
+            string text = (string)CreateAccountPanelTypeComboBox.SelectedItem;
             using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular);
             using SolidBrush brush = new(Color.White);
             SizeF textSize = e.Graphics.MeasureString(text, font);
@@ -1002,6 +941,53 @@ namespace WinFormsUI
             }
 
             return output;
+        }
+
+        private void AccountDetailsPanelLastIntervalPictureBox_Click(object sender, EventArgs e)
+        {
+            AccountDetailsPanelLastIntervalComboBox.DroppedDown = true;
+        }
+
+        private void AccountDetailsPanelLastIntervalPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            PictureBox pictureBox = (PictureBox)sender;
+
+            string text = (string)AccountDetailsPanelLastIntervalComboBox.SelectedItem;
+            using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular);
+            using SolidBrush brush = new(Color.White);
+            SizeF textSize = e.Graphics.MeasureString(text, font);
+
+            float x = 10;
+            float y = (pictureBox.Height - textSize.Height) / 2;
+
+            e.Graphics.DrawString(text, font, brush, x, y);
+        }
+
+        private void AccountDetailsPanelLastIntervalComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AccountDetailsPanelLastIntervalPictureBox.Invalidate();
+
+            string selectedItem = (string)AccountDetailsPanelLastIntervalComboBox.SelectedItem;
+            if (selectedItem == "Hour")
+            {
+                LoadMainChart(DateTime.Now.AddHours(-1));
+            }
+            else if (selectedItem == "Day")
+            {
+                LoadMainChart(DateTime.Now.AddDays(-1));
+            }
+            else if (selectedItem == "Week")
+            {
+                LoadMainChart(DateTime.Now.AddDays(-7));
+            }
+            else if (selectedItem == "Month")
+            {
+                LoadMainChart(DateTime.Now.AddMonths(-1));
+            }
+            else if (selectedItem == "Year")
+            {
+                LoadMainChart(DateTime.Now.AddYears(-1));
+            }
         }
     }
 }
