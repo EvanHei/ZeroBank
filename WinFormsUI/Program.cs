@@ -18,16 +18,7 @@ internal static class Program
 
         try
         {
-            //await ClientConfig.ApiAccessor.SignUp(username1, password1);
             await ClientConfig.ApiAccessor.Login(username1, password1);
-            //await ClientConfig.CreateAccount("Account 1", AccountType.Checking, encryptionPassword1);
-            //await ClientConfig.CreateAccount("Account 2", AccountType.Savings, encryptionPassword1);
-            //await ClientConfig.AddTransaction(1, 5, encryptionPassword1); // balance is 5
-            //await ClientConfig.AddTransaction(1, 10, encryptionPassword1); // balance is 15
-            //await ClientConfig.AddTransaction(1, -10, encryptionPassword1); // balance is 5
-            //await ClientConfig.AddTransaction(1, -10, encryptionPassword1); // balance is -5
-            //long result = await ClientConfig.GetBalance(1, encryptionPassword1);
-            //await ClientConfig.DeleteAccount(1);
         }
         catch (Exception ex)
         {

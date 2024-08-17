@@ -18,6 +18,12 @@ public static class ClientConfig
     public static EncryptionHelper EncryptionHelper { get; set; } = new EncryptionHelper();
     public static ApiAccessor ApiAccessor { get; set; } = new ApiAccessor();
 
+    public static async Task SignUp(string username, string password)
+    {
+        await ApiAccessor.SignUp(username, password);
+        await ApiAccessor.Login(username, password);
+    }
+
     public static async Task CreateAccount(string name, AccountType type, string password)
     {
         // get encryption parameters from server

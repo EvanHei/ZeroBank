@@ -18,7 +18,7 @@ namespace WinFormsUI.Forms
             InitializeComponent();
         }
 
-        private bool ValidateInputFields()
+        private bool ValidateFields()
         {
             bool output = true;
 
@@ -33,7 +33,7 @@ namespace WinFormsUI.Forms
 
         private async void LoginPictureBox_Click(object sender, EventArgs e)
         {
-            if (!ValidateInputFields())
+            if (!ValidateFields())
             {
                 return;
             }
@@ -66,14 +66,14 @@ namespace WinFormsUI.Forms
 
         private async void EnrollPictureBox_Click(object sender, EventArgs e)
         {
-            if (!ValidateInputFields())
+            if (!ValidateFields())
             {
                 return;
             }
 
             try
             {
-                await ClientConfig.ApiAccessor.SignUp(UsernameTextBox.Text, PasswordTextBox.Text);
+                await ClientConfig.SignUp(UsernameTextBox.Text, PasswordTextBox.Text);
 
                 this.Hide();
                 DashboardForm dashboardForm = new();
