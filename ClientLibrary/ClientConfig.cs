@@ -82,13 +82,11 @@ public static class ClientConfig
     public static async Task AddTransaction(int accountId, long amount, string password)
     {
         Account account = DataAccessor.LoadAccount(accountId);
-        long balance = await GetBalance(accountId, password);
-        long newBalance = balance + amount;
 
         // ensure the amount is within the cryptographic range
         using EncryptionParameters parms = DataAccessor.LoadParms(accountId);
         int maxValue = (int)((parms.PlainModulus.Value - 1) / 2);
-        if (Math.Abs(newBalance) > maxValue)
+        if (Math.Abs(amount) > maxValue)
         {
             throw new ArgumentOutOfRangeException(nameof(amount), amount, $"The amount must be in range of ±{maxValue}.");
         }
@@ -186,11 +184,10 @@ public static class ClientConfig
         return plaintextTransactions;
     }
 
-    public static (int max, int min) GetMaxAndMinValues(int accountId)
+    public static int GetMaxAmount(int accountId)
     {
         using EncryptionParameters parms = DataAccessor.LoadParms(accountId);
         int max = (int)((parms.PlainModulus.Value - 1) / 2);
-        int min = -(int)((parms.PlainModulus.Value - 1) / 2);
-        return (max, min);
+        return max;
     }
 }

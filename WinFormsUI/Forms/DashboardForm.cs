@@ -41,11 +41,6 @@ namespace WinFormsUI
             this.Refresh();
         }
 
-        private async void DashboardForm_Load(object sender, EventArgs e)
-        {
-            await GetData();
-        }
-
         private async Task GetSelectedAccountData(Account account, string password)
         {
             selectedAccount = account;
@@ -56,6 +51,11 @@ namespace WinFormsUI
             selectedAccountPlaintextTransactions = plaintextTransactions.OrderByDescending(transaction => transaction.Timestamp).ToList();
 
             selectedAccountBalance = selectedAccountPlaintextTransactions.Sum(t => t.Amount);
+        }
+
+        private async void DashboardForm_Load(object sender, EventArgs e)
+        {
+            await GetData();
         }
 
         private void SidebarListBox_DrawItem(object sender, DrawItemEventArgs e)
@@ -850,6 +850,7 @@ namespace WinFormsUI
         {
             TransactPanelDepositLabel_Click(null, null);
             TransactPanelAmountTextBox.Text = "";
+            TransactPanelRangeLabel.Text = (ClientConfig.GetMaxAmount(selectedAccount.Id) * 0.01).ToString("C");
 
             DashboardPanel.Visible = false;
             AccountsPanel.Visible = false;

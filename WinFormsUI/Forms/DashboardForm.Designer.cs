@@ -68,12 +68,13 @@
             DashboardPanelUserGuidePictureBox = new PictureBox();
             SidebarListBox = new ListBox();
             TransactPanel = new Panel();
+            TransactPanelRangeLabel = new Label();
             TransactPanelBackArrowPictureBox = new PictureBox();
             TransactPanelDollarSignLabel = new Label();
             TransactPanelConfirmPictureBox = new PictureBox();
             TransactPanelAmountTextBox = new TextBox();
             TransactPanelAmountPictureBox = new PictureBox();
-            TransactPanelAmountLabel = new Label();
+            TransactPanelAmountRangeLabel = new Label();
             TransactPanelWithdrawLabel = new Label();
             TransactPanelDepositLabel = new Label();
             TransactPanelHeaderLabel = new Label();
@@ -577,12 +578,13 @@
             // 
             // TransactPanel
             // 
+            TransactPanel.Controls.Add(TransactPanelRangeLabel);
             TransactPanel.Controls.Add(TransactPanelBackArrowPictureBox);
             TransactPanel.Controls.Add(TransactPanelDollarSignLabel);
             TransactPanel.Controls.Add(TransactPanelConfirmPictureBox);
             TransactPanel.Controls.Add(TransactPanelAmountTextBox);
             TransactPanel.Controls.Add(TransactPanelAmountPictureBox);
-            TransactPanel.Controls.Add(TransactPanelAmountLabel);
+            TransactPanel.Controls.Add(TransactPanelAmountRangeLabel);
             TransactPanel.Controls.Add(TransactPanelWithdrawLabel);
             TransactPanel.Controls.Add(TransactPanelDepositLabel);
             TransactPanel.Controls.Add(TransactPanelHeaderLabel);
@@ -592,6 +594,17 @@
             TransactPanel.Name = "TransactPanel";
             TransactPanel.Size = new Size(987, 735);
             TransactPanel.TabIndex = 16;
+            // 
+            // TransactPanelRangeLabel
+            // 
+            TransactPanelRangeLabel.AutoSize = true;
+            TransactPanelRangeLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            TransactPanelRangeLabel.ForeColor = Color.Silver;
+            TransactPanelRangeLabel.Location = new Point(453, 291);
+            TransactPanelRangeLabel.Name = "TransactPanelRangeLabel";
+            TransactPanelRangeLabel.Size = new Size(72, 21);
+            TransactPanelRangeLabel.TabIndex = 30;
+            TransactPanelRangeLabel.Text = "<range>";
             // 
             // TransactPanelBackArrowPictureBox
             // 
@@ -648,16 +661,16 @@
             TransactPanelAmountPictureBox.TabIndex = 16;
             TransactPanelAmountPictureBox.TabStop = false;
             // 
-            // TransactPanelAmountLabel
+            // TransactPanelAmountRangeLabel
             // 
-            TransactPanelAmountLabel.AutoSize = true;
-            TransactPanelAmountLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            TransactPanelAmountLabel.ForeColor = Color.Silver;
-            TransactPanelAmountLabel.Location = new Point(342, 291);
-            TransactPanelAmountLabel.Name = "TransactPanelAmountLabel";
-            TransactPanelAmountLabel.Size = new Size(66, 21);
-            TransactPanelAmountLabel.TabIndex = 14;
-            TransactPanelAmountLabel.Text = "Amount";
+            TransactPanelAmountRangeLabel.AutoSize = true;
+            TransactPanelAmountRangeLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            TransactPanelAmountRangeLabel.ForeColor = Color.Silver;
+            TransactPanelAmountRangeLabel.Location = new Point(342, 291);
+            TransactPanelAmountRangeLabel.Name = "TransactPanelAmountRangeLabel";
+            TransactPanelAmountRangeLabel.Size = new Size(117, 21);
+            TransactPanelAmountRangeLabel.TabIndex = 14;
+            TransactPanelAmountRangeLabel.Text = "Amount Range:";
             // 
             // TransactPanelWithdrawLabel
             // 
@@ -876,11 +889,11 @@
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 725);
             Controls.Add(SidebarListBox);
+            Controls.Add(TransactPanel);
+            Controls.Add(DashboardPanel);
             Controls.Add(AccountDetailsPanel);
             Controls.Add(AccountsPanel);
             Controls.Add(CreateAccountPanel);
-            Controls.Add(TransactPanel);
-            Controls.Add(DashboardPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Margin = new Padding(4);
             Name = "DashboardForm";
@@ -967,7 +980,7 @@
         private Label TransactPanelWithdrawLabel;
         private TextBox TransactPanelAmountTextBox;
         private PictureBox TransactPanelAmountPictureBox;
-        private Label TransactPanelAmountLabel;
+        private Label TransactPanelAmountRangeLabel;
         private Label TransactPanelDollarSignLabel;
         private PictureBox TransactPanelConfirmPictureBox;
         private Button AccountDetailsPanelbutton1;
@@ -1000,5 +1013,6 @@
         private PictureBox AccountDetailsPanelLastIntervalPictureBox;
         private PictureBox AccountDetailsPanelChartTypePictureBox;
         private ComboBox AccountDetailsPanelChartTypeComboBox;
+        private Label TransactPanelRangeLabel;
     }
 }
