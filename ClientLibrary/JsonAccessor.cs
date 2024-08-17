@@ -72,7 +72,7 @@ public class JsonAccessor
         string json = account.SerializeToJson();
 
         // filename is format <Name>.json
-        string path = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
+        string path = Path.Combine(Constants.AccountsDirectoryPath, account.Id + ".json");
         File.WriteAllText(path, json);
     }
 

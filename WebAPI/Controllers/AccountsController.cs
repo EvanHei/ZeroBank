@@ -73,7 +73,7 @@ public class AccountsController : ControllerBase
             accountCreationTimer.Stop();
             accountCreationTimer.Dispose();
             UserAccountStates.Remove(userId);
-            ServerConfig.DataAccessor.DeleteAccountById(account.Id);
+            ServerConfig.DataAccessor.DeleteAccount(account.Id);
         };
         accountCreationTimer.AutoReset = false;
         accountCreationTimer.Start();

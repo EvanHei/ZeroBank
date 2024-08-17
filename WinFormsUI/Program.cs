@@ -14,10 +14,10 @@ internal static class Program
     {
         string username1 = "Evan";
         string password1 = "password";
-        string encryptionPassword1 = "p";
 
         try
         {
+            //await ClientConfig.SignUp(username1, password1);
             await ClientConfig.ApiAccessor.Login(username1, password1);
         }
         catch (Exception ex)

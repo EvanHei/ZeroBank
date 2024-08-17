@@ -74,9 +74,9 @@ public class JsonAccessor
         File.WriteAllText(Constants.UsersFilePath, json);
     }
 
-    public RelinKeys LoadRelinKeysById(int id)
+    public RelinKeys LoadRelinKeys(int id)
     {
-        Account account = LoadAccountById(id);
+        Account account = LoadAccount(id);
         byte[] relinKeysBytes = account.SEALRelinKeys;
         using MemoryStream stream = new(relinKeysBytes);
         RelinKeys relinKeys = new();
@@ -92,7 +92,7 @@ public class JsonAccessor
         }
 
         // save server signing private key
-        string path = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Name + ".bin");
+        string path = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Id + ".bin");
         File.WriteAllBytes(path, serverSigningPrivateKey);
 
         // save partial account
@@ -105,7 +105,7 @@ public class JsonAccessor
         string json = account.SerializeToJson();
 
         // filename is format <Name>.json
-        string path = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
+        string path = Path.Combine(Constants.AccountsDirectoryPath, account.Id + ".json");
         File.WriteAllText(path, json);
     }
 
@@ -133,15 +133,15 @@ public class JsonAccessor
         return accounts;
     }
 
-    public Account LoadAccountById(int id)
+    public Account LoadAccount(int id)
     {
         Account account = LoadAllAccounts().Where(a => a.Id == id).FirstOrDefault() ?? throw new InvalidOperationException("Account not found.");
         return account;
     }
 
-    public void DeleteAccountById(int id)
+    public void DeleteAccount(int id)
     {
-        Account account = LoadAccountById(id);
+        Account account = LoadAccount(id);
         string accountPath = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
         File.Delete(accountPath);
 
@@ -150,9 +150,9 @@ public class JsonAccessor
         File.Delete(keyPath);
     }
 
-    public List<Ciphertext> LoadTransactionsById(int id)
+    public List<Ciphertext> LoadTransactions(int id)
     {
-        Account account = LoadAccountById(id);
+        Account account = LoadAccount(id);
         List<Ciphertext> transactions = new();
 
         foreach (CiphertextTransaction transaction in account.Transactions)
@@ -175,16 +175,16 @@ public class JsonAccessor
 
     public CiphertextTransaction AddTransaction(CiphertextTransaction transaction)
     {
-        Account account = LoadAccountById(transaction.AccountId);
+        Account account = LoadAccount(transaction.AccountId);
         account.Transactions.Add(transaction);
         SaveAccount(account);
         return transaction;
     }
 
-    public byte[] LoadSigningKeyById(int id)
+    public byte[] LoadSigningKey(int id)
     {
-        Account? account = LoadAccountById(id);
-        string path = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Name + ".bin");
+        Account account = LoadAccount(id);
+        string path = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Id + ".bin");
         return File.ReadAllBytes(path);
     }
 }

@@ -56,10 +56,6 @@ public static class ServerConfig
     {
         // ensure the account name is not taken
         List<Account> accounts = DataAccessor.LoadAllAccounts();
-        if (accounts.Any(a => a.Name == account.Name))
-        {
-            throw new InvalidOperationException($"Account with name {account.Name} already exists.");
-        }
 
         // set account ID
         account.Id = accounts.Count != 0 ? accounts.Max(a => a.Id) + 1 : 1;
@@ -88,7 +84,7 @@ public static class ServerConfig
 
     public static void AddTransaction(int userId, CiphertextTransaction transaction)
     {
-        Account account = DataAccessor.LoadAccountById(transaction.AccountId);
+        Account account = DataAccessor.LoadAccount(transaction.AccountId);
 
         // verify the user owns the account
         AuthorizeAccountAccess(transaction.AccountId, userId);
@@ -99,7 +95,7 @@ public static class ServerConfig
         ciphertext.Load(EncryptionHelper.Context, stream);
 
         // load server signing key
-        byte[] serverSigningPrivateKey = DataAccessor.LoadSigningKeyById(transaction.AccountId);
+        byte[] serverSigningPrivateKey = DataAccessor.LoadSigningKey(transaction.AccountId);
 
         // sign
         RsaSigner rsa = new();
@@ -115,13 +111,13 @@ public static class ServerConfig
     public static MemoryStream GetBalanceStream(int accountId, int userId)
     {
         // verify signatures
-        DataAccessor.LoadAccountById(accountId).EnsureValid();
+        DataAccessor.LoadAccount(accountId).EnsureValid();
 
         // verify the user owns the account
         AuthorizeAccountAccess(accountId, userId);
 
-        List<Ciphertext> transactions = DataAccessor.LoadTransactionsById(accountId);
-        using RelinKeys relinKeys = DataAccessor.LoadRelinKeysById(accountId);
+        List<Ciphertext> transactions = DataAccessor.LoadTransactions(accountId);
+        using RelinKeys relinKeys = DataAccessor.LoadRelinKeys(accountId);
         using Ciphertext balance = EncryptionHelper.GetBalance(transactions, relinKeys);
 
         if (balance == null)
@@ -137,7 +133,7 @@ public static class ServerConfig
 
     private static void AuthorizeAccountAccess(int accountId, int userId)
     {
-        Account account = DataAccessor.LoadAccountById(accountId);
+        Account account = DataAccessor.LoadAccount(accountId);
         if (account.UserId != userId)
         {
             throw new UnauthorizedAccessException("The user does not have permission to access this account.");
@@ -148,6 +144,6 @@ public static class ServerConfig
     {
         // verify the user owns the account
         AuthorizeAccountAccess(accountId, userId);
-        DataAccessor.DeleteAccountById(accountId);
+        DataAccessor.DeleteAccount(accountId);
     }
 }
