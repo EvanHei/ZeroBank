@@ -141,11 +141,19 @@ namespace WinFormsUI
 
         private void DashboardPanelUserGuideLabel_Click(object sender, EventArgs e)
         {
-            Process.Start(new ProcessStartInfo
+            try
             {
-                FileName = Constants.GitHubReadmeUrl,
-                UseShellExecute = true
-            });
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = Constants.GitHubReadmeUrl,
+                    UseShellExecute = true
+                });
+
+            }
+            catch (Exception ex)
+            {
+                DashboardPanelErrorLabel.Text = "An error occurred while opening the user guide";
+            }
         }
 
         #endregion
@@ -155,6 +163,7 @@ namespace WinFormsUI
         private void ShowAccountsPanel()
         {
             AccountsPanelListBox.DataSource = accounts;
+            TransactPanelErrorLabel.Text = "";
 
             DashboardPanel.Visible = false;
             AccountsPanel.Visible = true;
@@ -230,8 +239,7 @@ namespace WinFormsUI
             }
             catch (Exception ex)
             {
-                // TODO: display error
-                MessageBox.Show(ex.Message);
+                AccountsPanelErrorLabel.Text = "Could not load the account's data";
             }
         }
 
@@ -308,8 +316,7 @@ namespace WinFormsUI
 
             if (account.Transactions.Count > 0)
             {
-                // TODO: add error msg
-                MessageBox.Show("Cannot delete an account with transactions.");
+                AccountsPanelErrorLabel.Text = "Cannot delete an account with transactions";
                 return;
             }
 
@@ -319,8 +326,7 @@ namespace WinFormsUI
             }
             catch (Exception ex)
             {
-                // TODO: display error
-                MessageBox.Show(ex.Message);
+                AccountsPanelErrorLabel.Text = "An error occurred while deleting the account";
             }
 
             await GetData();
@@ -850,7 +856,8 @@ namespace WinFormsUI
         {
             TransactPanelDepositLabel_Click(null, null);
             TransactPanelAmountTextBox.Text = "";
-            TransactPanelRangeLabel.Text = (ClientConfig.GetMaxAmount(selectedAccount.Id) * 0.01).ToString("C");
+            TransactPanelRangeValueLabel.Text = (ClientConfig.GetMaxAmount(selectedAccount.Id) * 0.01).ToString("C");
+            TransactPanelErrorLabel.Text = "";
 
             DashboardPanel.Visible = false;
             AccountsPanel.Visible = false;
@@ -899,8 +906,7 @@ namespace WinFormsUI
         {
             if (!ValidateTransactPanelFields())
             {
-                // TODO: display error msg
-                TransactPanelAmountTextBox.Text = "";
+                TransactPanelErrorLabel.Text = "Amount is not in correct format";
                 return;
             }
 
@@ -918,16 +924,14 @@ namespace WinFormsUI
                 long amountLong = (long)(amountDouble * 100);
 
                 await ClientConfig.AddTransaction(selectedAccount.Id, amountLong, selectedAccountPassword);
-                TransactPanelAmountTextBox.Text = "";
                 await GetSelectedAccountData(selectedAccount, selectedAccountPassword);
+
+                TransactPanelAmountTextBox.Text = "";
+                ShowAccountDetailsPanel();
             }
             catch (Exception ex)
             {
-                // TODO: display error
-            }
-            finally
-            {
-                ShowAccountDetailsPanel();
+                TransactPanelErrorLabel.Text = "An error occurred while confirming the transaction";
             }
         }
 
@@ -959,6 +963,7 @@ namespace WinFormsUI
         private void ShowCreateAccountPanel()
         {
             CreateAccountPanelTypeComboBox.SelectedIndex = 0;
+            CreateAccountPanelErrorLabel.Text = "";
 
             DashboardPanel.Visible = false;
             AccountsPanel.Visible = false;
@@ -972,27 +977,31 @@ namespace WinFormsUI
         {
             bool output = true;
 
-            // TODO: create error msg
             if (string.IsNullOrWhiteSpace(CreateAccountPanelNameTextBox.Text))
             {
+                CreateAccountPanelErrorLabel.Text = "No name provided";
                 output = false;
             }
             if (accounts.Any(a => a.Name == CreateAccountPanelNameTextBox.Text))
             {
+                CreateAccountPanelErrorLabel.Text = "An account with this name already exists";
                 output = false;
             }
             if (CreateAccountPanelTypeComboBox.SelectedItem == null)
             {
-                output = false;
-            }
-            // TODO: ensure this meets the minimum password requirements
-            if (string.IsNullOrWhiteSpace(CreateAccountPanelPasswordTextBox.Text))
-            {
+                CreateAccountPanelErrorLabel.Text = "Invalid account type";
                 output = false;
             }
             string selectedType = CreateAccountPanelTypeComboBox.SelectedItem.ToString();
             if (!Enum.TryParse(selectedType, out AccountType type))
             {
+                CreateAccountPanelErrorLabel.Text = "Invalid account type";
+                output = false;
+            }
+            // TODO: ensure this meets the minimum password requirements
+            if (string.IsNullOrWhiteSpace(CreateAccountPanelPasswordTextBox.Text))
+            {
+                CreateAccountPanelErrorLabel.Text = "No password provided";
                 output = false;
             }
 
@@ -1029,7 +1038,7 @@ namespace WinFormsUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred while creating the account: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CreateAccountPanelErrorLabel.Text = "An error occurred while creating the account";
             }
         }
 

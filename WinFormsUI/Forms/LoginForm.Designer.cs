@@ -36,7 +36,7 @@
             PasswordTextBox = new TextBox();
             PasswordPictureBox = new PictureBox();
             PasswordLabel = new Label();
-            FailureLabel = new Label();
+            ErrorLabel = new Label();
             EnrollPictureBox = new PictureBox();
             SignUpPictureBox = new PictureBox();
             LoginPictureBox = new PictureBox();
@@ -123,17 +123,17 @@
             PasswordLabel.TabIndex = 6;
             PasswordLabel.Text = "Password";
             // 
-            // FailureLabel
+            // ErrorLabel
             // 
-            FailureLabel.AutoSize = true;
-            FailureLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            FailureLabel.ForeColor = Color.Red;
-            FailureLabel.Location = new Point(367, 371);
-            FailureLabel.Name = "FailureLabel";
-            FailureLabel.Size = new Size(93, 21);
-            FailureLabel.TabIndex = 11;
-            FailureLabel.Text = "<message>";
-            FailureLabel.Visible = false;
+            ErrorLabel.AutoSize = true;
+            ErrorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            ErrorLabel.ForeColor = Color.Red;
+            ErrorLabel.Location = new Point(380, 371);
+            ErrorLabel.Name = "ErrorLabel";
+            ErrorLabel.Size = new Size(67, 21);
+            ErrorLabel.TabIndex = 11;
+            ErrorLabel.Text = "<error>";
+            ErrorLabel.Visible = false;
             // 
             // EnrollPictureBox
             // 
@@ -194,7 +194,7 @@
             Controls.Add(LoginPictureBox);
             Controls.Add(SignUpPictureBox);
             Controls.Add(EnrollPictureBox);
-            Controls.Add(FailureLabel);
+            Controls.Add(ErrorLabel);
             Controls.Add(PasswordTextBox);
             Controls.Add(PasswordPictureBox);
             Controls.Add(PasswordLabel);
@@ -227,7 +227,7 @@
         private TextBox PasswordTextBox;
         private PictureBox PasswordPictureBox;
         private Label PasswordLabel;
-        private Label FailureLabel;
+        private Label ErrorLabel;
         private PictureBox EnrollPictureBox;
         private PictureBox SignUpPictureBox;
         private PictureBox LoginPictureBox;

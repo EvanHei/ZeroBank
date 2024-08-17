@@ -49,8 +49,8 @@ namespace WinFormsUI.Forms
             }
             catch (Exception ex)
             {
-                FailureLabel.Text = "Log in failed";
-                FailureLabel.Visible = true;
+                ErrorLabel.Text = "Log in failed";
+                ErrorLabel.Visible = true;
             }
         }
 
@@ -82,8 +82,8 @@ namespace WinFormsUI.Forms
             }
             catch (Exception ex)
             {
-                FailureLabel.Text = "Sign up failed";
-                FailureLabel.Visible = true;
+                ErrorLabel.Text = "Sign up failed";
+                ErrorLabel.Visible = true;
             }
         }
 
@@ -93,7 +93,7 @@ namespace WinFormsUI.Forms
             SignUpPictureBox.Visible = false;
             EnrollPictureBox.Visible = true;
             BackArrowPictureBox.Visible = true;
-            FailureLabel.Visible = false;
+            ErrorLabel.Visible = false;
 
             HeaderLabel.Text = "Sign Up";
             CenterLabelHorizontally(HeaderLabel);
@@ -105,7 +105,7 @@ namespace WinFormsUI.Forms
             SignUpPictureBox.Visible = true;
             EnrollPictureBox.Visible = false;
             BackArrowPictureBox.Visible = false;
-            FailureLabel.Visible = false;
+            ErrorLabel.Visible = false;
 
             HeaderLabel.Text = "ZeroBank";
             CenterLabelHorizontally(HeaderLabel);
