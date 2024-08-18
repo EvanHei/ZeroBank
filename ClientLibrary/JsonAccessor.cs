@@ -104,7 +104,7 @@ public class JsonAccessor
     public void DeleteAccount(int accountId)
     {
         Account account = LoadAccount(accountId);
-        string path = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
+        string path = Path.Combine(Constants.AccountsDirectoryPath, account.Id + ".json");
         File.Delete(path);
     }
 

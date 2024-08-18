@@ -142,11 +142,11 @@ public class JsonAccessor
     public void DeleteAccount(int id)
     {
         Account account = LoadAccount(id);
-        string accountPath = Path.Combine(Constants.AccountsDirectoryPath, $"{account.Name}.json");
+        string accountPath = Path.Combine(Constants.AccountsDirectoryPath, account.Id + ".json");
         File.Delete(accountPath);
 
         // delete the key file
-        string keyPath = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Name + ".bin");
+        string keyPath = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Id + ".bin");
         File.Delete(keyPath);
     }
 

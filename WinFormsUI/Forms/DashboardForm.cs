@@ -475,6 +475,7 @@ namespace WinFormsUI
             // define series
             Series series = new();
             series.ChartType = SeriesChartType.Area;
+            series.MarkerStyle = MarkerStyle.Circle;
             series.BorderWidth = 2;
             series.Color = Color.White;
             series.BackSecondaryColor = Color.SteelBlue;
@@ -840,6 +841,26 @@ namespace WinFormsUI
             else if (selectedItem == "Point")
             {
                 chart.Series[0].ChartType = SeriesChartType.Point;
+                chart.Series[0].MarkerStyle = MarkerStyle.Circle;
+                AccountDetailsPanelPointsCheckBox.Checked = true;
+            }
+        }
+
+        private void AccountDetailsPanelPointsCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Chart chart = AccountDetailsPanelMainChartPanel.Controls.OfType<Chart>().FirstOrDefault();
+            if (chart == null)
+            {
+                return;
+            }
+
+            if (AccountDetailsPanelPointsCheckBox.Checked == true)
+            {
+                chart.Series[0].MarkerStyle = MarkerStyle.Circle;
+            }
+            else
+            {
+                chart.Series[0].MarkerStyle = MarkerStyle.None;
             }
         }
 

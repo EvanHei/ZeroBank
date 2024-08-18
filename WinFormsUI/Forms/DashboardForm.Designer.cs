@@ -41,6 +41,7 @@
             AccountsPanelPasswordLabel = new Label();
             AccountsPanelAccountsPictureBox = new PictureBox();
             AccountDetailsPanel = new Panel();
+            AccountDetailsPanelPointsCheckBox = new CheckBox();
             AccountDetailsPanelErrorLabel = new Label();
             AccountDetailsPanelChartLabel = new Label();
             AccountDetailsPanelLastLabel = new Label();
@@ -269,6 +270,7 @@
             // 
             // AccountDetailsPanel
             // 
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelPointsCheckBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelErrorLabel);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelChartLabel);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelLastLabel);
@@ -291,6 +293,21 @@
             AccountDetailsPanel.Name = "AccountDetailsPanel";
             AccountDetailsPanel.Size = new Size(987, 735);
             AccountDetailsPanel.TabIndex = 1;
+            // 
+            // AccountDetailsPanelPointsCheckBox
+            // 
+            AccountDetailsPanelPointsCheckBox.AutoSize = true;
+            AccountDetailsPanelPointsCheckBox.CheckAlign = ContentAlignment.MiddleRight;
+            AccountDetailsPanelPointsCheckBox.Checked = true;
+            AccountDetailsPanelPointsCheckBox.CheckState = CheckState.Checked;
+            AccountDetailsPanelPointsCheckBox.ForeColor = Color.Silver;
+            AccountDetailsPanelPointsCheckBox.Location = new Point(636, 101);
+            AccountDetailsPanelPointsCheckBox.Name = "AccountDetailsPanelPointsCheckBox";
+            AccountDetailsPanelPointsCheckBox.Size = new Size(75, 25);
+            AccountDetailsPanelPointsCheckBox.TabIndex = 36;
+            AccountDetailsPanelPointsCheckBox.Text = "Points:";
+            AccountDetailsPanelPointsCheckBox.UseVisualStyleBackColor = true;
+            AccountDetailsPanelPointsCheckBox.CheckedChanged += AccountDetailsPanelPointsCheckBox_CheckedChanged;
             // 
             // AccountDetailsPanelErrorLabel
             // 
@@ -1089,5 +1106,6 @@
         private Label AccountDetailsPanelErrorLabel;
         private Label DashboardPanelErrorLabel;
         private Label CreateAccountPanelErrorLabel;
+        private CheckBox AccountDetailsPanelPointsCheckBox;
     }
 }
