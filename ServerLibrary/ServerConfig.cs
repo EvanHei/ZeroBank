@@ -1,6 +1,8 @@
 ﻿using Microsoft.Research.SEAL;
 using SharedLibrary;
 using SharedLibrary.Models;
+using System.Data.Common;
+using System.Transactions;
 
 namespace ServerLibrary;
 
@@ -97,7 +99,7 @@ public static class ServerConfig
         // load server signing key
         byte[] serverSigningPrivateKey = DataAccessor.LoadSigningKey(transaction.AccountId);
 
-        // sign
+        // sign transaction
         RsaSigner rsa = new();
         byte[] serverDigSig = rsa.Sign(serverSigningPrivateKey, transaction.SerializeMetadataToBytes());
         transaction.ServerDigSig = serverDigSig;
@@ -105,6 +107,7 @@ public static class ServerConfig
         // verify signatures
         account.EnsureValid();
 
+        // save to server
         DataAccessor.AddTransaction(transaction);
     }
 
@@ -140,10 +143,25 @@ public static class ServerConfig
         }
     }
 
-    public static void DeleteAccount(int accountId, int userId)
+    public static Account CloseAccount(Account account, int userId, byte[] key)
     {
         // verify the user owns the account
-        AuthorizeAccountAccess(accountId, userId);
-        DataAccessor.DeleteAccount(accountId);
+        AuthorizeAccountAccess(account.Id, userId);
+
+        // load server signing key
+        byte[] serverSigningPrivateKey = DataAccessor.LoadSigningKey(account.Id);
+
+        // sign metadata
+        RsaSigner rsa = new();
+        byte[] serverDigSig = rsa.Sign(serverSigningPrivateKey, account.SerializeMetadataToBytes());
+        account.ServerDigSig = serverDigSig;
+
+        // verify signatures
+        account.EnsureValid();
+
+        // save to server
+        DataAccessor.CloseAccount(account, key);
+
+        return account;
     }
 }

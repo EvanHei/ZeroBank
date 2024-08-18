@@ -73,6 +73,7 @@ public class AccountsController : ControllerBase
             accountCreationTimer.Stop();
             accountCreationTimer.Dispose();
             UserAccountStates.Remove(userId);
+
             ServerConfig.DataAccessor.DeleteAccount(account.Id);
         };
         accountCreationTimer.AutoReset = false;
@@ -128,30 +129,30 @@ public class AccountsController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpPost("close")]
     [Authorize]
-    public IResult Delete(int id)
+    public IResult CloseAccount([FromBody] CloseAccountRequest request)
     {
-        _logger.LogInformation($"Delete method called for account ID: {id}");
+        _logger.LogInformation($"CloseAccount method called for account ID: {request.Account.Id}");
 
         try
         {
             string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             int userId = int.Parse(userIdClaim);
-            ServerConfig.DeleteAccount(id, userId);
-            _logger.LogInformation($"Successfully deleted account ID: {id}");
-            return Results.Ok();
+            Account closedAccount = ServerConfig.CloseAccount(request.Account, userId, request.Key);
+            _logger.LogInformation($"Successfully closed account ID: {request.Account.Id}");
+            return Results.Ok(closedAccount);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred while deleting account ID: {id}");
+            _logger.LogError(ex, $"An error occurred while closing account ID: {request.Account.Id}");
             return Results.Problem(ex.Message);
         }
     }
 
-    [HttpPost("{id}/transaction")]
+    [HttpPost("transaction")]
     [Authorize]
-    public IResult PostTransactionById([FromBody] CiphertextTransaction transaction)
+    public IResult PostTransaction([FromBody] CiphertextTransaction transaction)
     {
         _logger.LogInformation($"PostTransactionById method called for account ID: {transaction.AccountId}");
 

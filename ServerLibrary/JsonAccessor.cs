@@ -103,8 +103,6 @@ public class JsonAccessor
     public void SaveAccount(Account account)
     {
         string json = account.SerializeToJson();
-
-        // filename is format <Name>.json
         string path = Path.Combine(Constants.AccountsDirectoryPath, account.Id + ".json");
         File.WriteAllText(path, json);
     }
@@ -141,6 +139,7 @@ public class JsonAccessor
 
     public void DeleteAccount(int id)
     {
+        // delete the account file
         Account account = LoadAccount(id);
         string accountPath = Path.Combine(Constants.AccountsDirectoryPath, account.Id + ".json");
         File.Delete(accountPath);
@@ -148,6 +147,13 @@ public class JsonAccessor
         // delete the key file
         string keyPath = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Id + ".bin");
         File.Delete(keyPath);
+    }
+
+    public void CloseAccount(Account account, byte[] key)
+    {
+        SaveAccount(account);
+
+        // TODO: save SEAL secret key
     }
 
     public List<Ciphertext> LoadTransactions(int id)

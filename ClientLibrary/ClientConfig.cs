@@ -9,6 +9,7 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace ClientLibrary;
 
@@ -156,10 +157,35 @@ public static class ClientConfig
         return balance;
     }
 
-    public static async Task DeleteAccount(int accountId)
+    public static async Task CloseAccount(int accountId, string password)
     {
-        await ApiAccessor.DeleteAccount(accountId);
-        DataAccessor.DeleteAccount(accountId);
+        // close account
+        Account account = DataAccessor.LoadAccount(accountId);
+        account.Closed = true;
+
+        // decrypt client signing encrypted key
+        Pbkdf2KeyDeriver keyDeriver = new();
+        AesEncryptor aes = new();
+        byte[] key = keyDeriver.DeriveKey(password);
+        byte[] clientSigningPrivateKey = aes.Decrypt(account.ClientSigningPrivateKeyEncrypted, key);
+
+        // sign
+        RsaSigner rsa = new();
+        byte[] clientDigSig = rsa.Sign(clientSigningPrivateKey, account.SerializeMetadataToBytes());
+        account.ClientDigSig = clientDigSig;
+
+        // get SEAL secret key and save to stream
+        using EncryptionParameters parms = DataAccessor.LoadParms(account.Id);
+        using SEALContext context = new(parms);
+        using SecretKey secretKey = DataAccessor.LoadSecretKey(account.Id, context, password);
+        using MemoryStream stream = new();
+        secretKey.Save(stream);
+
+        // post to server
+        Account closedAccount = await ApiAccessor.CloseAccount(account, stream.ToArray());
+
+        // save to client
+        DataAccessor.SaveAccount(closedAccount);
     }
 
     public static async Task<List<PlaintextTransaction>> GetPlaintextTransactions(int accountId, string password)

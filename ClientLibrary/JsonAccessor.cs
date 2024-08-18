@@ -70,8 +70,6 @@ public class JsonAccessor
     public void SaveAccount(Account account)
     {
         string json = account.SerializeToJson();
-
-        // filename is format <Name>.json
         string path = Path.Combine(Constants.AccountsDirectoryPath, account.Id + ".json");
         File.WriteAllText(path, json);
     }
@@ -99,13 +97,6 @@ public class JsonAccessor
     {
         Account account = LoadAccounts().Where(a => a.Id == accountId).FirstOrDefault() ?? throw new InvalidOperationException($"Account with ID {accountId} not found.");
         return account;
-    }
-
-    public void DeleteAccount(int accountId)
-    {
-        Account account = LoadAccount(accountId);
-        string path = Path.Combine(Constants.AccountsDirectoryPath, account.Id + ".json");
-        File.Delete(path);
     }
 
     public void AddTransaction(CiphertextTransaction transaction, SEALContext context)

@@ -19,6 +19,7 @@ public class Account
     public string Name { get; set; }
     public AccountType Type { get; set; }
     public DateTime DateCreated { get; private set; }
+    public bool Closed { get; set; }
     public byte[] Parms { get; set; }
     public byte[] SEALPublicKey { get; set; }
     public byte[] SEALSecretKeyEncrypted { get; set; }
@@ -28,8 +29,8 @@ public class Account
     public byte[] ServerSigningPublicKey { get; set; }
     public byte[] ClientDigSig { get; set; }
     public byte[] ServerDigSig { get; set; }
-    public List<CiphertextTransaction> Transactions { get; set; } = new();
 
+    public List<CiphertextTransaction> Transactions { get; set; } = new();
 
     public Account(string name,
                    AccountType type,
@@ -39,7 +40,8 @@ public class Account
                    byte[] SEALSecretKeyEncrypted,
                    byte[] SEALRelinKeys,
                    byte[] clientSigningPublicKey,
-                   byte[] clientSigningPrivateKeyEncrypted)
+                   byte[] clientSigningPrivateKeyEncrypted,
+                   bool closed = false)
     {
         Name = name;
         Type = type;
@@ -50,6 +52,7 @@ public class Account
         this.SEALRelinKeys = SEALRelinKeys;
         ClientSigningPublicKey = clientSigningPublicKey;
         ClientSigningPrivateKeyEncrypted = clientSigningPrivateKeyEncrypted;
+        Closed = closed;
     }
 
     public string SerializeToJson()
@@ -73,7 +76,8 @@ public class Account
             SEALRelinKeys,
             ClientSigningPublicKey,
             ClientSigningPrivateKeyEncrypted,
-            ServerSigningPublicKey
+            ServerSigningPublicKey,
+            Closed
         };
         return JsonSerializer.SerializeToUtf8Bytes(dataToSign);
     }

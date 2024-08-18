@@ -41,9 +41,10 @@ namespace WinFormsUI
             this.Refresh();
         }
 
+        // TODO: rename
         private async Task GetSelectedAccountData(Account account, string password)
         {
-            selectedAccount = account;
+            selectedAccount = accounts.Where(a => a.Id == account.Id).FirstOrDefault();
             selectedAccountPassword = password;
 
             // order transactions by date (most recent first)
@@ -51,6 +52,8 @@ namespace WinFormsUI
             selectedAccountPlaintextTransactions = plaintextTransactions.OrderByDescending(transaction => transaction.Timestamp).ToList();
 
             selectedAccountBalance = selectedAccountPlaintextTransactions.Sum(t => t.Amount);
+
+            this.Refresh();
         }
 
         private async void DashboardForm_Load(object sender, EventArgs e)
@@ -198,10 +201,8 @@ namespace WinFormsUI
             float smallTextX = (pictureBox.ClientSize.Width - smallTextSize.Width) / 2;
             float smallTextY = (pictureBox.ClientSize.Height - smallTextSize.Height) / 2;
 
-            float smallTextOffsetX = 15;  // shift n pixels left
-            float smallTextOffsetY = 15;   // shift n pixels up
-            smallTextX -= smallTextOffsetX;
-            smallTextY -= smallTextOffsetY;
+            smallTextX += -15; // shift left
+            smallTextY += -15; // shift up
 
             e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));
 
@@ -213,10 +214,7 @@ namespace WinFormsUI
 
             // same location initially
             float largeTextX = smallTextX;
-            float largeTextY = smallTextY;
-
-            float largeTextOffsetY = -18;   // shift -n pixels down
-            largeTextY -= largeTextOffsetY;
+            float largeTextY = smallTextY + 18; // shift down
 
             e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
         }
@@ -322,7 +320,7 @@ namespace WinFormsUI
 
             try
             {
-                await ClientConfig.DeleteAccount(account.Id);
+                await ClientConfig.CloseAccount(account.Id, selectedAccountPassword);
             }
             catch (Exception ex)
             {
@@ -550,32 +548,27 @@ namespace WinFormsUI
             // draw "Name"
             string smallText = "Name";
 
-            using Font smallTextFont = new("Segoe UI", 10, FontStyle.Regular, GraphicsUnit.Point);
+            using Font smallTextFont = new("Segoe UI Emoji", 10, FontStyle.Regular, GraphicsUnit.Point);
             using SolidBrush brush = new(Color.White);
             SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
 
             float smallTextX = (pictureBox.ClientSize.Width - smallTextSize.Width) / 2;
             float smallTextY = (pictureBox.ClientSize.Height - smallTextSize.Height) / 2;
 
-            float smallTextOffsetX = 42;  // shift n pixels left
-            float smallTextOffsetY = 15;   // shift m pixels up
-            smallTextX -= smallTextOffsetX;
-            smallTextY -= smallTextOffsetY;
+            smallTextX += -42; // shift left
+            smallTextY += -15; // shift up
 
             e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));
 
             // draw actual name of account
             string largeText = selectedAccount.Name;
 
-            using Font largeTextFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
+            using Font largeTextFont = new("Segoe UI Emoji", 16, FontStyle.Regular, GraphicsUnit.Point);
             SizeF largeTextSize = e.Graphics.MeasureString(largeText, largeTextFont);
 
             // same location initially
             float largeTextX = smallTextX;
-            float largeTextY = smallTextY;
-
-            float largeTextOffsetY = -14;   // shift -n pixels down
-            largeTextY -= largeTextOffsetY;
+            float largeTextY = smallTextY + 14;  // shift down
 
             e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
         }
@@ -594,10 +587,8 @@ namespace WinFormsUI
             float smallTextX = (pictureBox.ClientSize.Width - smallTextSize.Width) / 2;
             float smallTextY = (pictureBox.ClientSize.Height - smallTextSize.Height) / 2;
 
-            float smallTextOffsetX = 25;  // shift n pixels left
-            float smallTextOffsetY = 15;   // shift m pixels up
-            smallTextX -= smallTextOffsetX;
-            smallTextY -= smallTextOffsetY;
+            smallTextX += -25; // shift left
+            smallTextY += -15; // shift up
 
             e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));
 
@@ -609,10 +600,7 @@ namespace WinFormsUI
 
             // same location initially
             float largeTextX = smallTextX;
-            float largeTextY = smallTextY;
-
-            float largeTextOffsetY = -14;   // shift -n pixels down
-            largeTextY -= largeTextOffsetY;
+            float largeTextY = smallTextY + 14; // shift down
 
             e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
         }
@@ -621,35 +609,29 @@ namespace WinFormsUI
         {
             PictureBox pictureBox = (PictureBox)sender;
 
-            // draw "Switch To"
-            string smallText = "Switch To";
+            // draw "Status"
+            string smallText = "Status";
 
-            using Font smallTextFont = new("Segoe UI", 10, FontStyle.Regular, GraphicsUnit.Point);
+            using Font smallTextFont = new("Segoe UI Emoji", 10, FontStyle.Regular, GraphicsUnit.Point);
             using SolidBrush brush = new(Color.White);
             SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
 
             float smallTextX = (pictureBox.ClientSize.Width - smallTextSize.Width) / 2;
             float smallTextY = (pictureBox.ClientSize.Height - smallTextSize.Height) / 2;
 
-            float smallTextOffsetX = 35;  // shift n pixels left
-            float smallTextOffsetY = 15;   // shift m pixels up
-            smallTextX -= smallTextOffsetX;
-            smallTextY -= smallTextOffsetY;
+            smallTextX -= 43; // shift n pixels left
+            smallTextY -= 15; // shift m pixels up
 
             e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));
 
-            // draw "Blockchain View"
-            string largeText = "Blockchain View";
+            // draw open/closed
+            string largeText = selectedAccount.Closed ? "Closed" : "Open";
 
-            using Font largeTextFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
+            using Font largeTextFont = new("Segoe UI Emoji", 16, FontStyle.Regular, GraphicsUnit.Point);
             SizeF largeTextSize = e.Graphics.MeasureString(largeText, largeTextFont);
 
-            // same location initially
             float largeTextX = smallTextX;
-            float largeTextY = smallTextY;
-
-            float largeTextOffsetY = -14;   // shift -n pixels down
-            largeTextY -= largeTextOffsetY;
+            float largeTextY = smallTextY + 14; // shift down
 
             e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
         }
@@ -758,6 +740,7 @@ namespace WinFormsUI
         {
             PictureBox pictureBox = (PictureBox)sender;
 
+            // draw time interval
             string text = (string)AccountDetailsPanelLastIntervalComboBox.SelectedItem;
             using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular);
             using SolidBrush brush = new(Color.White);
@@ -864,9 +847,56 @@ namespace WinFormsUI
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void AccountDetailsPanelTransactPictureBox_Click(object sender, EventArgs e)
         {
             ShowTransactPanel();
+        }
+
+        private void AccountDetailsPanelTransactPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            PictureBox pictureBox = (PictureBox)sender;
+
+            // draw "Transact"
+            string text = "Transact";
+            using Font font = new("Segoe UI Emoji", 16, FontStyle.Regular);
+            using SolidBrush brush = new(Color.White);
+            SizeF textSize = e.Graphics.MeasureString(text, font);
+
+            float x = (pictureBox.Width - textSize.Width) / 2;
+            float y = (pictureBox.Height - textSize.Height) / 2;
+
+            e.Graphics.DrawString(text, font, brush, x, y);
+        }
+
+        private void AccountDetailsPanelClosePictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            PictureBox pictureBox = (PictureBox)sender;
+
+            // draw "Close"
+            string text = "Close";
+            using Font font = new("Segoe UI Emoji", 16, FontStyle.Regular);
+            using SolidBrush brush = new(Color.White);
+            SizeF textSize = e.Graphics.MeasureString(text, font);
+
+            float x = (pictureBox.Width - textSize.Width) / 2;
+            float y = (pictureBox.Height - textSize.Height) / 2;
+
+            e.Graphics.DrawString(text, font, brush, x, y);
+        }
+
+        private async void AccountDetailsPanelClosePictureBox_Click(object sender, EventArgs e)
+        {
+            // TODO: add confirm check
+            try
+            {
+                await ClientConfig.CloseAccount(selectedAccount.Id, selectedAccountPassword);
+                await GetData();
+                await GetSelectedAccountData(selectedAccount, selectedAccountPassword);
+            }
+            catch (Exception ex)
+            {
+                TransactPanelErrorLabel.Text = "An error occurred while closing the account";
+            }
         }
 
         #endregion

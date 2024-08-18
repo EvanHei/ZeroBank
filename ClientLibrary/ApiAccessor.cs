@@ -1,14 +1,7 @@
 ﻿using Microsoft.Research.SEAL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using SharedLibrary.Models;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 namespace ClientLibrary;
 
@@ -130,25 +123,28 @@ public class ApiAccessor
         }
     }
 
-    public async Task DeleteAccount(int accountId)
+    public async Task<Account> CloseAccount(Account account, byte[] key)
     {
-        string url = $"{Constants.AccountsBaseUrl}/{accountId}";
+        string url = $"{Constants.AccountsBaseUrl}/close";
         if (!IsValidUrl(url))
         {
             throw new ArgumentException("Invalid URL", nameof(url));
         }
 
-        HttpResponseMessage response = await client.DeleteAsync(url);
+        HttpResponseMessage response = await client.PostAsJsonAsync(url, new CloseAccountRequest(account, key));
         if (!response.IsSuccessStatusCode)
         {
             string errorContent = await response.Content.ReadAsStringAsync();
             throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorContent}");
         }
+
+        Account closedAccount = await response.Content.ReadFromJsonAsync<Account>();
+        return closedAccount;
     }
 
     public async Task<CiphertextTransaction> PostTransaction(CiphertextTransaction transaction)
     {
-        string url = $"{Constants.AccountsBaseUrl}/{transaction.AccountId}/transaction";
+        string url = $"{Constants.AccountsBaseUrl}/transaction";
         if (!IsValidUrl(url))
         {
             throw new ArgumentException("Invalid URL", nameof(url));

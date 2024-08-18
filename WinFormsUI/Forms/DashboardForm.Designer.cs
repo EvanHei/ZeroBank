@@ -41,11 +41,12 @@
             AccountsPanelPasswordLabel = new Label();
             AccountsPanelAccountsPictureBox = new PictureBox();
             AccountDetailsPanel = new Panel();
+            AccountDetailsPanelClosePictureBox = new PictureBox();
+            AccountDetailsPanelTransactPictureBox = new PictureBox();
             AccountDetailsPanelPointsCheckBox = new CheckBox();
             AccountDetailsPanelErrorLabel = new Label();
             AccountDetailsPanelChartLabel = new Label();
             AccountDetailsPanelLastLabel = new Label();
-            AccountDetailsPanelbutton1 = new Button();
             AccountDetailsPanelDoughnutChartPanel = new Panel();
             AccountDetailsPanelTransactionsListBox = new ListBox();
             AccountDetailsPanelTranasctionsListPictureBox = new PictureBox();
@@ -107,6 +108,8 @@
             ((System.ComponentModel.ISupportInitialize)AccountsPanelPasswordPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelAccountsPictureBox).BeginInit();
             AccountDetailsPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelClosePictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTranasctionsListPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelBlockchainPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactionsPictureBox).BeginInit();
@@ -270,11 +273,12 @@
             // 
             // AccountDetailsPanel
             // 
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelClosePictureBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelTransactPictureBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelPointsCheckBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelErrorLabel);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelChartLabel);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelLastLabel);
-            AccountDetailsPanel.Controls.Add(AccountDetailsPanelbutton1);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelDoughnutChartPanel);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelTransactionsListBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelTranasctionsListPictureBox);
@@ -293,6 +297,30 @@
             AccountDetailsPanel.Name = "AccountDetailsPanel";
             AccountDetailsPanel.Size = new Size(987, 735);
             AccountDetailsPanel.TabIndex = 1;
+            // 
+            // AccountDetailsPanelClosePictureBox
+            // 
+            AccountDetailsPanelClosePictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelClosePictureBox.Image");
+            AccountDetailsPanelClosePictureBox.Location = new Point(738, 645);
+            AccountDetailsPanelClosePictureBox.Name = "AccountDetailsPanelClosePictureBox";
+            AccountDetailsPanelClosePictureBox.Size = new Size(223, 61);
+            AccountDetailsPanelClosePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountDetailsPanelClosePictureBox.TabIndex = 38;
+            AccountDetailsPanelClosePictureBox.TabStop = false;
+            AccountDetailsPanelClosePictureBox.Click += AccountDetailsPanelClosePictureBox_Click;
+            AccountDetailsPanelClosePictureBox.Paint += AccountDetailsPanelClosePictureBox_Paint;
+            // 
+            // AccountDetailsPanelTransactPictureBox
+            // 
+            AccountDetailsPanelTransactPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelTransactPictureBox.Image");
+            AccountDetailsPanelTransactPictureBox.Location = new Point(738, 564);
+            AccountDetailsPanelTransactPictureBox.Name = "AccountDetailsPanelTransactPictureBox";
+            AccountDetailsPanelTransactPictureBox.Size = new Size(223, 61);
+            AccountDetailsPanelTransactPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountDetailsPanelTransactPictureBox.TabIndex = 37;
+            AccountDetailsPanelTransactPictureBox.TabStop = false;
+            AccountDetailsPanelTransactPictureBox.Click += AccountDetailsPanelTransactPictureBox_Click;
+            AccountDetailsPanelTransactPictureBox.Paint += AccountDetailsPanelTransactPictureBox_Paint;
             // 
             // AccountDetailsPanelPointsCheckBox
             // 
@@ -343,16 +371,6 @@
             AccountDetailsPanelLastLabel.Size = new Size(41, 21);
             AccountDetailsPanelLastLabel.TabIndex = 28;
             AccountDetailsPanelLastLabel.Text = "Last:";
-            // 
-            // AccountDetailsPanelbutton1
-            // 
-            AccountDetailsPanelbutton1.Location = new Point(810, 622);
-            AccountDetailsPanelbutton1.Name = "AccountDetailsPanelbutton1";
-            AccountDetailsPanelbutton1.Size = new Size(90, 38);
-            AccountDetailsPanelbutton1.TabIndex = 16;
-            AccountDetailsPanelbutton1.Text = "Transact";
-            AccountDetailsPanelbutton1.UseVisualStyleBackColor = true;
-            AccountDetailsPanelbutton1.Click += button1_Click;
             // 
             // AccountDetailsPanelDoughnutChartPanel
             // 
@@ -998,6 +1016,8 @@
             ((System.ComponentModel.ISupportInitialize)AccountsPanelAccountsPictureBox).EndInit();
             AccountDetailsPanel.ResumeLayout(false);
             AccountDetailsPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelClosePictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTranasctionsListPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelBlockchainPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactionsPictureBox).EndInit();
@@ -1070,13 +1090,11 @@
         private Label TransactPanelRangeLabel;
         private Label TransactPanelDollarSignLabel;
         private PictureBox TransactPanelConfirmPictureBox;
-        private Button AccountDetailsPanelbutton1;
         private PictureBox TransactPanelDepositPictureBox;
         private PictureBox TransactPanelWithdrawPictureBox;
         private Panel CreateAccountPanel;
         private Label AccountDetailsPanelChartLabel;
         private PictureBox CreateAccountPanelCreatePictureBox;
-        private PictureBox pictureBox2;
         private Label label3;
         private Label label4;
         private Label CreateAccountPanelHeaderLabel;
@@ -1107,5 +1125,7 @@
         private Label DashboardPanelErrorLabel;
         private Label CreateAccountPanelErrorLabel;
         private CheckBox AccountDetailsPanelPointsCheckBox;
+        private PictureBox AccountDetailsPanelTransactPictureBox;
+        private PictureBox AccountDetailsPanelClosePictureBox;
     }
 }
