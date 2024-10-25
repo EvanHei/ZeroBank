@@ -383,6 +383,11 @@ namespace WinFormsUI
                 AccountDetailsPanelClosePictureBox.Visible = false;
                 AccountDetailsPanelTransactPictureBox.Visible = false;
             }
+            else
+            {
+                AccountDetailsPanelClosePictureBox.Visible = true;
+                AccountDetailsPanelTransactPictureBox.Visible = true;
+            }
 
             DashboardPanel.Visible = false;
             AccountsPanel.Visible = false;

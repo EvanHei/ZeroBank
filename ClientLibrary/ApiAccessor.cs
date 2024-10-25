@@ -12,10 +12,6 @@ public class ApiAccessor
     public async Task Login(string username, string password)
     {
         string url = $"{Constants.UsersBaseUrl}/login";
-        if (!IsValidUrl(url))
-        {
-            throw new ArgumentException("Invalid URL", nameof(url));
-        }
 
         UserCredentials credentials = new(username, password);
         HttpResponseMessage response = await client.PostAsJsonAsync(url, credentials);
@@ -32,10 +28,6 @@ public class ApiAccessor
     public async Task SignUp(string username, string password)
     {
         string url = $"{Constants.UsersBaseUrl}/signup";
-        if (!IsValidUrl(url))
-        {
-            throw new ArgumentException("Invalid URL", nameof(url));
-        }
 
         UserCredentials credentials = new(username, password);
         HttpResponseMessage response = await client.PostAsJsonAsync(url, credentials);
@@ -48,10 +40,6 @@ public class ApiAccessor
 
     public async Task<EncryptionParameters> GetEncryptionParameters()
     {
-        if (!IsValidUrl(Constants.ParmsUrl))
-        {
-            throw new ArgumentException("Invalid URL", nameof(Constants.ParmsUrl));
-        }
 
         HttpResponseMessage response = await client.GetAsync(Constants.ParmsUrl);
         if (!response.IsSuccessStatusCode)
@@ -72,10 +60,6 @@ public class ApiAccessor
 
     public async Task<List<Account>> GetAccounts()
     {
-        if (!IsValidUrl(Constants.AccountsBaseUrl))
-        {
-            throw new ArgumentException("Invalid URL", nameof(Constants.AccountsBaseUrl));
-        }
 
         HttpResponseMessage response = await client.GetAsync(Constants.AccountsBaseUrl);
         if (!response.IsSuccessStatusCode)
@@ -91,10 +75,6 @@ public class ApiAccessor
     public async Task<Account> PostPartialAccount(Account account)
     {
         string url = $"{Constants.AccountsBaseUrl}/partial-account";
-        if (!IsValidUrl(url))
-        {
-            throw new ArgumentException("Invalid URL", nameof(url));
-        }
 
         HttpResponseMessage response = await client.PostAsJsonAsync(url, account);
         if (!response.IsSuccessStatusCode)
@@ -110,10 +90,6 @@ public class ApiAccessor
     public async Task PostFullAccount(Account account)
     {
         string url = $"{Constants.AccountsBaseUrl}/full-account";
-        if (!IsValidUrl(url))
-        {
-            throw new ArgumentException("Invalid URL", nameof(url));
-        }
 
         HttpResponseMessage response = await client.PostAsJsonAsync(url, account);
         if (!response.IsSuccessStatusCode)
@@ -126,10 +102,6 @@ public class ApiAccessor
     public async Task<Account> CloseAccount(Account account, byte[] key)
     {
         string url = $"{Constants.AccountsBaseUrl}/close";
-        if (!IsValidUrl(url))
-        {
-            throw new ArgumentException("Invalid URL", nameof(url));
-        }
 
         HttpResponseMessage response = await client.PostAsJsonAsync(url, new CloseAccountRequest(account, key));
         if (!response.IsSuccessStatusCode)
@@ -145,10 +117,6 @@ public class ApiAccessor
     public async Task<CiphertextTransaction> PostTransaction(CiphertextTransaction transaction)
     {
         string url = $"{Constants.AccountsBaseUrl}/transaction";
-        if (!IsValidUrl(url))
-        {
-            throw new ArgumentException("Invalid URL", nameof(url));
-        }
 
         HttpResponseMessage response = await client.PostAsJsonAsync(url, transaction);
         if (!response.IsSuccessStatusCode)
@@ -164,10 +132,6 @@ public class ApiAccessor
     public async Task<Stream> GetBalanceStream(int accountId)
     {
         string url = $"{Constants.AccountsBaseUrl}/{accountId}/balance";
-        if (!IsValidUrl(url))
-        {
-            throw new ArgumentException("Invalid URL", nameof(url));
-        }
 
         HttpResponseMessage response = await client.GetAsync(url);
         if (!response.IsSuccessStatusCode)
@@ -177,18 +141,5 @@ public class ApiAccessor
         }
 
         return await response.Content.ReadAsStreamAsync();
-    }
-
-    private static bool IsValidUrl(string url)
-    {
-        bool output = true;
-
-        if (string.IsNullOrWhiteSpace(url))
-            output = false;
-
-        output = Uri.TryCreate(url, UriKind.Absolute, out Uri uriOutput) &&
-            (uriOutput.Scheme == Uri.UriSchemeHttps || uriOutput.Scheme == Uri.UriSchemeHttp);
-
-        return output;
     }
 }
