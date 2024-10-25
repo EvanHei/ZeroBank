@@ -159,6 +159,24 @@ namespace WinFormsUI
             }
         }
 
+        private void DashboardPanelCreateAccountIconPictureBox_Click(object sender, EventArgs e)
+        {
+            SidebarListBox.SelectedIndex = 1;
+            ShowCreateAccountPanel();
+        }
+
+        private void DashboardPanelCreateAccountPictureBox_Click(object sender, EventArgs e)
+        {
+            SidebarListBox.SelectedIndex = 1;
+            ShowCreateAccountPanel();
+        }
+
+        private void DashboardPanelCreateAccountLabel_Click(object sender, EventArgs e)
+        {
+            SidebarListBox.SelectedIndex = 1;
+            ShowCreateAccountPanel();
+        }
+
         #endregion
 
         #region AccountsPanel

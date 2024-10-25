@@ -566,9 +566,10 @@
             DashboardPanelCreateAccountLabel.ForeColor = Color.FromArgb(146, 146, 146);
             DashboardPanelCreateAccountLabel.Location = new Point(334, 476);
             DashboardPanelCreateAccountLabel.Name = "DashboardPanelCreateAccountLabel";
-            DashboardPanelCreateAccountLabel.Size = new Size(113, 21);
+            DashboardPanelCreateAccountLabel.Size = new Size(115, 21);
             DashboardPanelCreateAccountLabel.TabIndex = 12;
-            DashboardPanelCreateAccountLabel.Text = "Create account";
+            DashboardPanelCreateAccountLabel.Text = "Create Account";
+            DashboardPanelCreateAccountLabel.Click += DashboardPanelCreateAccountLabel_Click;
             // 
             // DashboardPanelCreateAccountIconPictureBox
             // 
@@ -579,6 +580,7 @@
             DashboardPanelCreateAccountIconPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             DashboardPanelCreateAccountIconPictureBox.TabIndex = 11;
             DashboardPanelCreateAccountIconPictureBox.TabStop = false;
+            DashboardPanelCreateAccountIconPictureBox.Click += DashboardPanelCreateAccountIconPictureBox_Click;
             // 
             // DashboardPanelCreateAccountPictureBox
             // 
@@ -589,6 +591,7 @@
             DashboardPanelCreateAccountPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             DashboardPanelCreateAccountPictureBox.TabIndex = 10;
             DashboardPanelCreateAccountPictureBox.TabStop = false;
+            DashboardPanelCreateAccountPictureBox.Click += DashboardPanelCreateAccountPictureBox_Click;
             // 
             // DashboardPanelLogsLabel
             // 
@@ -1008,11 +1011,11 @@
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 728);
             Controls.Add(SidebarListBox);
+            Controls.Add(DashboardPanel);
             Controls.Add(AccountDetailsPanel);
             Controls.Add(AccountsPanel);
             Controls.Add(CreateAccountPanel);
             Controls.Add(TransactPanel);
-            Controls.Add(DashboardPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Margin = new Padding(4);
             Name = "DashboardForm";
