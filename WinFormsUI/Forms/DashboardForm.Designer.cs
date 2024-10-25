@@ -41,6 +41,7 @@
             AccountsPanelPasswordLabel = new Label();
             AccountsPanelAccountsPictureBox = new PictureBox();
             AccountDetailsPanel = new Panel();
+            AccountDetailsPanelBackArrowPictureBox = new PictureBox();
             AccountDetailsPanelClosePictureBox = new PictureBox();
             AccountDetailsPanelTransactPictureBox = new PictureBox();
             AccountDetailsPanelPointsCheckBox = new CheckBox();
@@ -108,6 +109,7 @@
             ((System.ComponentModel.ISupportInitialize)AccountsPanelPasswordPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelAccountsPictureBox).BeginInit();
             AccountDetailsPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelBackArrowPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelClosePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTranasctionsListPictureBox).BeginInit();
@@ -273,6 +275,7 @@
             // 
             // AccountDetailsPanel
             // 
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelBackArrowPictureBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelClosePictureBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelTransactPictureBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelPointsCheckBox);
@@ -298,10 +301,21 @@
             AccountDetailsPanel.Size = new Size(987, 735);
             AccountDetailsPanel.TabIndex = 1;
             // 
+            // AccountDetailsPanelBackArrowPictureBox
+            // 
+            AccountDetailsPanelBackArrowPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelBackArrowPictureBox.Image");
+            AccountDetailsPanelBackArrowPictureBox.Location = new Point(12, 12);
+            AccountDetailsPanelBackArrowPictureBox.Name = "AccountDetailsPanelBackArrowPictureBox";
+            AccountDetailsPanelBackArrowPictureBox.Size = new Size(38, 36);
+            AccountDetailsPanelBackArrowPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountDetailsPanelBackArrowPictureBox.TabIndex = 39;
+            AccountDetailsPanelBackArrowPictureBox.TabStop = false;
+            AccountDetailsPanelBackArrowPictureBox.Click += AccountDetailsPanelBackArrowPictureBox_Click;
+            // 
             // AccountDetailsPanelClosePictureBox
             // 
             AccountDetailsPanelClosePictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelClosePictureBox.Image");
-            AccountDetailsPanelClosePictureBox.Location = new Point(738, 645);
+            AccountDetailsPanelClosePictureBox.Location = new Point(738, 643);
             AccountDetailsPanelClosePictureBox.Name = "AccountDetailsPanelClosePictureBox";
             AccountDetailsPanelClosePictureBox.Size = new Size(223, 61);
             AccountDetailsPanelClosePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -313,7 +327,7 @@
             // AccountDetailsPanelTransactPictureBox
             // 
             AccountDetailsPanelTransactPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelTransactPictureBox.Image");
-            AccountDetailsPanelTransactPictureBox.Location = new Point(738, 564);
+            AccountDetailsPanelTransactPictureBox.Location = new Point(738, 563);
             AccountDetailsPanelTransactPictureBox.Name = "AccountDetailsPanelTransactPictureBox";
             AccountDetailsPanelTransactPictureBox.Size = new Size(223, 61);
             AccountDetailsPanelTransactPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -409,7 +423,7 @@
             // AccountDetailsPanelBlockchainPictureBox
             // 
             AccountDetailsPanelBlockchainPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelBlockchainPictureBox.Image");
-            AccountDetailsPanelBlockchainPictureBox.Location = new Point(738, 26);
+            AccountDetailsPanelBlockchainPictureBox.Location = new Point(738, 20);
             AccountDetailsPanelBlockchainPictureBox.Name = "AccountDetailsPanelBlockchainPictureBox";
             AccountDetailsPanelBlockchainPictureBox.Size = new Size(223, 61);
             AccountDetailsPanelBlockchainPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -420,7 +434,7 @@
             // AccountDetailsPanelTransactionsPictureBox
             // 
             AccountDetailsPanelTransactionsPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelTransactionsPictureBox.Image");
-            AccountDetailsPanelTransactionsPictureBox.Location = new Point(491, 26);
+            AccountDetailsPanelTransactionsPictureBox.Location = new Point(494, 20);
             AccountDetailsPanelTransactionsPictureBox.Name = "AccountDetailsPanelTransactionsPictureBox";
             AccountDetailsPanelTransactionsPictureBox.Size = new Size(223, 61);
             AccountDetailsPanelTransactionsPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -449,7 +463,7 @@
             // AccountDetailsPanelNamePictureBox
             // 
             AccountDetailsPanelNamePictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelNamePictureBox.Image");
-            AccountDetailsPanelNamePictureBox.Location = new Point(234, 26);
+            AccountDetailsPanelNamePictureBox.Location = new Point(244, 20);
             AccountDetailsPanelNamePictureBox.Name = "AccountDetailsPanelNamePictureBox";
             AccountDetailsPanelNamePictureBox.Size = new Size(223, 61);
             AccountDetailsPanelNamePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -1016,6 +1030,7 @@
             ((System.ComponentModel.ISupportInitialize)AccountsPanelAccountsPictureBox).EndInit();
             AccountDetailsPanel.ResumeLayout(false);
             AccountDetailsPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelBackArrowPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelClosePictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTranasctionsListPictureBox).EndInit();
@@ -1127,5 +1142,6 @@
         private CheckBox AccountDetailsPanelPointsCheckBox;
         private PictureBox AccountDetailsPanelTransactPictureBox;
         private PictureBox AccountDetailsPanelClosePictureBox;
+        private PictureBox AccountDetailsPanelBackArrowPictureBox;
     }
 }

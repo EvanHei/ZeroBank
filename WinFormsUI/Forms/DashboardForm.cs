@@ -26,7 +26,7 @@ namespace WinFormsUI
             SidebarListBox.SelectedIndex = 0;
         }
 
-        private async Task GetData()
+        private async Task GetServerData()
         {
             // TODO: display error msg
             try
@@ -58,7 +58,7 @@ namespace WinFormsUI
 
         private async void DashboardForm_Load(object sender, EventArgs e)
         {
-            await GetData();
+            await GetServerData();
         }
 
         private void SidebarListBox_DrawItem(object sender, DrawItemEventArgs e)
@@ -327,7 +327,7 @@ namespace WinFormsUI
                 AccountsPanelErrorLabel.Text = "An error occurred while deleting the account";
             }
 
-            await GetData();
+            await GetServerData();
             ShowAccountsPanel();
         }
 
@@ -359,6 +359,12 @@ namespace WinFormsUI
             AccountsPanelPasswordTextBox.Text = "";
             LoadDoughnutChart();
             LoadMainChart(DateTime.Now.AddYears(-1));
+
+            if (selectedAccount.Closed == true)
+            {
+                AccountDetailsPanelClosePictureBox.Visible = false;
+                AccountDetailsPanelTransactPictureBox.Visible = false;
+            }
 
             DashboardPanel.Visible = false;
             AccountsPanel.Visible = false;
@@ -731,6 +737,11 @@ namespace WinFormsUI
             e.Graphics.DrawString(balanceText, balanceFont, balanceBrush, new PointF(balanceX, balanceY));
         }
 
+        private void AccountDetailsPanelBackArrowPictureBox_Click(object sender, EventArgs e)
+        {
+            ShowAccountsPanel();
+        }
+
         private void AccountDetailsPanelLastIntervalPictureBox_Click(object sender, EventArgs e)
         {
             AccountDetailsPanelLastIntervalComboBox.DroppedDown = true;
@@ -890,7 +901,7 @@ namespace WinFormsUI
             try
             {
                 await ClientConfig.CloseAccount(selectedAccount.Id, selectedAccountPassword);
-                await GetData();
+                await GetServerData();
                 await GetSelectedAccountData(selectedAccount, selectedAccountPassword);
             }
             catch (Exception ex)
@@ -1084,7 +1095,7 @@ namespace WinFormsUI
                 CreateAccountPanelTypeComboBox.SelectedIndex = 0;
                 CreateAccountPanelPasswordTextBox.Text = "";
 
-                await GetData();
+                await GetServerData();
                 ShowAccountsPanel();
             }
             catch (Exception ex)
