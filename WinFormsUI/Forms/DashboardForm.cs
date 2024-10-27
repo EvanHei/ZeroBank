@@ -41,7 +41,6 @@ namespace WinFormsUI
             this.Refresh();
         }
 
-        // TODO: rename
         private async Task GetSelectedAccountData(Account account, string password)
         {
             selectedAccount = accounts.Where(a => a.Id == account.Id).FirstOrDefault();
@@ -363,6 +362,22 @@ namespace WinFormsUI
             float y = (pictureBox.ClientSize.Height - textSize.Height) / 2;
 
             e.Graphics.DrawString(text, font, brush, new PointF(x, y));
+        }
+
+        private void AccountsPanelRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (AccountsPanelAllRadioButton.Checked)
+            {
+                AccountsPanelListBox.DataSource = accounts;
+            }
+            else if (AccountsPanelOpenRadioButton.Checked)
+            {
+                AccountsPanelListBox.DataSource = accounts.Where(a => a.Closed == false).ToList();
+            }
+            else if (AccountsPanelClosedRadioButton.Checked)
+            {
+                AccountsPanelListBox.DataSource = accounts.Where(a => a.Closed == true).ToList();
+            }
         }
 
         #endregion

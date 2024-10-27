@@ -30,6 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DashboardForm));
             AccountsPanel = new Panel();
+            AccountsPanelClosedRadioButton = new RadioButton();
+            AccountsPanelOpenRadioButton = new RadioButton();
+            AccountsPanelAllRadioButton = new RadioButton();
             AccountsPanelErrorLabel = new Label();
             AccountsPanelDeletePictureBox = new PictureBox();
             AccountsPanelCreateNewPictureBox = new PictureBox();
@@ -143,6 +146,9 @@
             // 
             // AccountsPanel
             // 
+            AccountsPanel.Controls.Add(AccountsPanelClosedRadioButton);
+            AccountsPanel.Controls.Add(AccountsPanelOpenRadioButton);
+            AccountsPanel.Controls.Add(AccountsPanelAllRadioButton);
             AccountsPanel.Controls.Add(AccountsPanelErrorLabel);
             AccountsPanel.Controls.Add(AccountsPanelDeletePictureBox);
             AccountsPanel.Controls.Add(AccountsPanelCreateNewPictureBox);
@@ -157,6 +163,44 @@
             AccountsPanel.Name = "AccountsPanel";
             AccountsPanel.Size = new Size(987, 732);
             AccountsPanel.TabIndex = 10;
+            // 
+            // AccountsPanelClosedRadioButton
+            // 
+            AccountsPanelClosedRadioButton.AutoSize = true;
+            AccountsPanelClosedRadioButton.ForeColor = Color.Silver;
+            AccountsPanelClosedRadioButton.Location = new Point(720, 199);
+            AccountsPanelClosedRadioButton.Name = "AccountsPanelClosedRadioButton";
+            AccountsPanelClosedRadioButton.Size = new Size(75, 25);
+            AccountsPanelClosedRadioButton.TabIndex = 38;
+            AccountsPanelClosedRadioButton.Text = "Closed";
+            AccountsPanelClosedRadioButton.UseVisualStyleBackColor = true;
+            AccountsPanelClosedRadioButton.CheckedChanged += AccountsPanelRadioButton_CheckedChanged;
+            // 
+            // AccountsPanelOpenRadioButton
+            // 
+            AccountsPanelOpenRadioButton.AutoSize = true;
+            AccountsPanelOpenRadioButton.ForeColor = Color.Silver;
+            AccountsPanelOpenRadioButton.Location = new Point(720, 173);
+            AccountsPanelOpenRadioButton.Name = "AccountsPanelOpenRadioButton";
+            AccountsPanelOpenRadioButton.Size = new Size(66, 25);
+            AccountsPanelOpenRadioButton.TabIndex = 37;
+            AccountsPanelOpenRadioButton.Text = "Open";
+            AccountsPanelOpenRadioButton.UseVisualStyleBackColor = true;
+            AccountsPanelOpenRadioButton.CheckedChanged += AccountsPanelRadioButton_CheckedChanged;
+            // 
+            // AccountsPanelAllRadioButton
+            // 
+            AccountsPanelAllRadioButton.AutoSize = true;
+            AccountsPanelAllRadioButton.Checked = true;
+            AccountsPanelAllRadioButton.ForeColor = Color.Silver;
+            AccountsPanelAllRadioButton.Location = new Point(720, 147);
+            AccountsPanelAllRadioButton.Name = "AccountsPanelAllRadioButton";
+            AccountsPanelAllRadioButton.Size = new Size(46, 25);
+            AccountsPanelAllRadioButton.TabIndex = 36;
+            AccountsPanelAllRadioButton.TabStop = true;
+            AccountsPanelAllRadioButton.Text = "All";
+            AccountsPanelAllRadioButton.UseVisualStyleBackColor = true;
+            AccountsPanelAllRadioButton.CheckedChanged += AccountsPanelRadioButton_CheckedChanged;
             // 
             // AccountsPanelErrorLabel
             // 
@@ -173,7 +217,7 @@
             // AccountsPanelDeletePictureBox
             // 
             AccountsPanelDeletePictureBox.Image = (Image)resources.GetObject("AccountsPanelDeletePictureBox.Image");
-            AccountsPanelDeletePictureBox.Location = new Point(494, 666);
+            AccountsPanelDeletePictureBox.Location = new Point(431, 666);
             AccountsPanelDeletePictureBox.Name = "AccountsPanelDeletePictureBox";
             AccountsPanelDeletePictureBox.Size = new Size(123, 36);
             AccountsPanelDeletePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -185,7 +229,7 @@
             // AccountsPanelCreateNewPictureBox
             // 
             AccountsPanelCreateNewPictureBox.Image = (Image)resources.GetObject("AccountsPanelCreateNewPictureBox.Image");
-            AccountsPanelCreateNewPictureBox.Location = new Point(347, 666);
+            AccountsPanelCreateNewPictureBox.Location = new Point(284, 666);
             AccountsPanelCreateNewPictureBox.Name = "AccountsPanelCreateNewPictureBox";
             AccountsPanelCreateNewPictureBox.Size = new Size(123, 36);
             AccountsPanelCreateNewPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -202,7 +246,7 @@
             AccountsPanelListBox.ForeColor = Color.Silver;
             AccountsPanelListBox.FormattingEnabled = true;
             AccountsPanelListBox.ItemHeight = 21;
-            AccountsPanelListBox.Location = new Point(223, 158);
+            AccountsPanelListBox.Location = new Point(160, 158);
             AccountsPanelListBox.Name = "AccountsPanelListBox";
             AccountsPanelListBox.Size = new Size(520, 483);
             AccountsPanelListBox.TabIndex = 14;
@@ -212,7 +256,7 @@
             // AccountsPanelPasswordArrowPictureBox
             // 
             AccountsPanelPasswordArrowPictureBox.Image = (Image)resources.GetObject("AccountsPanelPasswordArrowPictureBox.Image");
-            AccountsPanelPasswordArrowPictureBox.Location = new Point(723, 91);
+            AccountsPanelPasswordArrowPictureBox.Location = new Point(660, 91);
             AccountsPanelPasswordArrowPictureBox.Name = "AccountsPanelPasswordArrowPictureBox";
             AccountsPanelPasswordArrowPictureBox.Size = new Size(20, 20);
             AccountsPanelPasswordArrowPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -223,7 +267,7 @@
             // AccountsPanelListPictureBox
             // 
             AccountsPanelListPictureBox.Image = (Image)resources.GetObject("AccountsPanelListPictureBox.Image");
-            AccountsPanelListPictureBox.Location = new Point(210, 147);
+            AccountsPanelListPictureBox.Location = new Point(147, 147);
             AccountsPanelListPictureBox.Name = "AccountsPanelListPictureBox";
             AccountsPanelListPictureBox.Size = new Size(551, 507);
             AccountsPanelListPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -235,7 +279,7 @@
             AccountsPanelPasswordTextBox.BackColor = Color.FromArgb(45, 45, 45);
             AccountsPanelPasswordTextBox.BorderStyle = BorderStyle.None;
             AccountsPanelPasswordTextBox.ForeColor = Color.White;
-            AccountsPanelPasswordTextBox.Location = new Point(507, 90);
+            AccountsPanelPasswordTextBox.Location = new Point(444, 90);
             AccountsPanelPasswordTextBox.Name = "AccountsPanelPasswordTextBox";
             AccountsPanelPasswordTextBox.Size = new Size(239, 22);
             AccountsPanelPasswordTextBox.TabIndex = 10;
@@ -244,7 +288,7 @@
             // AccountsPanelPasswordPictureBox
             // 
             AccountsPanelPasswordPictureBox.Image = (Image)resources.GetObject("AccountsPanelPasswordPictureBox.Image");
-            AccountsPanelPasswordPictureBox.Location = new Point(497, 75);
+            AccountsPanelPasswordPictureBox.Location = new Point(434, 75);
             AccountsPanelPasswordPictureBox.Name = "AccountsPanelPasswordPictureBox";
             AccountsPanelPasswordPictureBox.Size = new Size(257, 55);
             AccountsPanelPasswordPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -254,18 +298,18 @@
             // AccountsPanelPasswordLabel
             // 
             AccountsPanelPasswordLabel.AutoSize = true;
-            AccountsPanelPasswordLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            AccountsPanelPasswordLabel.Font = new Font("Segoe UI Emoji", 12F);
             AccountsPanelPasswordLabel.ForeColor = Color.Silver;
-            AccountsPanelPasswordLabel.Location = new Point(493, 52);
+            AccountsPanelPasswordLabel.Location = new Point(430, 52);
             AccountsPanelPasswordLabel.Name = "AccountsPanelPasswordLabel";
-            AccountsPanelPasswordLabel.Size = new Size(76, 21);
+            AccountsPanelPasswordLabel.Size = new Size(77, 21);
             AccountsPanelPasswordLabel.TabIndex = 9;
             AccountsPanelPasswordLabel.Text = "Password";
             // 
             // AccountsPanelAccountsPictureBox
             // 
             AccountsPanelAccountsPictureBox.Image = (Image)resources.GetObject("AccountsPanelAccountsPictureBox.Image");
-            AccountsPanelAccountsPictureBox.Location = new Point(210, 42);
+            AccountsPanelAccountsPictureBox.Location = new Point(147, 42);
             AccountsPanelAccountsPictureBox.Name = "AccountsPanelAccountsPictureBox";
             AccountsPanelAccountsPictureBox.Size = new Size(257, 81);
             AccountsPanelAccountsPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -1146,5 +1190,8 @@
         private PictureBox AccountDetailsPanelTransactPictureBox;
         private PictureBox AccountDetailsPanelClosePictureBox;
         private PictureBox AccountDetailsPanelBackArrowPictureBox;
+        private RadioButton AccountsPanelAllRadioButton;
+        private RadioButton AccountsPanelClosedRadioButton;
+        private RadioButton AccountsPanelOpenRadioButton;
     }
 }
