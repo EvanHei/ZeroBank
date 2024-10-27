@@ -111,29 +111,6 @@ public static class ServerConfig
         DataAccessor.AddTransaction(transaction);
     }
 
-    public static MemoryStream GetBalanceStream(int accountId, int userId)
-    {
-        // verify signatures
-        DataAccessor.LoadAccount(accountId).EnsureValid();
-
-        // verify the user owns the account
-        AuthorizeAccountAccess(accountId, userId);
-
-        List<Ciphertext> transactions = DataAccessor.LoadTransactions(accountId);
-        using RelinKeys relinKeys = DataAccessor.LoadRelinKeys(accountId);
-        using Ciphertext balance = EncryptionHelper.GetBalance(transactions, relinKeys);
-
-        if (balance == null)
-        {
-            return null;
-        }
-
-        MemoryStream stream = new();
-        balance.Save(stream);
-        stream.Seek(0, SeekOrigin.Begin);
-        return stream;
-    }
-
     private static void AuthorizeAccountAccess(int accountId, int userId)
     {
         Account account = DataAccessor.LoadAccount(accountId);

@@ -997,7 +997,7 @@ namespace WinFormsUI
 
             try
             {
-                // TODO: make it easier to input an amount
+                // TODO: make it easier to input an amount and fix bug where a value like $.23 results in $23
                 double.TryParse(TransactPanelAmountTextBox.Text, out double amountDouble);
 
                 // if it's a withdrawal, make negative

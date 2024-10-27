@@ -134,29 +134,6 @@ public static class ClientConfig
         DataAccessor.AddTransaction(returnedTransaction, context);
     }
 
-    public static async Task<long> GetBalance(int accountId, string password)
-    {
-        using EncryptionParameters parms = DataAccessor.LoadParms(accountId);
-        using SEALContext context = new(parms);
-        using SecretKey secretKey = DataAccessor.LoadSecretKey(accountId, context, password);
-
-        using Stream stream = await ApiAccessor.GetBalanceStream(accountId);
-
-        using MemoryStream memStream = new();
-        stream.CopyTo(memStream);
-        if (memStream.Length == 0)
-        {
-            return 0L;
-        }
-        memStream.Seek(0, SeekOrigin.Begin);
-
-        using Ciphertext ciphertext = new();
-        ciphertext.Load(context, memStream);
-
-        long balance = EncryptionHelper.Decrypt(ciphertext, context, secretKey);
-        return balance;
-    }
-
     public static async Task CloseAccount(int accountId, string password)
     {
         // close account

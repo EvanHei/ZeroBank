@@ -170,32 +170,4 @@ public class AccountsController : ControllerBase
             return Results.Problem(ex.Message);
         }
     }
-
-    [HttpGet("{id}/balance")]
-    [Authorize]
-    public IResult GetBalance(int id)
-    {
-        _logger.LogInformation($"GetBalance method called for account ID: {id}");
-
-        try
-        {
-            string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            int userId = int.Parse(userIdClaim);
-            MemoryStream stream = ServerConfig.GetBalanceStream(id, userId);
-
-            if (stream == null)
-            {
-                _logger.LogInformation($"No balance found for account ID: {id}");
-                return Results.NoContent();
-            }
-
-            _logger.LogInformation($"Successfully retrieved balance for account ID: {id}");
-            return Results.Stream(stream);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, $"An error occurred while retrieving the balance for account ID: {id}");
-            return Results.Problem(ex.Message);
-        }
-    }
 }

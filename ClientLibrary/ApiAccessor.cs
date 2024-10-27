@@ -128,18 +128,4 @@ public class ApiAccessor
         CiphertextTransaction returnedTransaction = await response.Content.ReadFromJsonAsync<CiphertextTransaction>();
         return returnedTransaction;
     }
-
-    public async Task<Stream> GetBalanceStream(int accountId)
-    {
-        string url = $"{Constants.AccountsBaseUrl}/{accountId}/balance";
-
-        HttpResponseMessage response = await client.GetAsync(url);
-        if (!response.IsSuccessStatusCode)
-        {
-            string errorContent = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorContent}");
-        }
-
-        return await response.Content.ReadAsStreamAsync();
-    }
 }
