@@ -1,17 +1,6 @@
 ﻿using Microsoft.Research.SEAL;
-using Microsoft.VisualBasic;
 using SharedLibrary.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.PortableExecutable;
-using System.Security.Cryptography;
-using System.Security.Principal;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ServerLibrary;
 
@@ -27,6 +16,12 @@ public class JsonAccessor
         {
             string json = JsonSerializer.Serialize(new List<User>());
             File.WriteAllText(Constants.UsersFilePath, json);
+        }
+
+        if (!File.Exists(Constants.UserPrivateKeysFilePath))
+        {
+            string json = JsonSerializer.Serialize(new Dictionary<int, string>());
+            File.WriteAllText(Constants.UserPrivateKeysFilePath, json);
         }
     }
 
@@ -152,8 +147,7 @@ public class JsonAccessor
     public void CloseAccount(Account account, byte[] key)
     {
         SaveAccount(account);
-
-        // TODO: save SEAL secret key
+        SaveUserPrivateKey(account.Id, key);
     }
 
     public List<Ciphertext> LoadTransactions(int id)
@@ -192,5 +186,38 @@ public class JsonAccessor
         Account account = LoadAccount(id);
         string path = Path.Combine(Constants.PrivateKeysDirectoryPath, account.Id + ".bin");
         return File.ReadAllBytes(path);
+    }
+
+    private Dictionary<int, string> LoadUserPrivateKeys()
+    {
+        if (!File.Exists(Constants.UserPrivateKeysFilePath))
+        {
+            throw new FileNotFoundException($"File not found: {Constants.UserPrivateKeysFilePath}");
+        }
+
+        string json = File.ReadAllText(Constants.UserPrivateKeysFilePath);
+        Dictionary<int, string> keys = JsonSerializer.Deserialize<Dictionary<int, string>>(json);
+        return keys;
+    }
+
+    public void SaveUserPrivateKey(int accountId, byte[] key)
+    {
+        Dictionary<int, string> keys = LoadUserPrivateKeys();
+        string keyString = Convert.ToBase64String(key);
+        keys[accountId] = keyString;
+        string json = JsonSerializer.Serialize(keys, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(Constants.UserPrivateKeysFilePath, json);
+    }
+
+    public byte[] LoadUserPrivateKey(int accountId)
+    {
+        Dictionary<int, string> keys = LoadUserPrivateKeys();
+
+        if (!keys.TryGetValue(accountId, out string encodedKey))
+        {
+            throw new KeyNotFoundException("Key not found for the specified account ID.");
+        }
+
+        return Convert.FromBase64String(encodedKey);
     }
 }

@@ -40,7 +40,6 @@ public class ApiAccessor
 
     public async Task<EncryptionParameters> GetEncryptionParameters()
     {
-
         HttpResponseMessage response = await client.GetAsync(Constants.ParmsUrl);
         if (!response.IsSuccessStatusCode)
         {
