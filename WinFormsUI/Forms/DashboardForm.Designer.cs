@@ -252,6 +252,7 @@
             AccountsPanelListBox.TabIndex = 14;
             AccountsPanelListBox.DrawItem += AccountsPanelListBox_DrawItem;
             AccountsPanelListBox.MeasureItem += AccountsPanelListBox_MeasureItem;
+            AccountsPanelListBox.SelectedIndexChanged += AccountsPanelListBox_SelectedIndexChanged;
             // 
             // AccountsPanelPasswordArrowPictureBox
             // 
@@ -284,6 +285,7 @@
             AccountsPanelPasswordTextBox.Size = new Size(239, 22);
             AccountsPanelPasswordTextBox.TabIndex = 10;
             AccountsPanelPasswordTextBox.UseSystemPasswordChar = true;
+            AccountsPanelPasswordTextBox.KeyDown += AccountsPanelPasswordTextBox_KeyDown;
             // 
             // AccountsPanelPasswordPictureBox
             // 
@@ -803,6 +805,7 @@
             TransactPanelAmountTextBox.RightToLeft = RightToLeft.Yes;
             TransactPanelAmountTextBox.Size = new Size(239, 22);
             TransactPanelAmountTextBox.TabIndex = 15;
+            TransactPanelAmountTextBox.KeyDown += TransactPanelAmountTextBox_KeyDown;
             // 
             // TransactPanelAmountPictureBox
             // 
@@ -933,7 +936,7 @@
             CreateAccountPanelNameTextBox.Location = new Point(356, 240);
             CreateAccountPanelNameTextBox.Name = "CreateAccountPanelNameTextBox";
             CreateAccountPanelNameTextBox.Size = new Size(239, 22);
-            CreateAccountPanelNameTextBox.TabIndex = 26;
+            CreateAccountPanelNameTextBox.TabIndex = 1;
             // 
             // CreateAccountPanelNamePictureBox
             // 
@@ -975,8 +978,9 @@
             CreateAccountPanelPasswordTextBox.Location = new Point(356, 402);
             CreateAccountPanelPasswordTextBox.Name = "CreateAccountPanelPasswordTextBox";
             CreateAccountPanelPasswordTextBox.Size = new Size(239, 22);
-            CreateAccountPanelPasswordTextBox.TabIndex = 19;
+            CreateAccountPanelPasswordTextBox.TabIndex = 2;
             CreateAccountPanelPasswordTextBox.UseSystemPasswordChar = true;
+            CreateAccountPanelPasswordTextBox.KeyDown += CreateAccountPanelPasswordTextBox_KeyDown;
             // 
             // CreateAccountPanelPasswordPictureBox
             // 
@@ -1055,11 +1059,11 @@
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 728);
             Controls.Add(SidebarListBox);
+            Controls.Add(AccountsPanel);
             Controls.Add(CreateAccountPanel);
             Controls.Add(TransactPanel);
             Controls.Add(DashboardPanel);
             Controls.Add(AccountDetailsPanel);
-            Controls.Add(AccountsPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Margin = new Padding(4);
             Name = "DashboardForm";

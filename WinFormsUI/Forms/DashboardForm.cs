@@ -380,6 +380,22 @@ namespace WinFormsUI
             }
         }
 
+        private void AccountsPanelPasswordTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter)
+            {
+                return;
+            }
+
+            e.SuppressKeyPress = true;
+            AccountsPanelPasswordArrowPictureBox_Click(null, null);
+        }
+
+        private void AccountsPanelListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AccountsPanelPasswordTextBox.Focus();
+        }
+
         #endregion
 
         #region AccountDetailsPanel
@@ -1056,6 +1072,17 @@ namespace WinFormsUI
             ShowAccountDetailsPanel();
         }
 
+        private void TransactPanelAmountTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter)
+            {
+                return;
+            }
+
+            e.SuppressKeyPress = true;
+            TransactPanelConfirmPictureBox_Click(null, null);
+        }
+
         #endregion
 
         #region CreateAccountPanel
@@ -1181,6 +1208,17 @@ namespace WinFormsUI
         private void CreateAccountPanelBackArrowPictureBox_Click(object sender, EventArgs e)
         {
             ShowAccountsPanel();
+        }
+
+        private void CreateAccountPanelPasswordTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter)
+            {
+                return;
+            }
+
+            e.SuppressKeyPress = true;
+            CreateAccountPanelCreatePictureBox_Click(null, null);
         }
 
         #endregion

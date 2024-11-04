@@ -157,5 +157,16 @@ namespace WinFormsUI.Forms
 
             e.Graphics.DrawString(text, font, brush, new PointF(x, y));
         }
+
+        private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter)
+            {
+                return;
+            }
+
+            e.SuppressKeyPress = true;
+            LoginPictureBox_Click(null, null);
+        }
     }
 }
