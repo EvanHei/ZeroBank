@@ -190,6 +190,9 @@ namespace WinFormsUI
             AccountDetailsPanel.Visible = false;
             TransactPanel.Visible = false;
             CreateAccountPanel.Visible = false;
+
+            AccountsPanelPasswordTextBox.Focus();
+            AccountsPanelListBox.SelectedIndex = AccountsPanelListBox.Items.Count > 0 ? 0 : -1;
         }
 
         private bool ValidateAccountsPanelFields()
@@ -393,6 +396,7 @@ namespace WinFormsUI
 
         private void AccountsPanelListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            AccountsPanelPasswordTextBox.Text = "";
             AccountsPanelPasswordTextBox.Focus();
         }
 
