@@ -385,13 +385,25 @@ namespace WinFormsUI
 
         private void AccountsPanelPasswordTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode != Keys.Enter)
+            switch (e.KeyCode)
             {
-                return;
+                case Keys.Enter:
+                    e.SuppressKeyPress = true;
+                    AccountsPanelPasswordArrowPictureBox_Click(null, null);
+                    break;
+                case Keys.Up:
+                    if (AccountsPanelListBox.SelectedIndex > 0)
+                    {
+                        AccountsPanelListBox.SelectedIndex--;
+                    }
+                    break;
+                case Keys.Down:
+                    if (AccountsPanelListBox.SelectedIndex < AccountsPanelListBox.Items.Count - 1)
+                    {
+                        AccountsPanelListBox.SelectedIndex++;
+                    }
+                    break;
             }
-
-            e.SuppressKeyPress = true;
-            AccountsPanelPasswordArrowPictureBox_Click(null, null);
         }
 
         private void AccountsPanelListBox_SelectedIndexChanged(object sender, EventArgs e)
