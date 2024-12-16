@@ -669,7 +669,7 @@ namespace WinFormsUI
             e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));
 
             // draw number of transactions
-            string largeText = selectedAccount.Transactions.Count.ToString();
+            string largeText = selectedAccountPlaintextTransactions.Count.ToString();
 
             using Font largeTextFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
             SizeF largeTextSize = e.Graphics.MeasureString(largeText, largeTextFont);
