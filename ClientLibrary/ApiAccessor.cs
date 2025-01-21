@@ -11,7 +11,7 @@ public class ApiAccessor
 
     public async Task Login(string username, string password)
     {
-        string url = $"{Constants.UsersBaseUrl}/login";
+        string url = $"{Constants.UsersBaseUrl}/user-login";
 
         Credentials credentials = new(username, password);
         HttpResponseMessage response = await client.PostAsJsonAsync(url, credentials);
@@ -27,7 +27,7 @@ public class ApiAccessor
 
     public async Task SignUp(string username, string password)
     {
-        string url = $"{Constants.UsersBaseUrl}/signup";
+        string url = $"{Constants.UsersBaseUrl}/user-signup";
 
         Credentials credentials = new(username, password);
         HttpResponseMessage response = await client.PostAsJsonAsync(url, credentials);

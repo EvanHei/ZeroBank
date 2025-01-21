@@ -23,8 +23,7 @@ public class UsersController : ControllerBase
         _logger = logger;
     }
 
-    // TODO: change to user-login
-    [HttpPost("login")]
+    [HttpPost("user-login")]
     public IResult Login(Credentials userCredentials)
     {
         _logger.LogInformation($"Login attempt for user: {userCredentials.Username}");
@@ -64,7 +63,7 @@ public class UsersController : ControllerBase
         }    
     }
 
-    [HttpPost("signup")]
+    [HttpPost("user-signup")]
     public IResult SignUp(Credentials userCredentials)
     {
         _logger.LogInformation($"Sign-up attempt for user: {userCredentials.Username}");

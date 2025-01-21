@@ -82,4 +82,6 @@ public class AdminController : Controller
             return Results.Problem(ex.Message);
         }
     }
+
+    // TODO: add delete admin endpoint
 }
