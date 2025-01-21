@@ -1,11 +1,11 @@
 ﻿namespace SharedLibrary.Models;
 
-public class UserCredentials
+public class Credentials
 {
     public string Username { get; set; }
     public string Password { get; set; }
 
-    public UserCredentials(string username, string password)
+    public Credentials(string username, string password)
     {
         Username = username;
         Password = password;

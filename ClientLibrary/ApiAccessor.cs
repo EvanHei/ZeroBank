@@ -13,7 +13,7 @@ public class ApiAccessor
     {
         string url = $"{Constants.UsersBaseUrl}/login";
 
-        UserCredentials credentials = new(username, password);
+        Credentials credentials = new(username, password);
         HttpResponseMessage response = await client.PostAsJsonAsync(url, credentials);
         if (!response.IsSuccessStatusCode)
         {
@@ -29,7 +29,7 @@ public class ApiAccessor
     {
         string url = $"{Constants.UsersBaseUrl}/signup";
 
-        UserCredentials credentials = new(username, password);
+        Credentials credentials = new(username, password);
         HttpResponseMessage response = await client.PostAsJsonAsync(url, credentials);
         if (!response.IsSuccessStatusCode)
         {

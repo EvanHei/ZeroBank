@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ServerLibrary;
 using SharedLibrary.Models;
@@ -12,31 +13,30 @@ namespace WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UsersController : ControllerBase
+public class AdminController : Controller
 {
     private readonly IConfiguration _configuration;
     private readonly ILogger<UsersController> _logger;
-
-    public UsersController(IConfiguration configuration, ILogger<UsersController> logger)
+    public AdminController(IConfiguration configuration, ILogger<UsersController> logger)
     {
         _configuration = configuration;
         _logger = logger;
     }
 
-    // TODO: change to user-login
-    [HttpPost("login")]
-    public IResult Login(Credentials userCredentials)
+    [HttpPost("admin-login")]
+    public IResult AdminLogin(Credentials adminCredentials)
     {
-        _logger.LogInformation($"Login attempt for user: {userCredentials.Username}");
+        _logger.LogInformation($"Login attempt for admin: {adminCredentials.Username}");
 
         try
         {
-            User user = ServerConfig.LoadUser(userCredentials);
+            User admin = ServerConfig.LoadAdmin(adminCredentials);
 
             // create claims
             List<Claim> claims = new();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
-            claims.Add(new Claim(ClaimTypes.Name, user.Username));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, admin.Id.ToString()));
+            claims.Add(new Claim(ClaimTypes.Name, admin.Username));
+            claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
             // create the new JWT token
             JwtSecurityToken token = new
@@ -54,30 +54,31 @@ public class UsersController : ControllerBase
 
             // return JWT token
             string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-            _logger.LogInformation($"JWT token generated successfully for user: {user.Username}");
+            _logger.LogInformation($"JWT token generated successfully for admin: {admin.Username}");
             return Results.Ok(tokenString);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred while processing the login for user: {userCredentials.Username}");
+            _logger.LogError(ex, $"An error occurred while processing the login for admin: {adminCredentials.Username}");
             return Results.Problem(ex.Message);
-        }    
+        }
     }
 
-    [HttpPost("signup")]
-    public IResult SignUp(Credentials userCredentials)
+    [HttpPost("new-admin")]
+    [Authorize(Roles = "Admin")]
+    public IResult NewAdmin(Credentials adminCredentials)
     {
-        _logger.LogInformation($"Sign-up attempt for user: {userCredentials.Username}");
+        _logger.LogInformation($"New admin creation attempt for admin: {adminCredentials.Username}");
 
         try
         {
-            ServerConfig.CreateUser(userCredentials);
-            _logger.LogInformation($"User signed up successfully: {userCredentials.Username}");
+            ServerConfig.CreateAdmin(adminCredentials);
+            _logger.LogInformation($"Admin created successfully: {adminCredentials.Username}");
             return Results.Ok();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred while processing the sign-up for user: {userCredentials.Username}");
+            _logger.LogError(ex, $"An error occurred while processing the new admin creation for admin: {adminCredentials.Username}");
             return Results.Problem(ex.Message);
         }
     }

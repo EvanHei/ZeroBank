@@ -11,7 +11,7 @@ public static class ServerConfig
     public static JsonAccessor DataAccessor { get; set; } = new JsonAccessor();
     public static EncryptionHelper EncryptionHelper { get; set; } = new EncryptionHelper();
 
-    public static void CreateUser(UserCredentials userCredentials)
+    public static void CreateUser(Credentials userCredentials)
     {
         if (string.IsNullOrEmpty(userCredentials.Username) || string.IsNullOrEmpty(userCredentials.Password))
         {
@@ -37,7 +37,33 @@ public static class ServerConfig
         DataAccessor.CreateUser(newUser);
     }
 
-    public static User LoadUser(UserCredentials userCredentials)
+    public static void CreateAdmin(Credentials adminCredentials)
+    {
+        if (string.IsNullOrEmpty(adminCredentials.Username) || string.IsNullOrEmpty(adminCredentials.Password))
+        {
+            throw new ArgumentException("Username and password must not be empty.");
+        }
+
+        // check if the admin already exists
+        User admin = DataAccessor.LoadAdmin(adminCredentials);
+        if (admin != null)
+        {
+            throw new InvalidOperationException("A user with the provided credentials already exists.");
+        }
+
+        // hash the password
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(adminCredentials.Password);
+
+        User newAdmin = new(adminCredentials.Username, passwordHash);
+
+        // set user ID
+        List<User> admins = DataAccessor.LoadAdmins();
+        newAdmin.Id = admins.Count != 0 ? admins.Max(u => u.Id) + 1 : 1;
+
+        DataAccessor.CreateAdmin(newAdmin);
+    }
+
+    public static User LoadUser(Credentials userCredentials)
     {
         if (string.IsNullOrEmpty(userCredentials.Username) || string.IsNullOrEmpty(userCredentials.Password))
         {
@@ -52,6 +78,23 @@ public static class ServerConfig
         }
 
         return user;
+    }
+
+    public static User LoadAdmin(Credentials adminCredentials)
+    {
+        if (string.IsNullOrEmpty(adminCredentials.Username) || string.IsNullOrEmpty(adminCredentials.Password))
+        {
+            throw new ArgumentException("Username and password must not be empty.");
+        }
+
+        // get admin from database
+        User admin = DataAccessor.LoadAdmin(adminCredentials);
+        if (admin == null)
+        {
+            throw new InvalidOperationException("Admin not found.");
+        }
+
+        return admin;
     }
 
     public static void CreatePartialAccount(Account account, int userId)

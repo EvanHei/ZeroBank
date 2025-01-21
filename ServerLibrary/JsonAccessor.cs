@@ -1,5 +1,6 @@
 ﻿using Microsoft.Research.SEAL;
 using SharedLibrary.Models;
+using System.IO;
 using System.Text.Json;
 
 namespace ServerLibrary;
@@ -11,6 +12,18 @@ public class JsonAccessor
         Directory.CreateDirectory(Constants.ServerDirectoryPath);
         Directory.CreateDirectory(Constants.AccountsDirectoryPath);
         Directory.CreateDirectory(Constants.PrivateKeysDirectoryPath);
+
+        if (!File.Exists(Constants.AdminsFilePath))
+        {
+            // create admin with default credentials
+            Credentials adminCredentials = new("admin", "admin");
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(adminCredentials.Password);
+            User defaultAdmin = new(adminCredentials.Username, passwordHash);
+
+            string json = JsonSerializer.Serialize(new List<User>());
+            File.WriteAllText(Constants.AdminsFilePath, json);
+            CreateAdmin(defaultAdmin);
+        }
 
         if (!File.Exists(Constants.UsersFilePath))
         {
@@ -25,7 +38,7 @@ public class JsonAccessor
         }
     }
 
-    public User LoadUser(UserCredentials userCredentials)
+    public User LoadUser(Credentials userCredentials)
     {
         User user = LoadUsers().FirstOrDefault(u => u.Username.Equals(userCredentials.Username, StringComparison.OrdinalIgnoreCase));
 
@@ -36,6 +49,31 @@ public class JsonAccessor
         }
 
         return null;
+    }
+
+    public User LoadAdmin(Credentials userCredentials)
+    {
+        User admin = LoadAdmins().FirstOrDefault(u => u.Username.Equals(userCredentials.Username, StringComparison.OrdinalIgnoreCase));
+
+        // verify the password
+        if (admin != null && BCrypt.Net.BCrypt.Verify(userCredentials.Password, admin.PasswordHash))
+        {
+            return admin;
+        }
+
+        return null;
+    }
+
+    public List<User> LoadAdmins()
+    {
+        if (!File.Exists(Constants.AdminsFilePath))
+        {
+            throw new FileNotFoundException($"File not found: {Constants.AdminsFilePath}");
+        }
+
+        string json = File.ReadAllText(Constants.AdminsFilePath);
+        List<User> admins = JsonSerializer.Deserialize<List<User>>(json);
+        return admins;
     }
 
     public List<User> LoadUsers()
@@ -67,6 +105,25 @@ public class JsonAccessor
         users.Add(user);
         string json = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(Constants.UsersFilePath, json);
+    }
+
+    public void CreateAdmin(User admin)
+    {
+        if (admin == null)
+        {
+            throw new ArgumentException("User cannot be null.");
+        }
+
+        List<User> admins = LoadAdmins();
+
+        if (admins.Any(u => u.Username == admin.Username))
+        {
+            throw new ArgumentException("Username taken.");
+        }
+
+        admins.Add(admin);
+        string json = JsonSerializer.Serialize(admins, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(Constants.AdminsFilePath, json);
     }
 
     public RelinKeys LoadRelinKeys(int id)

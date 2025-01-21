@@ -15,5 +15,6 @@ public static class Constants
     public static readonly string AccountsDirectoryPath = Path.Combine(ServerDirectoryPath, "Accounts");
     public static readonly string PrivateKeysDirectoryPath = Path.Combine(ServerDirectoryPath, "Private Keys");
     public static readonly string UsersFilePath = Path.Combine(ServerDirectoryPath, "Users.json");
+    public static readonly string AdminsFilePath = Path.Combine(ServerDirectoryPath, "Admins.json");
     public static readonly string UserPrivateKeysFilePath = Path.Combine(ServerDirectoryPath, "UserPrivateKeys.json");
 }

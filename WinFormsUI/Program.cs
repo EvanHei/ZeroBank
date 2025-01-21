@@ -12,13 +12,13 @@ internal static class Program
     [STAThread]
     static async Task Main()
     {
-        string username1 = "Evan";
-        string password1 = "password";
+        //string username1 = "Evan";
+        //string password1 = "password";
 
         try
         {
             //await ClientConfig.SignUp(username1, password1);
-            await ClientConfig.ApiAccessor.Login(username1, password1);
+            //await ClientConfig.ApiAccessor.Login(username1, password1);
         }
         catch (Exception ex)
         {
@@ -26,6 +26,6 @@ internal static class Program
         }
 
         ApplicationConfiguration.Initialize();
-        Application.Run(new DashboardForm());
+        Application.Run(new LoginForm());
     }
 }
