@@ -1,3 +1,6 @@
+using ServerLibrary;
+using SharedLibrary.Models;
+
 namespace AdminUI.Forms
 {
     public partial class LoginForm : Form
@@ -7,6 +10,19 @@ namespace AdminUI.Forms
             InitializeComponent();
         }
 
+        private bool ValidateFields()
+        {
+            bool output = true;
+
+            if (string.IsNullOrEmpty(UsernameTextBox.Text) ||
+                string.IsNullOrEmpty(PasswordTextBox.Text))
+            {
+                output = false;
+            }
+
+            return output;
+        }
+
         private void LoginPictureBox_Click(object sender, EventArgs e)
         {
 
@@ -14,17 +30,65 @@ namespace AdminUI.Forms
 
         private void AddPictureBox_Click(object sender, EventArgs e)
         {
+            ShowAddAdmin();
+        }
 
+        private void ShowAddAdmin()
+        {
+            LoginPictureBox.Visible = false;
+            AddPictureBox.Visible = false;
+            AddAdminPictureBox.Visible = true;
+            BackArrowPictureBox.Visible = true;
+            ErrorLabel.Visible = false;
+
+            HeaderLabel.Text = "   Add Admin";
+            CenterLabelHorizontally(HeaderLabel);
         }
 
         private void AddAdminPictureBox_Click(object sender, EventArgs e)
         {
+            if (!ValidateFields())
+            {
+                return;
+            }
 
+            try
+            {
+                Credentials adminCredentials = new(UsernameTextBox.Text, PasswordTextBox.Text);
+                ServerConfig.CreateAdmin(adminCredentials);
+
+                this.Hide();
+                //DashboardForm dashboardForm = new();
+                //dashboardForm.ShowDialog();
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                ErrorLabel.Text = "Add admin failed";
+                ErrorLabel.Visible = true;
+            }
         }
 
         private void BackArrowPictureBox_Click(object sender, EventArgs e)
         {
+            ShowLogin();
+        }
 
+        private void ShowLogin()
+        {
+            LoginPictureBox.Visible = true;
+            AddPictureBox.Visible = true;
+            AddAdminPictureBox.Visible = false;
+            BackArrowPictureBox.Visible = false;
+            ErrorLabel.Visible = false;
+
+            HeaderLabel.Text = "ZeroBank Admin";
+            CenterLabelHorizontally(HeaderLabel);
+        }
+
+        private void CenterLabelHorizontally(Label label)
+        {
+            label.Left = (this.ClientSize.Width - label.Width) / 2;
         }
 
         private void LoginPictureBox_Paint(object sender, PaintEventArgs e)

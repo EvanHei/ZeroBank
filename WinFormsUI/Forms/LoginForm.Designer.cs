@@ -126,14 +126,15 @@
             // 
             // ErrorLabel
             // 
-            ErrorLabel.AutoSize = true;
-            ErrorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            ErrorLabel.Dock = DockStyle.Bottom;
+            ErrorLabel.Font = new Font("Segoe UI Emoji", 12F);
             ErrorLabel.ForeColor = Color.Red;
-            ErrorLabel.Location = new Point(380, 371);
+            ErrorLabel.Location = new Point(0, 470);
             ErrorLabel.Name = "ErrorLabel";
-            ErrorLabel.Size = new Size(67, 21);
+            ErrorLabel.Size = new Size(841, 21);
             ErrorLabel.TabIndex = 11;
             ErrorLabel.Text = "<error>";
+            ErrorLabel.TextAlign = ContentAlignment.MiddleRight;
             ErrorLabel.Visible = false;
             // 
             // EnrollPictureBox
