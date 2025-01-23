@@ -51,31 +51,6 @@ public class JsonAccessor
         return null;
     }
 
-    public User LoadAdmin(Credentials userCredentials)
-    {
-        User admin = LoadAdmins().FirstOrDefault(u => u.Username.Equals(userCredentials.Username, StringComparison.OrdinalIgnoreCase));
-
-        // verify the password
-        if (admin != null && BCrypt.Net.BCrypt.Verify(userCredentials.Password, admin.PasswordHash))
-        {
-            return admin;
-        }
-
-        return null;
-    }
-
-    public List<User> LoadAdmins()
-    {
-        if (!File.Exists(Constants.AdminsFilePath))
-        {
-            throw new FileNotFoundException($"File not found: {Constants.AdminsFilePath}");
-        }
-
-        string json = File.ReadAllText(Constants.AdminsFilePath);
-        List<User> admins = JsonSerializer.Deserialize<List<User>>(json);
-        return admins;
-    }
-
     public List<User> LoadUsers()
     {
         if (!File.Exists(Constants.UsersFilePath))
@@ -107,6 +82,31 @@ public class JsonAccessor
         File.WriteAllText(Constants.UsersFilePath, json);
     }
 
+    public User LoadAdmin(Credentials userCredentials)
+    {
+        User admin = LoadAdmins().FirstOrDefault(u => u.Username.Equals(userCredentials.Username, StringComparison.OrdinalIgnoreCase));
+
+        // verify the password
+        if (admin != null && BCrypt.Net.BCrypt.Verify(userCredentials.Password, admin.PasswordHash))
+        {
+            return admin;
+        }
+
+        return null;
+    }
+
+    public List<User> LoadAdmins()
+    {
+        if (!File.Exists(Constants.AdminsFilePath))
+        {
+            throw new FileNotFoundException($"File not found: {Constants.AdminsFilePath}");
+        }
+
+        string json = File.ReadAllText(Constants.AdminsFilePath);
+        List<User> admins = JsonSerializer.Deserialize<List<User>>(json);
+        return admins;
+    }
+
     public void CreateAdmin(User admin)
     {
         if (admin == null)
@@ -118,7 +118,7 @@ public class JsonAccessor
 
         if (admins.Any(u => u.Username == admin.Username))
         {
-            throw new ArgumentException("Username taken.");
+            throw new ArgumentException("Admin username taken.");
         }
 
         admins.Add(admin);

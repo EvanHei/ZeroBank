@@ -37,6 +37,23 @@ public static class ServerConfig
         DataAccessor.CreateUser(newUser);
     }
 
+    public static User LoadUser(Credentials userCredentials)
+    {
+        if (string.IsNullOrEmpty(userCredentials.Username) || string.IsNullOrEmpty(userCredentials.Password))
+        {
+            throw new ArgumentException("Username and password must not be empty.");
+        }
+
+        // get user from database
+        User user = DataAccessor.LoadUser(userCredentials);
+        if (user == null)
+        {
+            throw new InvalidOperationException("User not found.");
+        }
+
+        return user;
+    }
+
     public static void CreateAdmin(Credentials adminCredentials)
     {
         if (string.IsNullOrEmpty(adminCredentials.Username) || string.IsNullOrEmpty(adminCredentials.Password))
@@ -56,45 +73,11 @@ public static class ServerConfig
 
         User newAdmin = new(adminCredentials.Username, passwordHash);
 
-        // set user ID
+        // set admin ID
         List<User> admins = DataAccessor.LoadAdmins();
         newAdmin.Id = admins.Count != 0 ? admins.Max(u => u.Id) + 1 : 1;
 
         DataAccessor.CreateAdmin(newAdmin);
-    }
-
-    public static void DeleteAdmin(Credentials adminCredentials)
-    {
-        if (string.IsNullOrEmpty(adminCredentials.Username) || string.IsNullOrEmpty(adminCredentials.Password))
-        {
-            throw new ArgumentException("Username and password must not be empty.");
-        }
-
-        // check if the admin exists
-        User adminToDelete = DataAccessor.LoadAdmin(adminCredentials);
-        if (adminToDelete == null)
-        {
-            throw new InvalidOperationException("No admin exists with the provided credentials.");
-        }
-
-        DataAccessor.DeleteAdmin(adminToDelete);
-    }
-
-    public static User LoadUser(Credentials userCredentials)
-    {
-        if (string.IsNullOrEmpty(userCredentials.Username) || string.IsNullOrEmpty(userCredentials.Password))
-        {
-            throw new ArgumentException("Username and password must not be empty.");
-        }
-
-        // get user from database
-        User user = DataAccessor.LoadUser(userCredentials);
-        if (user == null)
-        {
-            throw new InvalidOperationException("User not found.");
-        }
-
-        return user;
     }
 
     public static User LoadAdmin(Credentials adminCredentials)
@@ -112,6 +95,23 @@ public static class ServerConfig
         }
 
         return admin;
+    }
+
+    public static void DeleteAdmin(Credentials adminCredentials)
+    {
+        if (string.IsNullOrEmpty(adminCredentials.Username) || string.IsNullOrEmpty(adminCredentials.Password))
+        {
+            throw new ArgumentException("Username and password must not be empty.");
+        }
+
+        // check if the admin exists
+        User adminToDelete = DataAccessor.LoadAdmin(adminCredentials);
+        if (adminToDelete == null)
+        {
+            throw new InvalidOperationException("No admin exists with the provided credentials.");
+        }
+
+        DataAccessor.DeleteAdmin(adminToDelete);
     }
 
     public static void CreatePartialAccount(Account account, int userId)
