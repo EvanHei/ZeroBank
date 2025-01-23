@@ -8,7 +8,7 @@ using System.Security.Policy;
 using System.Transactions;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace WinFormsUI
+namespace UserUI.Forms
 {
     public partial class DashboardForm : Form
     {

@@ -1,4 +1,4 @@
-﻿namespace WinFormsUI.Forms
+﻿namespace UserUI.Forms
 {
     partial class LoginForm
     {
