@@ -83,5 +83,22 @@ public class AdminController : Controller
         }
     }
 
-    // TODO: add delete admin endpoint
+    [HttpPost("delete-admin")]
+    [Authorize(Roles = "Admin")]
+    public IResult DeleteAdmin(Credentials adminCredentials)
+    {
+        _logger.LogInformation($"DeleteAdmin method called for admin: {adminCredentials.Username}");
+
+        try
+        {
+            ServerConfig.DeleteAdmin(adminCredentials);
+            _logger.LogInformation($"Admin deleted successfully: {adminCredentials.Username}");
+            return Results.Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"An error occurred while deleting admin: {adminCredentials.Username}");
+            return Results.Problem(ex.Message);
+        }
+    }
 }

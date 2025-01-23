@@ -126,6 +126,26 @@ public class JsonAccessor
         File.WriteAllText(Constants.AdminsFilePath, json);
     }
 
+    public void DeleteAdmin(User admin)
+    {
+        if (admin == null)
+        {
+            throw new ArgumentException("Admin cannot be null.");
+        }
+
+        List<User> admins = LoadAdmins();
+
+        User adminToDelete = admins.FirstOrDefault(u => u.Username == admin.Username);
+        if (adminToDelete == null)
+        {
+            throw new ArgumentException("Admin not found.");
+        }
+
+        admins.Remove(adminToDelete);
+        string json = JsonSerializer.Serialize(admins, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(Constants.AdminsFilePath, json);
+    }
+
     public RelinKeys LoadRelinKeys(int id)
     {
         Account account = LoadAccount(id);

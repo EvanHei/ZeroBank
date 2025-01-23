@@ -63,6 +63,23 @@ public static class ServerConfig
         DataAccessor.CreateAdmin(newAdmin);
     }
 
+    public static void DeleteAdmin(Credentials adminCredentials)
+    {
+        if (string.IsNullOrEmpty(adminCredentials.Username) || string.IsNullOrEmpty(adminCredentials.Password))
+        {
+            throw new ArgumentException("Username and password must not be empty.");
+        }
+
+        // check if the admin exists
+        User adminToDelete = DataAccessor.LoadAdmin(adminCredentials);
+        if (adminToDelete == null)
+        {
+            throw new InvalidOperationException("No admin exists with the provided credentials.");
+        }
+
+        DataAccessor.DeleteAdmin(adminToDelete);
+    }
+
     public static User LoadUser(Credentials userCredentials)
     {
         if (string.IsNullOrEmpty(userCredentials.Username) || string.IsNullOrEmpty(userCredentials.Password))
