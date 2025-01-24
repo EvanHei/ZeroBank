@@ -3,9 +3,9 @@ using ClientLibrary.Models;
 using Microsoft.Research.SEAL;
 using SharedLibrary;
 using SharedLibrary.Models;
-using UserUI.Forms;
+using ClientUI.Forms;
 
-namespace UserUI;
+namespace ClientUI;
 
 internal static class Program
 {

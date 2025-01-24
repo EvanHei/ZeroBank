@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace UserUI.Forms
+namespace ClientUI.Forms
 {
     public partial class LoginForm : Form
     {

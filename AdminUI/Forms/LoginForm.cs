@@ -25,7 +25,26 @@ namespace AdminUI.Forms
 
         private void LoginPictureBox_Click(object sender, EventArgs e)
         {
+            if (!ValidateFields())
+            {
+                return;
+            }
 
+            try
+            {
+                // TODO: implement
+                //await AdminConfig.ApiAccessor.Login(UsernameTextBox.Text, PasswordTextBox.Text);
+
+                this.Hide();
+                DashboardForm dashboardForm = new();
+                dashboardForm.ShowDialog();
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                ErrorLabel.Text = "Log in failed";
+                ErrorLabel.Visible = true;
+            }
         }
 
         private void AddPictureBox_Click(object sender, EventArgs e)
@@ -55,11 +74,13 @@ namespace AdminUI.Forms
             try
             {
                 Credentials adminCredentials = new(UsernameTextBox.Text, PasswordTextBox.Text);
+
+                // TODO: replace with AdminConfig.ApiAccessor.CreateAdmin(...);
                 ServerConfig.CreateAdmin(adminCredentials);
 
                 this.Hide();
-                //DashboardForm dashboardForm = new();
-                //dashboardForm.ShowDialog();
+                DashboardForm dashboardForm = new();
+                dashboardForm.ShowDialog();
                 this.Close();
             }
             catch (Exception ex)

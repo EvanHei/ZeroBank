@@ -64,9 +64,9 @@ public class AdminController : Controller
         }
     }
 
-    [HttpPost("new-admin")]
+    [HttpPost("create-admin")]
     [Authorize(Roles = "Admin")]
-    public IResult NewAdmin(Credentials adminCredentials)
+    public IResult CreateAdmin(Credentials adminCredentials)
     {
         _logger.LogInformation($"New admin creation attempt for admin: {adminCredentials.Username}");
 
@@ -101,4 +101,6 @@ public class AdminController : Controller
             return Results.Problem(ex.Message);
         }
     }
+
+    // TODO: add a user data retrieval endpoint
 }
