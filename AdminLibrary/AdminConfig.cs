@@ -10,19 +10,20 @@ public static class AdminConfig
 {
     public static ApiAccessor ApiAccessor { get; set; } = new ApiAccessor();
 
-    public static async Task Login(string username, string password)
+    public static async Task AdminLogin(string username, string password)
     {
-        throw new NotImplementedException();
+        await ApiAccessor.AdminLogin(username, password);
     }
 
-    public static async Task CreateAdmin(string username, string password)
+    public static async Task AdminCreate(string username, string password)
     {
-        throw new NotImplementedException();
+        await ApiAccessor.AdminCreate(username, password);
+        await ApiAccessor.AdminLogin(username, password);
     }
 
-    public static async Task DeleteAdmin(string username, string password)
+    public static async Task AdminDelete(string username, string password)
     {
-        throw new NotImplementedException();
+        await ApiAccessor.AdminDelete(username, password);
     }
 
     // TODO: add a user data retrieval method

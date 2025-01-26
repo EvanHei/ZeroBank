@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AdminLibrary\AdminLibrary.csproj" />
     <ProjectReference Include="..\ServerLibrary\ServerLibrary.csproj" />
   </ItemGroup>
 

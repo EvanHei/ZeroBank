@@ -1,19 +1,34 @@
+using AdminLibrary;
 using AdminUI.Forms;
 
-namespace AdminUI
+namespace AdminUI;
+
+internal static class Program
 {
-    internal static class Program
+    /// <summary>
+    ///  The main entry point for the application.
+    /// </summary>
+    [STAThread]
+    static async Task Main()
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        string username1 = "admin";
+        string password1 = "admin";
+
+        string username2 = "string";
+        string password2 = "string";
+
+        try
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
-            Application.Run(new LoginForm());
+            //await AdminConfig.AdminLogin(username1, password1);
+            //await AdminConfig.AdminCreate(username2, password2);
+            //await AdminConfig.AdminDelete(username2, password2);
         }
+        catch (Exception ex)
+        {
+            string error = ex.Message;
+        }
+
+        ApplicationConfiguration.Initialize();
+        Application.Run(new LoginForm());
     }
 }

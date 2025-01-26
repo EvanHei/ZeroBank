@@ -21,6 +21,7 @@ public class ApiAccessor
             throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorMessage}");
         }
 
+        // retrieve and add token as a header
         string token = await response.Content.ReadFromJsonAsync<string>();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }

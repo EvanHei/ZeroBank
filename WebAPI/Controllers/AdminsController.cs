@@ -13,17 +13,17 @@ namespace WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AdminController : Controller
+public class AdminsController : Controller
 {
     private readonly IConfiguration _configuration;
     private readonly ILogger<UsersController> _logger;
-    public AdminController(IConfiguration configuration, ILogger<UsersController> logger)
+    public AdminsController(IConfiguration configuration, ILogger<UsersController> logger)
     {
         _configuration = configuration;
         _logger = logger;
     }
 
-    [HttpPost("admin-login")]
+    [HttpPost("login")]
     public IResult AdminLogin(Credentials adminCredentials)
     {
         _logger.LogInformation($"Login attempt for admin: {adminCredentials.Username}");
@@ -64,7 +64,7 @@ public class AdminController : Controller
         }
     }
 
-    [HttpPost("create-admin")]
+    [HttpPost("create")]
     [Authorize(Roles = "Admin")]
     public IResult CreateAdmin(Credentials adminCredentials)
     {
@@ -83,7 +83,7 @@ public class AdminController : Controller
         }
     }
 
-    [HttpPost("delete-admin")]
+    [HttpPost("delete")]
     [Authorize(Roles = "Admin")]
     public IResult DeleteAdmin(Credentials adminCredentials)
     {

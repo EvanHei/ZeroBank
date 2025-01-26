@@ -1,3 +1,4 @@
+using AdminLibrary;
 using ServerLibrary;
 using SharedLibrary.Models;
 
@@ -23,7 +24,7 @@ namespace AdminUI.Forms
             return output;
         }
 
-        private void LoginPictureBox_Click(object sender, EventArgs e)
+        private async void LoginPictureBox_Click(object sender, EventArgs e)
         {
             if (!ValidateFields())
             {
@@ -32,8 +33,7 @@ namespace AdminUI.Forms
 
             try
             {
-                // TODO: implement
-                //await AdminConfig.ApiAccessor.Login(UsernameTextBox.Text, PasswordTextBox.Text);
+                await AdminConfig.AdminLogin(UsernameTextBox.Text, PasswordTextBox.Text);
 
                 this.Hide();
                 DashboardForm dashboardForm = new();
