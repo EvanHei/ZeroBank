@@ -40,7 +40,7 @@ namespace ClientUI.Forms
 
             try
             {
-                await ClientConfig.ApiAccessor.Login(UsernameTextBox.Text, PasswordTextBox.Text);
+                await ClientConfig.Login(UsernameTextBox.Text, PasswordTextBox.Text);
 
                 this.Hide();
                 DashboardForm dashboardForm = new();

@@ -11,10 +11,7 @@ public class ApiAccessor
 
     public async Task Login(string username, string password)
     {
-        string url = $"{Constants.UsersBaseUrl}/user-login";
-
-        Credentials credentials = new(username, password);
-        HttpResponseMessage response = await client.PostAsJsonAsync(url, credentials);
+        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.UserLoginUrl, new Credentials(username, password));
         if (!response.IsSuccessStatusCode)
         {
             string errorMessage = await response.Content.ReadAsStringAsync();
@@ -28,10 +25,7 @@ public class ApiAccessor
 
     public async Task SignUp(string username, string password)
     {
-        string url = $"{Constants.UsersBaseUrl}/user-signup";
-
-        Credentials credentials = new(username, password);
-        HttpResponseMessage response = await client.PostAsJsonAsync(url, credentials);
+        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.UserSignUpUrl, new Credentials(username, password));
         if (!response.IsSuccessStatusCode)
         {
             string errorMessage = await response.Content.ReadAsStringAsync();
@@ -60,8 +54,7 @@ public class ApiAccessor
 
     public async Task<List<Account>> GetAccounts()
     {
-
-        HttpResponseMessage response = await client.GetAsync(Constants.AccountsBaseUrl);
+        HttpResponseMessage response = await client.GetAsync(Constants.AccountBaseUrl);
         if (!response.IsSuccessStatusCode)
         {
             string errorContent = await response.Content.ReadAsStringAsync();
@@ -74,9 +67,7 @@ public class ApiAccessor
 
     public async Task<Account> PostPartialAccount(Account account)
     {
-        string url = $"{Constants.AccountsBaseUrl}/partial-account";
-
-        HttpResponseMessage response = await client.PostAsJsonAsync(url, account);
+        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.AccountPartialAccountUrl, account);
         if (!response.IsSuccessStatusCode)
         {
             string errorMessage = await response.Content.ReadAsStringAsync();
@@ -89,9 +80,7 @@ public class ApiAccessor
 
     public async Task PostFullAccount(Account account)
     {
-        string url = $"{Constants.AccountsBaseUrl}/full-account";
-
-        HttpResponseMessage response = await client.PostAsJsonAsync(url, account);
+        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.AccountFullAccountUrl, account);
         if (!response.IsSuccessStatusCode)
         {
             string errorMessage = await response.Content.ReadAsStringAsync();
@@ -99,26 +88,9 @@ public class ApiAccessor
         }
     }
 
-    public async Task<Account> CloseAccount(Account account, byte[] key)
-    {
-        string url = $"{Constants.AccountsBaseUrl}/close";
-
-        HttpResponseMessage response = await client.PostAsJsonAsync(url, new CloseAccountRequest(account, key));
-        if (!response.IsSuccessStatusCode)
-        {
-            string errorContent = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorContent}");
-        }
-
-        Account closedAccount = await response.Content.ReadFromJsonAsync<Account>();
-        return closedAccount;
-    }
-
     public async Task<CiphertextTransaction> PostTransaction(CiphertextTransaction transaction)
     {
-        string url = $"{Constants.AccountsBaseUrl}/transaction";
-
-        HttpResponseMessage response = await client.PostAsJsonAsync(url, transaction);
+        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.AccountTransactionUrl, transaction);
         if (!response.IsSuccessStatusCode)
         {
             string errorContent = await response.Content.ReadAsStringAsync();
@@ -127,5 +99,18 @@ public class ApiAccessor
 
         CiphertextTransaction returnedTransaction = await response.Content.ReadFromJsonAsync<CiphertextTransaction>();
         return returnedTransaction;
+    }
+
+    public async Task<Account> CloseAccount(Account account, byte[] key)
+    {
+        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.AccountCloseUrl, new CloseAccountRequest(account, key));
+        if (!response.IsSuccessStatusCode)
+        {
+            string errorContent = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorContent}");
+        }
+
+        Account closedAccount = await response.Content.ReadFromJsonAsync<Account>();
+        return closedAccount;
     }
 }

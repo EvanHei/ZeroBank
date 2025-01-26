@@ -9,11 +9,11 @@ namespace WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AccountsController : ControllerBase
+public class AccountController : ControllerBase
 {
-    private readonly ILogger<AccountsController> _logger;
+    private readonly ILogger<AccountController> _logger;
 
-    public AccountsController(ILogger<AccountsController> logger)
+    public AccountController(ILogger<AccountController> logger)
     {
         _logger = logger;
     }
@@ -50,7 +50,7 @@ public class AccountsController : ControllerBase
 
     private static readonly Dictionary<int, (int AccountId, System.Timers.Timer Timer)> UserAccountStates = new();
 
-    [HttpPost("partial-account")]
+    [HttpPost("post-partial")]
     [Authorize]
     public IResult PostPartialAccount([FromBody] Account account)
     {
@@ -96,7 +96,7 @@ public class AccountsController : ControllerBase
         }
     }
 
-    [HttpPost("full-account")]
+    [HttpPost("post-full")]
     [Authorize]
     public IResult PostFullAccount([FromBody] Account account)
     {
@@ -129,27 +129,6 @@ public class AccountsController : ControllerBase
         }
     }
 
-    [HttpPost("close")]
-    [Authorize]
-    public IResult CloseAccount([FromBody] CloseAccountRequest request)
-    {
-        _logger.LogInformation($"CloseAccount method called for account ID: {request.Account.Id}");
-
-        try
-        {
-            string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            int userId = int.Parse(userIdClaim);
-            Account closedAccount = ServerConfig.CloseAccount(request.Account, userId, request.Key);
-            _logger.LogInformation($"Successfully closed account ID: {request.Account.Id}");
-            return Results.Ok(closedAccount);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, $"An error occurred while closing account ID: {request.Account.Id}");
-            return Results.Problem(ex.Message);
-        }
-    }
-
     [HttpPost("transaction")]
     [Authorize]
     public IResult PostTransaction([FromBody] CiphertextTransaction transaction)
@@ -167,6 +146,27 @@ public class AccountsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, $"An error occurred while adding a transaction for account ID: {transaction.AccountId}");
+            return Results.Problem(ex.Message);
+        }
+    }
+
+    [HttpPost("close")]
+    [Authorize]
+    public IResult CloseAccount([FromBody] CloseAccountRequest request)
+    {
+        _logger.LogInformation($"CloseAccount method called for account ID: {request.Account.Id}");
+
+        try
+        {
+            string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = int.Parse(userIdClaim);
+            Account closedAccount = ServerConfig.CloseAccount(request.Account, userId, request.Key);
+            _logger.LogInformation($"Successfully closed account ID: {request.Account.Id}");
+            return Results.Ok(closedAccount);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"An error occurred while closing account ID: {request.Account.Id}");
             return Results.Problem(ex.Message);
         }
     }

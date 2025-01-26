@@ -12,18 +12,18 @@ namespace WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UsersController : ControllerBase
+public class UserController : ControllerBase
 {
     private readonly IConfiguration _configuration;
-    private readonly ILogger<UsersController> _logger;
+    private readonly ILogger<UserController> _logger;
 
-    public UsersController(IConfiguration configuration, ILogger<UsersController> logger)
+    public UserController(IConfiguration configuration, ILogger<UserController> logger)
     {
         _configuration = configuration;
         _logger = logger;
     }
 
-    [HttpPost("user-login")]
+    [HttpPost("login")]
     public IResult Login(Credentials userCredentials)
     {
         _logger.LogInformation($"Login attempt for user: {userCredentials.Username}");
@@ -63,7 +63,7 @@ public class UsersController : ControllerBase
         }    
     }
 
-    [HttpPost("user-signup")]
+    [HttpPost("signup")]
     public IResult SignUp(Credentials userCredentials)
     {
         _logger.LogInformation($"Sign-up attempt for user: {userCredentials.Username}");

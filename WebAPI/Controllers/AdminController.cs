@@ -16,8 +16,8 @@ namespace WebAPI.Controllers;
 public class AdminController : Controller
 {
     private readonly IConfiguration _configuration;
-    private readonly ILogger<UsersController> _logger;
-    public AdminController(IConfiguration configuration, ILogger<UsersController> logger)
+    private readonly ILogger<UserController> _logger;
+    public AdminController(IConfiguration configuration, ILogger<UserController> logger)
     {
         _configuration = configuration;
         _logger = logger;
