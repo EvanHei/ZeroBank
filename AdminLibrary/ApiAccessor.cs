@@ -15,9 +15,7 @@ public class ApiAccessor
 
     public async Task AdminLogin(string username, string password)
     {
-        Credentials credentials = new(username, password);
-
-        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.AdminLoginUrl, credentials);
+        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.AdminLoginUrl, new Credentials(username, password));
         if (!response.IsSuccessStatusCode)
         {
             string errorMessage = await response.Content.ReadAsStringAsync();
@@ -31,9 +29,7 @@ public class ApiAccessor
 
     public async Task AdminCreate(string username, string password)
     {
-        Credentials credentials = new(username, password);
-
-        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.AdminCreateUrl, credentials);
+        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.AdminCreateUrl, new Credentials(username, password));
         if (!response.IsSuccessStatusCode)
         {
             string errorMessage = await response.Content.ReadAsStringAsync();
@@ -43,9 +39,7 @@ public class ApiAccessor
 
     public async Task AdminDelete(string username, string password)
     {
-        Credentials credentials = new(username, password);
-
-        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.AdminDeleteUrl, credentials);
+        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.AdminDeleteUrl, new Credentials(username, password));
         if (!response.IsSuccessStatusCode)
         {
             string errorMessage = await response.Content.ReadAsStringAsync();

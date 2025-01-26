@@ -13,11 +13,11 @@ namespace WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AdminsController : Controller
+public class AdminController : Controller
 {
     private readonly IConfiguration _configuration;
     private readonly ILogger<UsersController> _logger;
-    public AdminsController(IConfiguration configuration, ILogger<UsersController> logger)
+    public AdminController(IConfiguration configuration, ILogger<UsersController> logger)
     {
         _configuration = configuration;
         _logger = logger;

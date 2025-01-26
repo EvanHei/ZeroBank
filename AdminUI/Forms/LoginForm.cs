@@ -33,6 +33,7 @@ namespace AdminUI.Forms
 
             try
             {
+                // TODO: test
                 await AdminConfig.AdminLogin(UsernameTextBox.Text, PasswordTextBox.Text);
 
                 this.Hide();
