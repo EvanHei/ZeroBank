@@ -102,5 +102,22 @@ public class AdminController : Controller
         }
     }
 
-    // TODO: add a user data retrieval endpoint
+    [HttpGet("accounts")]
+    [Authorize(Roles = "Admin")]
+    public IResult GetUserAccounts()
+    {
+        _logger.LogInformation("GetUserAccounts method called");
+
+        try
+        {
+            List<Account> accounts = ServerConfig.DataAccessor.LoadAllAccounts();
+            _logger.LogInformation("Successfully retrieved accounts");
+            return Results.Ok(accounts);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while retrieving accounts");
+            return Results.Problem(ex.Message);
+        }
+    }
 }

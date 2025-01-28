@@ -25,6 +25,4 @@ public static class AdminConfig
     {
         await ApiAccessor.AdminDelete(username, password);
     }
-
-    // TODO: add a user data retrieval method
 }

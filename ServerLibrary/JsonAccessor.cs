@@ -189,7 +189,7 @@ public class JsonAccessor
     {
         if (!Directory.Exists(Constants.AccountsDirectoryPath))
         {
-            throw new DirectoryNotFoundException($"Directory not found: { Constants.AccountsDirectoryPath}");
+            throw new DirectoryNotFoundException($"Directory not found: {Constants.AccountsDirectoryPath}");
         }
 
         List<Account> accounts = new();

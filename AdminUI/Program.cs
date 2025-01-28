@@ -1,5 +1,6 @@
 using AdminLibrary;
 using AdminUI.Forms;
+using SharedLibrary.Models;
 
 namespace AdminUI;
 
@@ -20,8 +21,9 @@ internal static class Program
         try
         {
             await AdminConfig.AdminLogin(username1, password1);
-            await AdminConfig.AdminCreate(username2, password2);
-            await AdminConfig.AdminDelete(username2, password2);
+            //await AdminConfig.AdminCreate(username2, password2);
+            //await AdminConfig.AdminDelete(username2, password2);
+            // List<Account> accounts = await AdminConfig.ApiAccessor.GetUserAccounts();
         }
         catch (Exception ex)
         {
