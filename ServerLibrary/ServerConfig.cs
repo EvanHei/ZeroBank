@@ -164,11 +164,11 @@ public static class ServerConfig
         byte[] serverDigSig = rsa.Sign(serverSigningPrivateKey, transaction.SerializeMetadataToBytes());
         transaction.ServerDigSig = serverDigSig;
 
-        // verify signatures
-        account.EnsureValid();
-
         // save to server
         DataAccessor.AddTransaction(transaction);
+
+        // verify signatures
+        account.EnsureValid();
     }
 
     private static void AuthorizeAccountAccess(int accountId, int userId)

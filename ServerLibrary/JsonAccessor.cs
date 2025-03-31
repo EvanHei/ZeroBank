@@ -179,9 +179,9 @@ public class JsonAccessor
         File.WriteAllText(path, json);
     }
 
-    public List<Account> LoadUserAccounts(int id)
+    public List<Account> LoadUserAccounts(int userId)
     {
-        List <Account> userAccounts = LoadAllAccounts().Where(a => a.UserId == id).ToList();
+        List <Account> userAccounts = LoadAllAccounts().Where(a => a.UserId == userId).ToList();
         return userAccounts;
     }
 
