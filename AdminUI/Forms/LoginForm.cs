@@ -33,8 +33,8 @@ namespace AdminUI.Forms
 
             try
             {
-                // TODO: test
-                await AdminConfig.AdminLogin(UsernameTextBox.Text, PasswordTextBox.Text);
+                Credentials adminCredentials = new(UsernameTextBox.Text, PasswordTextBox.Text);
+                await AdminConfig.AdminLogin(adminCredentials);
 
                 this.Hide();
                 DashboardForm dashboardForm = new();
@@ -65,7 +65,7 @@ namespace AdminUI.Forms
             CenterLabelHorizontally(HeaderLabel);
         }
 
-        private void AddAdminPictureBox_Click(object sender, EventArgs e)
+        private async void AddAdminPictureBox_Click(object sender, EventArgs e)
         {
             if (!ValidateFields())
             {
@@ -75,9 +75,7 @@ namespace AdminUI.Forms
             try
             {
                 Credentials adminCredentials = new(UsernameTextBox.Text, PasswordTextBox.Text);
-
-                // TODO: replace with AdminConfig.ApiAccessor.CreateAdmin(...);
-                ServerConfig.CreateAdmin(adminCredentials);
+                await AdminConfig.AdminCreate(adminCredentials);
 
                 this.Hide();
                 DashboardForm dashboardForm = new();
