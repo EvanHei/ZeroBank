@@ -31,8 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
             BackArrowPictureBox = new PictureBox();
             LoginPictureBox = new PictureBox();
-            AddPictureBox = new PictureBox();
-            AddAdminPictureBox = new PictureBox();
             ErrorLabel = new Label();
             PasswordTextBox = new TextBox();
             PasswordPictureBox = new PictureBox();
@@ -43,8 +41,6 @@
             HeaderLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)BackArrowPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)LoginPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)AddPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)AddAdminPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PasswordPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)UsernamePictureBox).BeginInit();
             SuspendLayout();
@@ -64,7 +60,7 @@
             // LoginPictureBox
             // 
             LoginPictureBox.Image = (Image)resources.GetObject("LoginPictureBox.Image");
-            LoginPictureBox.Location = new Point(290, 324);
+            LoginPictureBox.Location = new Point(358, 324);
             LoginPictureBox.Name = "LoginPictureBox";
             LoginPictureBox.Size = new Size(123, 36);
             LoginPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -72,31 +68,6 @@
             LoginPictureBox.TabStop = false;
             LoginPictureBox.Click += LoginPictureBox_Click;
             LoginPictureBox.Paint += LoginPictureBox_Paint;
-            // 
-            // AddPictureBox
-            // 
-            AddPictureBox.Image = (Image)resources.GetObject("AddPictureBox.Image");
-            AddPictureBox.Location = new Point(425, 324);
-            AddPictureBox.Name = "AddPictureBox";
-            AddPictureBox.Size = new Size(123, 36);
-            AddPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            AddPictureBox.TabIndex = 21;
-            AddPictureBox.TabStop = false;
-            AddPictureBox.Click += AddPictureBox_Click;
-            AddPictureBox.Paint += AddPictureBox_Paint;
-            // 
-            // AddAdminPictureBox
-            // 
-            AddAdminPictureBox.Image = (Image)resources.GetObject("AddAdminPictureBox.Image");
-            AddAdminPictureBox.Location = new Point(354, 324);
-            AddAdminPictureBox.Name = "AddAdminPictureBox";
-            AddAdminPictureBox.Size = new Size(123, 36);
-            AddAdminPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            AddAdminPictureBox.TabIndex = 22;
-            AddAdminPictureBox.TabStop = false;
-            AddAdminPictureBox.Visible = false;
-            AddAdminPictureBox.Click += AddAdminPictureBox_Click;
-            AddAdminPictureBox.Paint += AddAdminPictureBox_Paint;
             // 
             // ErrorLabel
             // 
@@ -193,8 +164,6 @@
             ClientSize = new Size(841, 491);
             Controls.Add(BackArrowPictureBox);
             Controls.Add(LoginPictureBox);
-            Controls.Add(AddPictureBox);
-            Controls.Add(AddAdminPictureBox);
             Controls.Add(ErrorLabel);
             Controls.Add(PasswordTextBox);
             Controls.Add(PasswordPictureBox);
@@ -211,8 +180,6 @@
             Text = "Login";
             ((System.ComponentModel.ISupportInitialize)BackArrowPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)LoginPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)AddPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)AddAdminPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)PasswordPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)UsernamePictureBox).EndInit();
             ResumeLayout(false);
@@ -223,8 +190,6 @@
 
         private PictureBox BackArrowPictureBox;
         private PictureBox LoginPictureBox;
-        private PictureBox AddPictureBox;
-        private PictureBox AddAdminPictureBox;
         private Label ErrorLabel;
         private TextBox PasswordTextBox;
         private PictureBox PasswordPictureBox;
