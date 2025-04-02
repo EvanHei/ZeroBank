@@ -656,7 +656,7 @@ namespace ClientUI.Forms
             // draw "Transactions"
             string smallText = "Transactions";
 
-            using Font smallTextFont = new("Segoe UI", 10, FontStyle.Regular, GraphicsUnit.Point);
+            using Font smallTextFont = new("Segoe UI Emoji", 10, FontStyle.Regular, GraphicsUnit.Point);
             using SolidBrush brush = new(Color.White);
             SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
 
@@ -671,7 +671,7 @@ namespace ClientUI.Forms
             // draw number of transactions
             string largeText = selectedAccountPlaintextTransactions.Count.ToString();
 
-            using Font largeTextFont = new("Segoe UI", 16, FontStyle.Regular, GraphicsUnit.Point);
+            using Font largeTextFont = new("Segoe UI Emoji", 16, FontStyle.Regular, GraphicsUnit.Point);
             SizeF largeTextSize = e.Graphics.MeasureString(largeText, largeTextFont);
 
             // same location initially
@@ -681,7 +681,7 @@ namespace ClientUI.Forms
             e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
         }
 
-        private void AccountDetailsPanelBlockchainPictureBox_Paint(object sender, PaintEventArgs e)
+        private void AccountDetailsPanelStatusPictureBox_Paint(object sender, PaintEventArgs e)
         {
             PictureBox pictureBox = (PictureBox)sender;
 

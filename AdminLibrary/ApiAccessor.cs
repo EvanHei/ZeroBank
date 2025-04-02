@@ -47,7 +47,7 @@ public class ApiAccessor
         }
     }
 
-    public async Task<List<Account>> GetUserAccounts()
+    public async Task<List<Account>> GetAccounts()
     {
         HttpResponseMessage response = await client.GetAsync(Constants.GetUserAccountsUrl);
         if (!response.IsSuccessStatusCode)
@@ -58,5 +58,18 @@ public class ApiAccessor
 
         List<Account> accounts = await response.Content.ReadFromJsonAsync<List<Account>>();
         return accounts;
+    }
+
+    public async Task<List<User>> GetUsers()
+    {
+        HttpResponseMessage response = await client.GetAsync(Constants.GetUsersUrl);
+        if (!response.IsSuccessStatusCode)
+        {
+            string errorContent = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorContent}");
+        }
+
+        List<User> users = await response.Content.ReadFromJsonAsync<List<User>>();
+        return users;
     }
 }

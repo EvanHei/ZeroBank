@@ -22,7 +22,7 @@ internal static class Program
             await AdminConfig.AdminLogin(adminCredentials_1);
             //await AdminConfig.AdminCreate(adminCredentials_2);
             //await AdminConfig.AdminDelete(adminCredentials_1);
-            List<Account> accounts = await AdminConfig.ApiAccessor.GetUserAccounts();
+            List<Account> accounts = await AdminConfig.ApiAccessor.GetAccounts();
 
             // must be 1 account to work
             ulong value = AdminConfig.LoadPlainModulus(accounts[0]);
@@ -33,6 +33,6 @@ internal static class Program
         }
 
         ApplicationConfiguration.Initialize();
-        Application.Run(new LoginForm());
+        Application.Run(new DashboardForm());
     }
 }

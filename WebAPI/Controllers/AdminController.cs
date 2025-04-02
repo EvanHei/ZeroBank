@@ -104,7 +104,7 @@ public class AdminController : Controller
 
     [HttpGet("accounts")]
     [Authorize(Roles = "Admin")]
-    public IResult GetUserAccounts()
+    public IResult GetAccounts()
     {
         _logger.LogInformation("GetUserAccounts method called");
 
@@ -117,6 +117,25 @@ public class AdminController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while retrieving accounts");
+            return Results.Problem(ex.Message);
+        }
+    }
+
+    [HttpGet("users")]
+    [Authorize(Roles = "Admin")]
+    public IResult GetUsers()
+    {
+        _logger.LogInformation("GetUsers method called");
+
+        try
+        {
+            List<User> users = ServerConfig.DataAccessor.LoadUsers();
+            _logger.LogInformation("Successfully retrieved users");
+            return Results.Ok(users);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while retrieving users");
             return Results.Problem(ex.Message);
         }
     }

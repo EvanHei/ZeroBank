@@ -54,7 +54,7 @@
             AccountDetailsPanelDoughnutChartPanel = new Panel();
             AccountDetailsPanelTransactionsListBox = new ListBox();
             AccountDetailsPanelTranasctionsListPictureBox = new PictureBox();
-            AccountDetailsPanelBlockchainPictureBox = new PictureBox();
+            AccountDetailsPanelStatusPictureBox = new PictureBox();
             AccountDetailsPanelTransactionsPictureBox = new PictureBox();
             AccountDetailsPanelMainChartPanel = new Panel();
             AccountDetailsPanelDoughnutChartPictureBox = new PictureBox();
@@ -116,7 +116,7 @@
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelClosePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTranasctionsListPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelBlockchainPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelStatusPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactionsPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelDoughnutChartPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelNamePictureBox).BeginInit();
@@ -331,7 +331,7 @@
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelDoughnutChartPanel);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelTransactionsListBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelTranasctionsListPictureBox);
-            AccountDetailsPanel.Controls.Add(AccountDetailsPanelBlockchainPictureBox);
+            AccountDetailsPanel.Controls.Add(AccountDetailsPanelStatusPictureBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelTransactionsPictureBox);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelMainChartPanel);
             AccountDetailsPanel.Controls.Add(AccountDetailsPanelDoughnutChartPictureBox);
@@ -466,16 +466,16 @@
             AccountDetailsPanelTranasctionsListPictureBox.TabStop = false;
             AccountDetailsPanelTranasctionsListPictureBox.Paint += AccountDetailsPanelTranasctionsListPictureBox_Paint;
             // 
-            // AccountDetailsPanelBlockchainPictureBox
+            // AccountDetailsPanelStatusPictureBox
             // 
-            AccountDetailsPanelBlockchainPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelBlockchainPictureBox.Image");
-            AccountDetailsPanelBlockchainPictureBox.Location = new Point(738, 20);
-            AccountDetailsPanelBlockchainPictureBox.Name = "AccountDetailsPanelBlockchainPictureBox";
-            AccountDetailsPanelBlockchainPictureBox.Size = new Size(223, 61);
-            AccountDetailsPanelBlockchainPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            AccountDetailsPanelBlockchainPictureBox.TabIndex = 10;
-            AccountDetailsPanelBlockchainPictureBox.TabStop = false;
-            AccountDetailsPanelBlockchainPictureBox.Paint += AccountDetailsPanelBlockchainPictureBox_Paint;
+            AccountDetailsPanelStatusPictureBox.Image = (Image)resources.GetObject("AccountDetailsPanelStatusPictureBox.Image");
+            AccountDetailsPanelStatusPictureBox.Location = new Point(738, 20);
+            AccountDetailsPanelStatusPictureBox.Name = "AccountDetailsPanelStatusPictureBox";
+            AccountDetailsPanelStatusPictureBox.Size = new Size(223, 61);
+            AccountDetailsPanelStatusPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            AccountDetailsPanelStatusPictureBox.TabIndex = 10;
+            AccountDetailsPanelStatusPictureBox.TabStop = false;
+            AccountDetailsPanelStatusPictureBox.Paint += AccountDetailsPanelStatusPictureBox_Paint;
             // 
             // AccountDetailsPanelTransactionsPictureBox
             // 
@@ -1059,11 +1059,11 @@
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 728);
             Controls.Add(SidebarListBox);
+            Controls.Add(AccountDetailsPanel);
             Controls.Add(AccountsPanel);
             Controls.Add(CreateAccountPanel);
             Controls.Add(TransactPanel);
             Controls.Add(DashboardPanel);
-            Controls.Add(AccountDetailsPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Margin = new Padding(4);
             Name = "DashboardForm";
@@ -1085,7 +1085,7 @@
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelClosePictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTranasctionsListPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelBlockchainPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelStatusPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelTransactionsPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelDoughnutChartPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelNamePictureBox).EndInit();
@@ -1141,7 +1141,7 @@
         private PictureBox AccountsPanelListPictureBox;
         private PictureBox AccountsPanelPasswordArrowPictureBox;
         private ListBox AccountsPanelListBox;
-        private PictureBox AccountDetailsPanelBlockchainPictureBox;
+        private PictureBox AccountDetailsPanelStatusPictureBox;
         private PictureBox AccountDetailsPanelTransactionsPictureBox;
         private PictureBox AccountDetailsPanelTranasctionsListPictureBox;
         private ListBox AccountDetailsPanelTransactionsListBox;
