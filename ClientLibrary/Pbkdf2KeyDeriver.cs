@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace ClientLibrary;
+namespace SharedLibrary;
 
 public class Pbkdf2KeyDeriver
 {

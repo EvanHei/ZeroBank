@@ -1,5 +1,5 @@
-﻿using ClientLibrary;
-using ClientLibrary.Models;
+﻿using SharedLibrary;
+using SharedLibrary.Models;
 using SharedLibrary;
 using SharedLibrary.Models;
 using System.Diagnostics;
@@ -695,7 +695,7 @@ namespace ClientUI.Forms
             float smallTextX = (pictureBox.ClientSize.Width - smallTextSize.Width) / 2;
             float smallTextY = (pictureBox.ClientSize.Height - smallTextSize.Height) / 2;
 
-            smallTextX -= 43; // shift n pixels left
+            smallTextX -= 33; // shift n pixels left
             smallTextY -= 15; // shift m pixels up
 
             e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));

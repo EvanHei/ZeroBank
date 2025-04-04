@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientLibrary.Models;
+namespace SharedLibrary.Models;
 
 public class PlaintextTransaction
 {

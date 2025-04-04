@@ -1,5 +1,5 @@
-using ClientLibrary;
-using ClientLibrary.Models;
+using SharedLibrary;
+using SharedLibrary.Models;
 using Microsoft.Research.SEAL;
 using SharedLibrary;
 using SharedLibrary.Models;

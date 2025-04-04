@@ -106,7 +106,7 @@ public class AdminController : Controller
     [Authorize(Roles = "Admin")]
     public IResult GetAccounts()
     {
-        _logger.LogInformation("GetUserAccounts method called");
+        _logger.LogInformation("GetAccounts method called");
 
         try
         {
@@ -136,6 +136,25 @@ public class AdminController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while retrieving users");
+            return Results.Problem(ex.Message);
+        }
+    }
+
+    [HttpGet("keys")]
+    [Authorize(Roles = "Admin")]
+    public IResult GetKeys()
+    {
+        _logger.LogInformation("GetKeys method called");
+
+        try
+        {
+            Dictionary<int, string> keys = ServerConfig.DataAccessor.LoadUserPrivateKeys();
+            _logger.LogInformation("Successfully retrieved keys");
+            return Results.Ok(keys);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while retrieving keys");
             return Results.Problem(ex.Message);
         }
     }

@@ -3,7 +3,7 @@ using SharedLibrary.Models;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-namespace ClientLibrary;
+namespace SharedLibrary;
 
 public class ApiAccessor
 {

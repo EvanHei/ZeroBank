@@ -1,4 +1,4 @@
-﻿using ClientLibrary.Models;
+﻿using SharedLibrary.Models;
 using Microsoft.Research.SEAL;
 using SharedLibrary;
 using SharedLibrary.Models;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace ClientLibrary;
+namespace SharedLibrary;
 
 public static class ClientConfig
 {

@@ -1,9 +1,9 @@
-﻿using ClientLibrary.Models;
+﻿using SharedLibrary.Models;
 using Microsoft.Research.SEAL;
 using SharedLibrary.Models;
 using System.Text.Json;
 
-namespace ClientLibrary;
+namespace SharedLibrary;
 
 public class JsonAccessor
 {

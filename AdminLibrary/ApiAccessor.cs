@@ -72,4 +72,17 @@ public class ApiAccessor
         List<User> users = await response.Content.ReadFromJsonAsync<List<User>>();
         return users;
     }
+
+    public async Task<Dictionary<int, string>> GetKeys()
+    {
+        HttpResponseMessage response = await client.GetAsync(Constants.GetKeysUrl);
+        if (!response.IsSuccessStatusCode)
+        {
+            string errorContent = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorContent}");
+        }
+
+        Dictionary<int, string> keys = await response.Content.ReadFromJsonAsync<Dictionary<int, string>>();
+        return keys;
+    }
 }

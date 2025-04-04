@@ -1,7 +1,7 @@
 ﻿using Microsoft.Research.SEAL;
 using SharedLibrary;
 
-namespace ClientLibrary;
+namespace SharedLibrary;
 
 public class EncryptionHelper
 {

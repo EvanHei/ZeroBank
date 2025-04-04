@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.IO;
 
-namespace ClientLibrary;
+namespace SharedLibrary;
 
 /// <summary>
 /// Provides functionality to encrypt and decrypt text using the Advanced Encryption Standard (AES) algorithm.

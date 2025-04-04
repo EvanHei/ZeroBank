@@ -265,7 +265,7 @@ public class JsonAccessor
         return File.ReadAllBytes(path);
     }
 
-    private Dictionary<int, string> LoadUserPrivateKeys()
+    public Dictionary<int, string> LoadUserPrivateKeys()
     {
         if (!File.Exists(Constants.UserPrivateKeysFilePath))
         {
@@ -284,17 +284,5 @@ public class JsonAccessor
         keys[accountId] = keyString;
         string json = JsonSerializer.Serialize(keys, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(Constants.UserPrivateKeysFilePath, json);
-    }
-
-    public byte[] LoadUserPrivateKey(int accountId)
-    {
-        Dictionary<int, string> keys = LoadUserPrivateKeys();
-
-        if (!keys.TryGetValue(accountId, out string encodedKey))
-        {
-            throw new KeyNotFoundException("Key not found for the specified account ID.");
-        }
-
-        return Convert.FromBase64String(encodedKey);
     }
 }
