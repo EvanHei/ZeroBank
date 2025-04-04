@@ -73,6 +73,19 @@ public class ApiAccessor
         return users;
     }
 
+    public async Task<List<User>> GetAdmins()
+    {
+        HttpResponseMessage response = await client.GetAsync(Constants.GetAdminsUrl);
+        if (!response.IsSuccessStatusCode)
+        {
+            string errorContent = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorContent}");
+        }
+
+        List<User> admins = await response.Content.ReadFromJsonAsync<List<User>>();
+        return admins;
+    }
+
     public async Task<Dictionary<int, string>> GetKeys()
     {
         HttpResponseMessage response = await client.GetAsync(Constants.GetKeysUrl);

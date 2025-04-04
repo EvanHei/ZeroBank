@@ -53,6 +53,16 @@
             AccountDetailsPanelStatusPictureBox = new PictureBox();
             AccountDetailsPanelDateCreatedPictureBox = new PictureBox();
             AccountDetailsPanelNamePictureBox = new PictureBox();
+            CreateAdminPanel = new Panel();
+            CreateAdminPanelErrorLabel = new Label();
+            CreateAdminPanelUsernameTextBox = new TextBox();
+            CreateAdminPanelUsernamePictureBox = new PictureBox();
+            CreateAdminPanelUsernameLabel = new Label();
+            CreateAdminPanelPasswordTextBox = new TextBox();
+            CreateAdminPanelPasswordPictureBox = new PictureBox();
+            CreateAdminPanelPasswordLabel = new Label();
+            CreateAdminPanelCreatePictureBox = new PictureBox();
+            CreateAdminPanelHeaderLabel = new Label();
             AccountsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelViewDetailsPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelListPictureBox).BeginInit();
@@ -68,6 +78,10 @@
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelStatusPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelDateCreatedPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelNamePictureBox).BeginInit();
+            CreateAdminPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)CreateAdminPanelUsernamePictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)CreateAdminPanelPasswordPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)CreateAdminPanelCreatePictureBox).BeginInit();
             SuspendLayout();
             // 
             // AccountsPanel
@@ -367,6 +381,121 @@
             AccountDetailsPanelNamePictureBox.TabStop = false;
             AccountDetailsPanelNamePictureBox.Paint += AccountDetailsPanelNamePictureBox_Paint;
             // 
+            // CreateAdminPanel
+            // 
+            CreateAdminPanel.Controls.Add(CreateAdminPanelErrorLabel);
+            CreateAdminPanel.Controls.Add(CreateAdminPanelUsernameTextBox);
+            CreateAdminPanel.Controls.Add(CreateAdminPanelUsernamePictureBox);
+            CreateAdminPanel.Controls.Add(CreateAdminPanelUsernameLabel);
+            CreateAdminPanel.Controls.Add(CreateAdminPanelPasswordTextBox);
+            CreateAdminPanel.Controls.Add(CreateAdminPanelPasswordPictureBox);
+            CreateAdminPanel.Controls.Add(CreateAdminPanelPasswordLabel);
+            CreateAdminPanel.Controls.Add(CreateAdminPanelCreatePictureBox);
+            CreateAdminPanel.Controls.Add(CreateAdminPanelHeaderLabel);
+            CreateAdminPanel.Location = new Point(195, -6);
+            CreateAdminPanel.Name = "CreateAdminPanel";
+            CreateAdminPanel.Size = new Size(987, 735);
+            CreateAdminPanel.TabIndex = 41;
+            // 
+            // CreateAccountPanelErrorLabel
+            // 
+            CreateAdminPanelErrorLabel.Dock = DockStyle.Bottom;
+            CreateAdminPanelErrorLabel.Font = new Font("Segoe UI Emoji", 12F);
+            CreateAdminPanelErrorLabel.ForeColor = Color.Red;
+            CreateAdminPanelErrorLabel.Location = new Point(0, 709);
+            CreateAdminPanelErrorLabel.Name = "CreateAccountPanelErrorLabel";
+            CreateAdminPanelErrorLabel.Padding = new Padding(0, 0, 3, 0);
+            CreateAdminPanelErrorLabel.Size = new Size(987, 26);
+            CreateAdminPanelErrorLabel.TabIndex = 36;
+            CreateAdminPanelErrorLabel.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // CreateAdminPanelUsernameTextBox
+            // 
+            CreateAdminPanelUsernameTextBox.BackColor = Color.FromArgb(45, 45, 45);
+            CreateAdminPanelUsernameTextBox.BorderStyle = BorderStyle.None;
+            CreateAdminPanelUsernameTextBox.ForeColor = Color.White;
+            CreateAdminPanelUsernameTextBox.Location = new Point(356, 240);
+            CreateAdminPanelUsernameTextBox.Name = "CreateAdminPanelUsernameTextBox";
+            CreateAdminPanelUsernameTextBox.Size = new Size(239, 22);
+            CreateAdminPanelUsernameTextBox.TabIndex = 1;
+            // 
+            // CreateAdminPanelUsernamePictureBox
+            // 
+            CreateAdminPanelUsernamePictureBox.Image = (Image)resources.GetObject("CreateAdminPanelUsernamePictureBox.Image");
+            CreateAdminPanelUsernamePictureBox.Location = new Point(346, 225);
+            CreateAdminPanelUsernamePictureBox.Name = "CreateAdminPanelUsernamePictureBox";
+            CreateAdminPanelUsernamePictureBox.Size = new Size(257, 55);
+            CreateAdminPanelUsernamePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            CreateAdminPanelUsernamePictureBox.TabIndex = 27;
+            CreateAdminPanelUsernamePictureBox.TabStop = false;
+            // 
+            // CreateAdminPanelUsernameLabel
+            // 
+            CreateAdminPanelUsernameLabel.AutoSize = true;
+            CreateAdminPanelUsernameLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            CreateAdminPanelUsernameLabel.ForeColor = Color.Silver;
+            CreateAdminPanelUsernameLabel.Location = new Point(342, 202);
+            CreateAdminPanelUsernameLabel.Name = "CreateAdminPanelUsernameLabel";
+            CreateAdminPanelUsernameLabel.Size = new Size(81, 21);
+            CreateAdminPanelUsernameLabel.TabIndex = 25;
+            CreateAdminPanelUsernameLabel.Text = "Username";
+            // 
+            // CreateAdminPanelPasswordTextBox
+            // 
+            CreateAdminPanelPasswordTextBox.BackColor = Color.FromArgb(45, 45, 45);
+            CreateAdminPanelPasswordTextBox.BorderStyle = BorderStyle.None;
+            CreateAdminPanelPasswordTextBox.ForeColor = Color.White;
+            CreateAdminPanelPasswordTextBox.Location = new Point(356, 321);
+            CreateAdminPanelPasswordTextBox.Name = "CreateAdminPanelPasswordTextBox";
+            CreateAdminPanelPasswordTextBox.Size = new Size(239, 22);
+            CreateAdminPanelPasswordTextBox.TabIndex = 2;
+            CreateAdminPanelPasswordTextBox.UseSystemPasswordChar = true;
+            // 
+            // CreateAdminPanelPasswordPictureBox
+            // 
+            CreateAdminPanelPasswordPictureBox.Image = (Image)resources.GetObject("CreateAdminPanelPasswordPictureBox.Image");
+            CreateAdminPanelPasswordPictureBox.Location = new Point(346, 306);
+            CreateAdminPanelPasswordPictureBox.Name = "CreateAdminPanelPasswordPictureBox";
+            CreateAdminPanelPasswordPictureBox.Size = new Size(257, 55);
+            CreateAdminPanelPasswordPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            CreateAdminPanelPasswordPictureBox.TabIndex = 20;
+            CreateAdminPanelPasswordPictureBox.TabStop = false;
+            // 
+            // CreateAdminPanelPasswordLabel
+            // 
+            CreateAdminPanelPasswordLabel.AutoSize = true;
+            CreateAdminPanelPasswordLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            CreateAdminPanelPasswordLabel.ForeColor = Color.Silver;
+            CreateAdminPanelPasswordLabel.Location = new Point(342, 283);
+            CreateAdminPanelPasswordLabel.Name = "CreateAdminPanelPasswordLabel";
+            CreateAdminPanelPasswordLabel.Size = new Size(76, 21);
+            CreateAdminPanelPasswordLabel.TabIndex = 18;
+            CreateAdminPanelPasswordLabel.Text = "Password";
+            // 
+            // CreateAdminPanelCreatePictureBox
+            // 
+            CreateAdminPanelCreatePictureBox.Image = (Image)resources.GetObject("CreateAdminPanelCreatePictureBox.Image");
+            CreateAdminPanelCreatePictureBox.Location = new Point(414, 385);
+            CreateAdminPanelCreatePictureBox.Name = "CreateAdminPanelCreatePictureBox";
+            CreateAdminPanelCreatePictureBox.Size = new Size(123, 36);
+            CreateAdminPanelCreatePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            CreateAdminPanelCreatePictureBox.TabIndex = 17;
+            CreateAdminPanelCreatePictureBox.TabStop = false;
+            CreateAdminPanelCreatePictureBox.Click += CreateAdminPanelCreatePictureBox_Click;
+            CreateAdminPanelCreatePictureBox.Paint += CreateAdminPanelCreatePictureBox_Paint;
+            // 
+            // CreateAdminPanelHeaderLabel
+            // 
+            CreateAdminPanelHeaderLabel.Anchor = AnchorStyles.None;
+            CreateAdminPanelHeaderLabel.AutoSize = true;
+            CreateAdminPanelHeaderLabel.Font = new Font("Segoe UI Emoji", 24F);
+            CreateAdminPanelHeaderLabel.ForeColor = Color.White;
+            CreateAdminPanelHeaderLabel.Location = new Point(368, 91);
+            CreateAdminPanelHeaderLabel.Name = "CreateAdminPanelHeaderLabel";
+            CreateAdminPanelHeaderLabel.Size = new Size(214, 43);
+            CreateAdminPanelHeaderLabel.TabIndex = 1;
+            CreateAdminPanelHeaderLabel.Text = "Create Admin";
+            // 
             // DashboardForm
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
@@ -374,8 +503,9 @@
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 728);
             Controls.Add(SidebarListBox);
-            Controls.Add(AccountsPanel);
+            Controls.Add(CreateAdminPanel);
             Controls.Add(AccountDetailsPanel);
+            Controls.Add(AccountsPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Margin = new Padding(4);
             Name = "DashboardForm";
@@ -398,6 +528,11 @@
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelStatusPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelDateCreatedPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelNamePictureBox).EndInit();
+            CreateAdminPanel.ResumeLayout(false);
+            CreateAdminPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)CreateAdminPanelUsernamePictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)CreateAdminPanelPasswordPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)CreateAdminPanelCreatePictureBox).EndInit();
             ResumeLayout(false);
         }
 
@@ -427,5 +562,15 @@
         private ListBox AccountDetailsPanelTransactionsListBox;
         private PictureBox AccountDetailsPanelTranasctionsListPictureBox;
         private PictureBox AccountDetailsPanelClosePictureBox;
+        private Panel CreateAdminPanel;
+        private Label CreateAdminPanelErrorLabel;
+        private TextBox CreateAdminPanelUsernameTextBox;
+        private PictureBox CreateAdminPanelUsernamePictureBox;
+        private Label CreateAdminPanelUsernameLabel;
+        private TextBox CreateAdminPanelPasswordTextBox;
+        private PictureBox CreateAdminPanelPasswordPictureBox;
+        private Label CreateAdminPanelPasswordLabel;
+        private PictureBox CreateAdminPanelCreatePictureBox;
+        private Label CreateAdminPanelHeaderLabel;
     }
 }

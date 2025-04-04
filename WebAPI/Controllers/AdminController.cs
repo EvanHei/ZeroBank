@@ -102,6 +102,25 @@ public class AdminController : Controller
         }
     }
 
+    [HttpGet("admins")]
+    [Authorize(Roles = "Admin")]
+    public IResult GetAdmins()
+    {
+        _logger.LogInformation("GetAdmins method called");
+
+        try
+        {
+            List<User> admins = ServerConfig.DataAccessor.LoadAdmins();
+            _logger.LogInformation("Successfully retrieved admins");
+            return Results.Ok(admins);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while retrieving admins");
+            return Results.Problem(ex.Message);
+        }
+    }
+
     [HttpGet("accounts")]
     [Authorize(Roles = "Admin")]
     public IResult GetAccounts()

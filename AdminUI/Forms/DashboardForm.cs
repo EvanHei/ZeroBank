@@ -1,4 +1,5 @@
 ﻿using AdminLibrary;
+using SharedLibrary;
 using SharedLibrary.Models;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace AdminUI.Forms
         private List<Account> accounts = new();
         private Dictionary<int, string> keys = new();
         private List<User> users;
+        private List<User> admins;
         private List<CiphertextTransaction> selectedAccountCiphertextTransactions;
         private List<PlaintextTransaction> selectedAccountPlaintextTransactions;
         private Account selectedAccount;
@@ -37,6 +39,7 @@ namespace AdminUI.Forms
                 accounts = await AdminConfig.ApiAccessor.GetAccounts();
                 keys = await AdminConfig.ApiAccessor.GetKeys();
                 users = await AdminConfig.ApiAccessor.GetUsers();
+                admins = await AdminConfig.ApiAccessor.GetAdmins();
             }
             catch (Exception ex)
             {
@@ -101,7 +104,7 @@ namespace AdminUI.Forms
 
             if (selectedItem == "👥 Add Admin")
             {
-                ShowAddAdminPanel();
+                ShowCreateAdminPanel();
             }
             else if (selectedItem == "💳 Accounts")
             {
@@ -117,12 +120,11 @@ namespace AdminUI.Forms
             e.Graphics.DrawLine(pen, new Point(xPosition, 0), new Point(xPosition, this.ClientSize.Height));
         }
 
-        // TODO: update once the add admin panel is added
-        private void ShowAddAdminPanel()
+        private void ShowCreateAdminPanel()
         {
-            //AddAdminPanel.Visible = true;
+            CreateAdminPanel.Visible = true;
             AccountsPanel.Visible = false;
-            //AccountDetailsPanel.Visible = false;
+            AccountDetailsPanel.Visible = false;
         }
 
         #region AccountsPanel
@@ -136,6 +138,7 @@ namespace AdminUI.Forms
 
             AccountsPanelListBox.DataSource = accounts;
 
+            CreateAdminPanel.Visible = false;
             AccountsPanel.Visible = true;
             AccountDetailsPanel.Visible = false;
 
@@ -284,6 +287,7 @@ namespace AdminUI.Forms
                 AccountDetailsPanelTransactionsListBox.DataSource = selectedAccountCiphertextTransactions;
             }
 
+            CreateAdminPanel.Visible = false;
             AccountsPanel.Visible = false;
             AccountDetailsPanel.Visible = true;
         }
@@ -631,6 +635,75 @@ namespace AdminUI.Forms
         private void AccountDetailsPanelTransactionsListBox_MeasureItem(object sender, MeasureItemEventArgs e)
         {
             e.ItemHeight = 40;
+        }
+
+        #endregion
+
+        #region CreateAdminPanel
+
+        private void CreateAdminPanelCreatePictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            PictureBox pictureBox = (PictureBox)sender;
+
+            string text = "Create";
+
+            using Font font = new("Segoe UI Emoji", 12, FontStyle.Regular, GraphicsUnit.Point);
+            using SolidBrush brush = new(Color.White);
+            SizeF textSize = e.Graphics.MeasureString(text, font);
+
+            float x = (pictureBox.ClientSize.Width - textSize.Width) / 2;
+            float y = (pictureBox.ClientSize.Height - textSize.Height) / 2;
+
+            e.Graphics.DrawString(text, font, brush, new PointF(x, y));
+        }
+
+        private async void CreateAdminPanelCreatePictureBox_Click(object sender, EventArgs e)
+        {
+            if (!ValidateCreateAccountPanelFields())
+            {
+                return;
+            }
+
+            try
+            {
+                Credentials newAdminCredentials = new(CreateAdminPanelUsernameTextBox.Text, CreateAdminPanelPasswordTextBox.Text);
+                await AdminConfig.AdminCreate(newAdminCredentials);
+
+                // clear fields
+                CreateAdminPanelUsernameTextBox.Text = "";
+                CreateAdminPanelPasswordTextBox.Text = "";
+
+                await GetServerData();
+                SidebarListBox.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                CreateAdminPanelErrorLabel.Text = "An error occurred while creating the admin";
+            }
+        }
+
+        private bool ValidateCreateAccountPanelFields()
+        {
+            bool output = true;
+
+            if (string.IsNullOrWhiteSpace(CreateAdminPanelUsernameTextBox.Text))
+            {
+                CreateAdminPanelErrorLabel.Text = "No username provided";
+                output = false;
+            }
+            if (admins.Any(a => a.Username == CreateAdminPanelUsernameTextBox.Text))
+            {
+                CreateAdminPanelErrorLabel.Text = "An admin with this username already exists";
+                output = false;
+            }
+            // TODO: ensure this meets the minimum password requirements
+            if (string.IsNullOrWhiteSpace(CreateAdminPanelPasswordTextBox.Text))
+            {
+                CreateAdminPanelErrorLabel.Text = "No password provided";
+                output = false;
+            }
+
+            return output;
         }
 
         #endregion
