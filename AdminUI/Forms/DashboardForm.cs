@@ -493,68 +493,44 @@ namespace AdminUI.Forms
                 return;
             }
 
+            PictureBox pictureBox = (PictureBox)sender;
+            string smallText;
+            string largeText;
+
             // if the key is known, display the balance
             if (!string.IsNullOrWhiteSpace(selectedAccountKeyString))
             {
-                PictureBox pictureBox = (PictureBox)sender;
-
-                // draw "Balance"
-                string smallText = "Balance";
-
-                using Font smallTextFont = new("Segoe UI Emoji", 10, FontStyle.Regular, GraphicsUnit.Point);
-                using SolidBrush brush = new(Color.White);
-                SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
-
-                float smallTextX = (pictureBox.ClientSize.Width - smallTextSize.Width) / 2;
-                float smallTextY = (pictureBox.ClientSize.Height - smallTextSize.Height) / 2;
-
-                smallTextX -= 75; // shift n pixels left
-                smallTextY -= 15; // shift m pixels up
-
-                e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));
-
-                // draw balance
-                string largeText = AdminConfig.GetFormattedBalance(selectedAccountPlaintextTransactions);
-
-                using Font largeTextFont = new("Segoe UI Emoji", 16, FontStyle.Regular, GraphicsUnit.Point);
-                SizeF largeTextSize = e.Graphics.MeasureString(largeText, largeTextFont);
-
-                float largeTextX = smallTextX;
-                float largeTextY = smallTextY + 14; // shift down
-
-                e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
+                smallText = "Balance";
+                largeText = AdminConfig.GetFormattedBalance(selectedAccountPlaintextTransactions);
             }
             // if the key is unknown, display the range
             else
             {
-                PictureBox pictureBox = (PictureBox)sender;
-
-                // draw "Range"
-                string smallText = "Range";
-
-                using Font smallTextFont = new("Segoe UI Emoji", 10, FontStyle.Regular, GraphicsUnit.Point);
-                using SolidBrush brush = new(Color.White);
-                SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
-
-                float smallTextX = (pictureBox.ClientSize.Width - smallTextSize.Width) / 2;
-                float smallTextY = (pictureBox.ClientSize.Height - smallTextSize.Height) / 2;
-
-                smallTextX -= 75; // shift n pixels left
-                smallTextY -= 15; // shift m pixels up
-
-                e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));
-
-                // draw range
-                string largeText = "±" + (((AdminConfig.LoadPlainModulus(selectedAccount) - 1) / 2 * .01) * selectedAccountCiphertextTransactions.Count).ToString("C");
-
-                using Font largeTextFont = new("Segoe UI Emoji", 16, FontStyle.Regular, GraphicsUnit.Point);
-                SizeF largeTextSize = e.Graphics.MeasureString(largeText, largeTextFont);
-
-                float largeTextX = smallTextX;
-                float largeTextY = smallTextY + 14; // shift down
-
-                e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
+                smallText = "Range";
+                largeText = "±" + (((AdminConfig.LoadPlainModulus(selectedAccount) - 1) / 2 * .01) * selectedAccountCiphertextTransactions.Count).ToString("C");
             }
+
+            // draw "Range" / "Balance"
+            using Font smallTextFont = new("Segoe UI Emoji", 10, FontStyle.Regular, GraphicsUnit.Point);
+            using SolidBrush brush = new(Color.White);
+            SizeF smallTextSize = e.Graphics.MeasureString(smallText, smallTextFont);
+
+            float smallTextX = (pictureBox.ClientSize.Width - smallTextSize.Width) / 2;
+            float smallTextY = (pictureBox.ClientSize.Height - smallTextSize.Height) / 2;
+
+            smallTextX -= 75; // shift n pixels left
+            smallTextY -= 15; // shift m pixels up
+
+            e.Graphics.DrawString(smallText, smallTextFont, brush, new PointF(smallTextX, smallTextY));
+
+            // draw range / balance
+            using Font largeTextFont = new("Segoe UI Emoji", 16, FontStyle.Regular, GraphicsUnit.Point);
+            SizeF largeTextSize = e.Graphics.MeasureString(largeText, largeTextFont);
+
+            float largeTextX = smallTextX;
+            float largeTextY = smallTextY + 14; // shift down
+
+            e.Graphics.DrawString(largeText, largeTextFont, brush, new PointF(smallTextX, largeTextY));
         }
 
         private void AccountDetailsPanelClosePictureBox_Paint(object sender, PaintEventArgs e)
@@ -600,82 +576,56 @@ namespace AdminUI.Forms
                 return;
             }
 
+            // get the background color if selected or not
+            Color backgroundColor = e.State.HasFlag(DrawItemState.Selected) ? Color.FromArgb(163, 6, 64) : e.BackColor;
+
+            // draw background
+            using SolidBrush backgroundBrush = new(backgroundColor);
+            e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
+
+            // draw line to separate rows
+            using Pen linePen = new(Color.Gray, 1);
+            e.Graphics.DrawLine(linePen, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
+
+            string timestamp;
+            string type;
+            string amount;
+
+            // if the key is known, display deposit / withdrawal and the amount
             if (!string.IsNullOrWhiteSpace(selectedAccountKeyString))
             {
                 PlaintextTransaction plaintextTransaction = (PlaintextTransaction)AccountDetailsPanelTransactionsListBox.Items[e.Index];
-
-                // get the background color if selected or not
-                Color backgroundColor = e.State.HasFlag(DrawItemState.Selected) ? Color.FromArgb(163, 6, 64) : e.BackColor;
-
-                // draw background
-                using SolidBrush backgroundBrush = new(backgroundColor);
-                e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
-
-                // draw line to separate rows
-                using Pen linePen = new(Color.Gray, 1);
-                e.Graphics.DrawLine(linePen, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
-
-                // draw type
-                string type = "Deposit";
-                if (plaintextTransaction.Amount < 0)
-                {
-                    type = "Withdrawal";
-                }
-
-                using Font typeFont = new(e.Font.FontFamily, 12, FontStyle.Regular);
-                SizeF typeSize = e.Graphics.MeasureString(type, typeFont);
-                float typeY = e.Bounds.Y + (e.Bounds.Height - typeSize.Height) / 2;
-                e.Graphics.DrawString(type, typeFont, Brushes.White, e.Bounds.X + 5, typeY);
-
-                // draw amount
-                using Font amountFont = new(e.Font.FontFamily, 12, FontStyle.Regular);
-                SizeF amountTextSize = e.Graphics.MeasureString(plaintextTransaction.FormattedAmount, typeFont);
-                float amountX = e.Bounds.Right - amountTextSize.Width - 5;
-                e.Graphics.DrawString(plaintextTransaction.FormattedAmount, amountFont, Brushes.White, amountX, e.Bounds.Y);
-
-                // draw date
-                using Font dateFont = new(e.Font.FontFamily, 8, FontStyle.Regular);
-                using SolidBrush dateBrush = new(Color.FromArgb(145, 145, 145));
-                SizeF dateTextSize = e.Graphics.MeasureString(plaintextTransaction.Timestamp.ToString(), dateFont);
-                float dateX = e.Bounds.Right - dateTextSize.Width - 5;
-                e.Graphics.DrawString(plaintextTransaction.Timestamp.ToString(), dateFont, dateBrush, dateX, e.Bounds.Y + 22);
+                timestamp = plaintextTransaction.Timestamp.ToString();
+                type = plaintextTransaction.Amount < 0 ? "Withdrawal" : "Deposit";
+                amount = plaintextTransaction.FormattedAmount;
             }
+            // if the key is unknown, display ***** and $$$
             else
             {
                 CiphertextTransaction ciphertextTransaction = (CiphertextTransaction)AccountDetailsPanelTransactionsListBox.Items[e.Index];
-
-                // get the background color if selected or not
-                Color backgroundColor = e.State.HasFlag(DrawItemState.Selected) ? Color.FromArgb(163, 6, 64) : e.BackColor;
-
-                // draw background
-                using SolidBrush backgroundBrush = new(backgroundColor);
-                e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
-
-                // draw line to separate rows
-                using Pen linePen = new(Color.Gray, 1);
-                e.Graphics.DrawLine(linePen, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
-
-                // draw type
-                string type = "*****";
-
-                using Font typeFont = new(e.Font.FontFamily, 12, FontStyle.Regular);
-                SizeF typeSize = e.Graphics.MeasureString(type, typeFont);
-                float typeY = e.Bounds.Y + (e.Bounds.Height - typeSize.Height) / 2;
-                e.Graphics.DrawString(type, typeFont, Brushes.White, e.Bounds.X + 5, typeY);
-
-                // draw amount
-                using Font amountFont = new(e.Font.FontFamily, 12, FontStyle.Regular);
-                SizeF amountTextSize = e.Graphics.MeasureString("$$$", typeFont);
-                float amountX = e.Bounds.Right - amountTextSize.Width - 5;
-                e.Graphics.DrawString("$$$", amountFont, Brushes.White, amountX, e.Bounds.Y);
-
-                // draw date
-                using Font dateFont = new(e.Font.FontFamily, 8, FontStyle.Regular);
-                using SolidBrush dateBrush = new(Color.FromArgb(145, 145, 145));
-                SizeF dateTextSize = e.Graphics.MeasureString(ciphertextTransaction.Timestamp.ToString(), dateFont);
-                float dateX = e.Bounds.Right - dateTextSize.Width - 5;
-                e.Graphics.DrawString(ciphertextTransaction.Timestamp.ToString(), dateFont, dateBrush, dateX, e.Bounds.Y + 22);
+                timestamp = ciphertextTransaction.Timestamp.ToString();
+                type = "*****";
+                amount = "$$$";
             }
+
+            // draw type
+            using Font typeFont = new(e.Font.FontFamily, 12, FontStyle.Regular);
+            SizeF typeSize = e.Graphics.MeasureString(type, typeFont);
+            float typeY = e.Bounds.Y + (e.Bounds.Height - typeSize.Height) / 2;
+            e.Graphics.DrawString(type, typeFont, Brushes.White, e.Bounds.X + 5, typeY);
+
+            // draw date
+            using Font dateFont = new(e.Font.FontFamily, 8, FontStyle.Regular);
+            using SolidBrush dateBrush = new(Color.FromArgb(145, 145, 145));
+            SizeF dateTextSize = e.Graphics.MeasureString(timestamp, dateFont);
+            float dateX = e.Bounds.Right - dateTextSize.Width - 5;
+            e.Graphics.DrawString(timestamp, dateFont, dateBrush, dateX, e.Bounds.Y + 22);
+
+            // draw amount
+            using Font amountFont = new(e.Font.FontFamily, 12, FontStyle.Regular);
+            SizeF amountTextSize = e.Graphics.MeasureString(amount, typeFont);
+            float amountX = e.Bounds.Right - amountTextSize.Width - 5;
+            e.Graphics.DrawString(amount, amountFont, Brushes.White, amountX, e.Bounds.Y);
         }
 
         private void AccountDetailsPanelTransactionsListBox_MeasureItem(object sender, MeasureItemEventArgs e)
