@@ -397,13 +397,13 @@
             CreateAdminPanel.Size = new Size(987, 735);
             CreateAdminPanel.TabIndex = 41;
             // 
-            // CreateAccountPanelErrorLabel
+            // CreateAdminPanelErrorLabel
             // 
             CreateAdminPanelErrorLabel.Dock = DockStyle.Bottom;
             CreateAdminPanelErrorLabel.Font = new Font("Segoe UI Emoji", 12F);
             CreateAdminPanelErrorLabel.ForeColor = Color.Red;
             CreateAdminPanelErrorLabel.Location = new Point(0, 709);
-            CreateAdminPanelErrorLabel.Name = "CreateAccountPanelErrorLabel";
+            CreateAdminPanelErrorLabel.Name = "CreateAdminPanelErrorLabel";
             CreateAdminPanelErrorLabel.Padding = new Padding(0, 0, 3, 0);
             CreateAdminPanelErrorLabel.Size = new Size(987, 26);
             CreateAdminPanelErrorLabel.TabIndex = 36;
@@ -507,6 +507,7 @@
             Controls.Add(AccountDetailsPanel);
             Controls.Add(AccountsPanel);
             Font = new Font("Segoe UI Emoji", 12F);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
             Name = "DashboardForm";
             StartPosition = FormStartPosition.CenterScreen;

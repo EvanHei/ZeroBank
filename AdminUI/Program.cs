@@ -26,6 +26,6 @@ internal static class Program
         }
 
         ApplicationConfiguration.Initialize();
-        Application.Run(new DashboardForm());
+        Application.Run(new LoginForm());
     }
 }
