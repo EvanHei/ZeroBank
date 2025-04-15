@@ -1162,8 +1162,6 @@
         private Panel CreateAccountPanel;
         private Label AccountDetailsPanelChartLabel;
         private PictureBox CreateAccountPanelCreatePictureBox;
-        private Label label3;
-        private Label label4;
         private Label CreateAccountPanelHeaderLabel;
         private TextBox CreateAccountPanelPasswordTextBox;
         private PictureBox CreateAccountPanelPasswordPictureBox;
@@ -1171,8 +1169,6 @@
         private PictureBox CreateAccountPanelTypePictureBox;
         private Label CreateAccountPanelTypeLabel;
         private ComboBox CreateAccountPanelTypeComboBox;
-        private PictureBox pictureBox3;
-        private PictureBox pictureBox4;
         private TextBox CreateAccountPanelNameTextBox;
         private PictureBox CreateAccountPanelNamePictureBox;
         private Label CreateAccountPanelNameLabel;

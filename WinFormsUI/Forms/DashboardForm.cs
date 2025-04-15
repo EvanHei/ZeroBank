@@ -1,7 +1,6 @@
-﻿using SharedLibrary;
+﻿using ClientLibrary;
 using SharedLibrary.Models;
 using SharedLibrary;
-using SharedLibrary.Models;
 using System.Diagnostics;
 using System.Globalization;
 using System.Security.Policy;

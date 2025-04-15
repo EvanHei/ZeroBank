@@ -1,8 +1,6 @@
 using SharedLibrary;
 using SharedLibrary.Models;
 using Microsoft.Research.SEAL;
-using SharedLibrary;
-using SharedLibrary.Models;
 using ClientUI.Forms;
 
 namespace ClientUI;

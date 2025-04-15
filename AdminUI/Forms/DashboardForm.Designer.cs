@@ -63,6 +63,7 @@
             CreateAdminPanelPasswordLabel = new Label();
             CreateAdminPanelCreatePictureBox = new PictureBox();
             CreateAdminPanelHeaderLabel = new Label();
+            SidebarRefreshLabel = new Label();
             AccountsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelViewDetailsPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelListPictureBox).BeginInit();
@@ -496,16 +497,28 @@
             CreateAdminPanelHeaderLabel.TabIndex = 1;
             CreateAdminPanelHeaderLabel.Text = "Create Admin";
             // 
+            // SidebarRefreshLabel
+            // 
+            SidebarRefreshLabel.AutoSize = true;
+            SidebarRefreshLabel.ForeColor = Color.FromArgb(172, 172, 172);
+            SidebarRefreshLabel.Location = new Point(-1, 3);
+            SidebarRefreshLabel.Name = "SidebarRefreshLabel";
+            SidebarRefreshLabel.Size = new Size(32, 21);
+            SidebarRefreshLabel.TabIndex = 42;
+            SidebarRefreshLabel.Text = "🔄";
+            SidebarRefreshLabel.Click += SidebarRefreshLabel_Click;
+            // 
             // DashboardForm
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 728);
+            Controls.Add(SidebarRefreshLabel);
             Controls.Add(SidebarListBox);
+            Controls.Add(AccountsPanel);
             Controls.Add(CreateAdminPanel);
             Controls.Add(AccountDetailsPanel);
-            Controls.Add(AccountsPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
@@ -535,6 +548,7 @@
             ((System.ComponentModel.ISupportInitialize)CreateAdminPanelPasswordPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)CreateAdminPanelCreatePictureBox).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -573,5 +587,6 @@
         private Label CreateAdminPanelPasswordLabel;
         private PictureBox CreateAdminPanelCreatePictureBox;
         private Label CreateAdminPanelHeaderLabel;
+        private Label SidebarRefreshLabel;
     }
 }

@@ -67,6 +67,16 @@ namespace AdminUI.Forms
             this.Refresh();
         }
 
+        private void DashboardForm_Paint(object sender, PaintEventArgs e)
+        {
+            // draw the line separating the sidebar
+            using Pen pen = new(Color.FromArgb(79, 79, 79), 2);
+            int xPosition = 195;
+            e.Graphics.DrawLine(pen, new Point(xPosition, 0), new Point(xPosition, this.ClientSize.Height));
+        }
+
+        #region Sidebar
+
         private void SidebarListBox_DrawItem(object sender, DrawItemEventArgs e)
         {
             string text = SidebarListBox.Items[e.Index].ToString();
@@ -112,20 +122,18 @@ namespace AdminUI.Forms
             }
         }
 
-        private void DashboardForm_Paint(object sender, PaintEventArgs e)
+        private async void SidebarRefreshLabel_Click(object sender, EventArgs e)
         {
-            // draw the line separating the sidebar
-            using Pen pen = new(Color.FromArgb(79, 79, 79), 2);
-            int xPosition = 195;
-            e.Graphics.DrawLine(pen, new Point(xPosition, 0), new Point(xPosition, this.ClientSize.Height));
+            await GetServerData();
+
+            string selectedItem = SidebarListBox.SelectedItem.ToString();
+            if (selectedItem == "💳 Accounts")
+            {
+                await ShowAccountsPanel();
+            }
         }
 
-        private void ShowCreateAdminPanel()
-        {
-            CreateAdminPanel.Visible = true;
-            AccountsPanel.Visible = false;
-            AccountDetailsPanel.Visible = false;
-        }
+        #endregion
 
         #region AccountsPanel
 
@@ -640,6 +648,13 @@ namespace AdminUI.Forms
         #endregion
 
         #region CreateAdminPanel
+
+        private void ShowCreateAdminPanel()
+        {
+            CreateAdminPanel.Visible = true;
+            AccountsPanel.Visible = false;
+            AccountDetailsPanel.Visible = false;
+        }
 
         private void CreateAdminPanelCreatePictureBox_Paint(object sender, PaintEventArgs e)
         {

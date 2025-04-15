@@ -1,4 +1,4 @@
-﻿using SharedLibrary;
+﻿using ClientLibrary;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
