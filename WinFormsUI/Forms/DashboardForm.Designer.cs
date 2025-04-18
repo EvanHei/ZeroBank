@@ -69,9 +69,6 @@
             DashboardPanelCreateAccountLabel = new Label();
             DashboardPanelCreateAccountIconPictureBox = new PictureBox();
             DashboardPanelCreateAccountPictureBox = new PictureBox();
-            DashboardPanelLogsLabel = new Label();
-            DashboardPanelLogsIconPictureBox = new PictureBox();
-            DashboardPanelLogsPictureBox = new PictureBox();
             DashboardPanelUserGuideLabel = new Label();
             DashboardPanelUserGuideIconPictureBox = new PictureBox();
             DashboardPanelUserGuidePictureBox = new PictureBox();
@@ -126,8 +123,6 @@
             DashboardPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DashboardPanelCreateAccountIconPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DashboardPanelCreateAccountPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)DashboardPanelLogsIconPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)DashboardPanelLogsPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DashboardPanelUserGuideIconPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DashboardPanelUserGuidePictureBox).BeginInit();
             TransactPanel.SuspendLayout();
@@ -583,9 +578,6 @@
             DashboardPanel.Controls.Add(DashboardPanelCreateAccountLabel);
             DashboardPanel.Controls.Add(DashboardPanelCreateAccountIconPictureBox);
             DashboardPanel.Controls.Add(DashboardPanelCreateAccountPictureBox);
-            DashboardPanel.Controls.Add(DashboardPanelLogsLabel);
-            DashboardPanel.Controls.Add(DashboardPanelLogsIconPictureBox);
-            DashboardPanel.Controls.Add(DashboardPanelLogsPictureBox);
             DashboardPanel.Controls.Add(DashboardPanelUserGuideLabel);
             DashboardPanel.Controls.Add(DashboardPanelUserGuideIconPictureBox);
             DashboardPanel.Controls.Add(DashboardPanelUserGuidePictureBox);
@@ -610,7 +602,7 @@
             // 
             DashboardPanelCreateAccountLabel.AutoSize = true;
             DashboardPanelCreateAccountLabel.ForeColor = Color.FromArgb(146, 146, 146);
-            DashboardPanelCreateAccountLabel.Location = new Point(334, 476);
+            DashboardPanelCreateAccountLabel.Location = new Point(533, 335);
             DashboardPanelCreateAccountLabel.Name = "DashboardPanelCreateAccountLabel";
             DashboardPanelCreateAccountLabel.Size = new Size(115, 21);
             DashboardPanelCreateAccountLabel.TabIndex = 12;
@@ -620,7 +612,7 @@
             // DashboardPanelCreateAccountIconPictureBox
             // 
             DashboardPanelCreateAccountIconPictureBox.Image = (Image)resources.GetObject("DashboardPanelCreateAccountIconPictureBox.Image");
-            DashboardPanelCreateAccountIconPictureBox.Location = new Point(367, 416);
+            DashboardPanelCreateAccountIconPictureBox.Location = new Point(566, 275);
             DashboardPanelCreateAccountIconPictureBox.Name = "DashboardPanelCreateAccountIconPictureBox";
             DashboardPanelCreateAccountIconPictureBox.Size = new Size(47, 39);
             DashboardPanelCreateAccountIconPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -631,7 +623,7 @@
             // DashboardPanelCreateAccountPictureBox
             // 
             DashboardPanelCreateAccountPictureBox.Image = (Image)resources.GetObject("DashboardPanelCreateAccountPictureBox.Image");
-            DashboardPanelCreateAccountPictureBox.Location = new Point(314, 374);
+            DashboardPanelCreateAccountPictureBox.Location = new Point(513, 233);
             DashboardPanelCreateAccountPictureBox.Name = "DashboardPanelCreateAccountPictureBox";
             DashboardPanelCreateAccountPictureBox.Size = new Size(153, 153);
             DashboardPanelCreateAccountPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -639,41 +631,11 @@
             DashboardPanelCreateAccountPictureBox.TabStop = false;
             DashboardPanelCreateAccountPictureBox.Click += DashboardPanelCreateAccountPictureBox_Click;
             // 
-            // DashboardPanelLogsLabel
-            // 
-            DashboardPanelLogsLabel.AutoSize = true;
-            DashboardPanelLogsLabel.ForeColor = Color.FromArgb(146, 146, 146);
-            DashboardPanelLogsLabel.Location = new Point(562, 287);
-            DashboardPanelLogsLabel.Name = "DashboardPanelLogsLabel";
-            DashboardPanelLogsLabel.Size = new Size(43, 21);
-            DashboardPanelLogsLabel.TabIndex = 9;
-            DashboardPanelLogsLabel.Text = "Logs";
-            // 
-            // DashboardPanelLogsIconPictureBox
-            // 
-            DashboardPanelLogsIconPictureBox.Image = (Image)resources.GetObject("DashboardPanelLogsIconPictureBox.Image");
-            DashboardPanelLogsIconPictureBox.Location = new Point(560, 227);
-            DashboardPanelLogsIconPictureBox.Name = "DashboardPanelLogsIconPictureBox";
-            DashboardPanelLogsIconPictureBox.Size = new Size(47, 39);
-            DashboardPanelLogsIconPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            DashboardPanelLogsIconPictureBox.TabIndex = 8;
-            DashboardPanelLogsIconPictureBox.TabStop = false;
-            // 
-            // DashboardPanelLogsPictureBox
-            // 
-            DashboardPanelLogsPictureBox.Image = (Image)resources.GetObject("DashboardPanelLogsPictureBox.Image");
-            DashboardPanelLogsPictureBox.Location = new Point(507, 185);
-            DashboardPanelLogsPictureBox.Name = "DashboardPanelLogsPictureBox";
-            DashboardPanelLogsPictureBox.Size = new Size(153, 153);
-            DashboardPanelLogsPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            DashboardPanelLogsPictureBox.TabIndex = 7;
-            DashboardPanelLogsPictureBox.TabStop = false;
-            // 
             // DashboardPanelUserGuideLabel
             // 
             DashboardPanelUserGuideLabel.AutoSize = true;
             DashboardPanelUserGuideLabel.ForeColor = Color.FromArgb(146, 146, 146);
-            DashboardPanelUserGuideLabel.Location = new Point(347, 287);
+            DashboardPanelUserGuideLabel.Location = new Point(364, 335);
             DashboardPanelUserGuideLabel.Name = "DashboardPanelUserGuideLabel";
             DashboardPanelUserGuideLabel.Size = new Size(87, 21);
             DashboardPanelUserGuideLabel.TabIndex = 6;
@@ -683,7 +645,7 @@
             // DashboardPanelUserGuideIconPictureBox
             // 
             DashboardPanelUserGuideIconPictureBox.Image = (Image)resources.GetObject("DashboardPanelUserGuideIconPictureBox.Image");
-            DashboardPanelUserGuideIconPictureBox.Location = new Point(367, 227);
+            DashboardPanelUserGuideIconPictureBox.Location = new Point(384, 275);
             DashboardPanelUserGuideIconPictureBox.Name = "DashboardPanelUserGuideIconPictureBox";
             DashboardPanelUserGuideIconPictureBox.Size = new Size(47, 39);
             DashboardPanelUserGuideIconPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -694,7 +656,7 @@
             // DashboardPanelUserGuidePictureBox
             // 
             DashboardPanelUserGuidePictureBox.Image = (Image)resources.GetObject("DashboardPanelUserGuidePictureBox.Image");
-            DashboardPanelUserGuidePictureBox.Location = new Point(314, 185);
+            DashboardPanelUserGuidePictureBox.Location = new Point(331, 233);
             DashboardPanelUserGuidePictureBox.Name = "DashboardPanelUserGuidePictureBox";
             DashboardPanelUserGuidePictureBox.Size = new Size(153, 153);
             DashboardPanelUserGuidePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -1059,11 +1021,11 @@
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 728);
             Controls.Add(SidebarListBox);
-            Controls.Add(CreateAccountPanel);
-            Controls.Add(TransactPanel);
             Controls.Add(DashboardPanel);
             Controls.Add(AccountDetailsPanel);
             Controls.Add(AccountsPanel);
+            Controls.Add(CreateAccountPanel);
+            Controls.Add(TransactPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
@@ -1097,8 +1059,6 @@
             DashboardPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)DashboardPanelCreateAccountIconPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)DashboardPanelCreateAccountPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)DashboardPanelLogsIconPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)DashboardPanelLogsPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)DashboardPanelUserGuideIconPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)DashboardPanelUserGuidePictureBox).EndInit();
             TransactPanel.ResumeLayout(false);
@@ -1132,9 +1092,6 @@
         private Label DashboardPanelCreateAccountLabel;
         private PictureBox DashboardPanelCreateAccountIconPictureBox;
         private PictureBox DashboardPanelCreateAccountPictureBox;
-        private Label DashboardPanelLogsLabel;
-        private PictureBox DashboardPanelLogsIconPictureBox;
-        private PictureBox DashboardPanelLogsPictureBox;
         private PictureBox AccountsPanelAccountsPictureBox;
         private TextBox AccountsPanelPasswordTextBox;
         private PictureBox AccountsPanelPasswordPictureBox;
