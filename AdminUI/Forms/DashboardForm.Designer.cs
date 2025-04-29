@@ -37,8 +37,6 @@
             AccountsPanelViewDetailsPictureBox = new PictureBox();
             AccountsPanelListBox = new ListBox();
             AccountsPanelListPictureBox = new PictureBox();
-            AccountsPanelPasswordTextBox = new TextBox();
-            AccountsPanelPasswordPictureBox = new PictureBox();
             AccountsPanelAccountsPictureBox = new PictureBox();
             SidebarListBox = new ListBox();
             AccountDetailsPanel = new Panel();
@@ -67,7 +65,6 @@
             AccountsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelViewDetailsPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelListPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)AccountsPanelPasswordPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelAccountsPictureBox).BeginInit();
             AccountDetailsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelClosePictureBox).BeginInit();
@@ -94,8 +91,6 @@
             AccountsPanel.Controls.Add(AccountsPanelViewDetailsPictureBox);
             AccountsPanel.Controls.Add(AccountsPanelListBox);
             AccountsPanel.Controls.Add(AccountsPanelListPictureBox);
-            AccountsPanel.Controls.Add(AccountsPanelPasswordTextBox);
-            AccountsPanel.Controls.Add(AccountsPanelPasswordPictureBox);
             AccountsPanel.Controls.Add(AccountsPanelAccountsPictureBox);
             AccountsPanel.Location = new Point(195, -6);
             AccountsPanel.Name = "AccountsPanel";
@@ -188,26 +183,6 @@
             AccountsPanelListPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             AccountsPanelListPictureBox.TabIndex = 12;
             AccountsPanelListPictureBox.TabStop = false;
-            // 
-            // AccountsPanelPasswordTextBox
-            // 
-            AccountsPanelPasswordTextBox.BackColor = Color.FromArgb(45, 45, 45);
-            AccountsPanelPasswordTextBox.BorderStyle = BorderStyle.None;
-            AccountsPanelPasswordTextBox.ForeColor = Color.White;
-            AccountsPanelPasswordTextBox.Location = new Point(444, 90);
-            AccountsPanelPasswordTextBox.Name = "AccountsPanelPasswordTextBox";
-            AccountsPanelPasswordTextBox.Size = new Size(239, 22);
-            AccountsPanelPasswordTextBox.TabIndex = 10;
-            // 
-            // AccountsPanelPasswordPictureBox
-            // 
-            AccountsPanelPasswordPictureBox.Image = (Image)resources.GetObject("AccountsPanelPasswordPictureBox.Image");
-            AccountsPanelPasswordPictureBox.Location = new Point(434, 75);
-            AccountsPanelPasswordPictureBox.Name = "AccountsPanelPasswordPictureBox";
-            AccountsPanelPasswordPictureBox.Size = new Size(257, 55);
-            AccountsPanelPasswordPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            AccountsPanelPasswordPictureBox.TabIndex = 11;
-            AccountsPanelPasswordPictureBox.TabStop = false;
             // 
             // AccountsPanelAccountsPictureBox
             // 
@@ -516,9 +491,9 @@
             ClientSize = new Size(1176, 728);
             Controls.Add(SidebarRefreshLabel);
             Controls.Add(SidebarListBox);
-            Controls.Add(AccountDetailsPanel);
             Controls.Add(AccountsPanel);
             Controls.Add(CreateAdminPanel);
+            Controls.Add(AccountDetailsPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
@@ -530,7 +505,6 @@
             AccountsPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelViewDetailsPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelListPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)AccountsPanelPasswordPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelAccountsPictureBox).EndInit();
             AccountDetailsPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)AccountDetailsPanelClosePictureBox).EndInit();
@@ -561,8 +535,6 @@
         private PictureBox AccountsPanelViewDetailsPictureBox;
         private ListBox AccountsPanelListBox;
         private PictureBox AccountsPanelListPictureBox;
-        private TextBox AccountsPanelPasswordTextBox;
-        private PictureBox AccountsPanelPasswordPictureBox;
         private PictureBox AccountsPanelAccountsPictureBox;
         private ListBox SidebarListBox;
         private Panel AccountDetailsPanel;
