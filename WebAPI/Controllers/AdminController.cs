@@ -177,4 +177,23 @@ public class AdminController : Controller
             return Results.Problem(ex.Message);
         }
     }
+
+    [HttpPost("close-account")]
+    [Authorize(Roles = "Admin")]
+    public IResult CloseAccount(AdminCloseAccountRequest adminCloseAccountRequest)
+    {
+        _logger.LogInformation($"CloseAccount method called for account: {adminCloseAccountRequest.AccountId}");
+
+        try
+        {
+            ServerConfig.DataAccessor.AdminCloseAccount(adminCloseAccountRequest.AccountId);
+            _logger.LogInformation($"Account closed successfully: {adminCloseAccountRequest.AccountId}");
+            return Results.Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"An error occurred closing account: {adminCloseAccountRequest.AccountId}");
+            return Results.Problem(ex.Message);
+        }
+    }
 }

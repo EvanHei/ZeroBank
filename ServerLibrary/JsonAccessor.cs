@@ -36,6 +36,12 @@ public class JsonAccessor
             string json = JsonSerializer.Serialize(new Dictionary<int, string>());
             File.WriteAllText(Constants.UserPrivateKeysFilePath, json);
         }
+
+        if (!File.Exists(Constants.ClosedAccountIdsFilePath))
+        {
+            string json = JsonSerializer.Serialize(new List<int>());
+            File.WriteAllText(Constants.ClosedAccountIdsFilePath, json);
+        }
     }
 
     public User LoadUser(Credentials userCredentials)
@@ -221,10 +227,30 @@ public class JsonAccessor
         File.Delete(keyPath);
     }
 
-    public void CloseAccount(Account account, byte[] key)
+    public void UserCloseAccount(Account account, byte[] key)
     {
         SaveAccount(account);
         SaveUserPrivateKey(account.Id, key);
+    }
+
+    public void AdminCloseAccount(int accountId)
+    {
+        List<int> closedAccountIds = LoadClosedAccountIds();
+        closedAccountIds.Add(accountId);
+        string json = JsonSerializer.Serialize(closedAccountIds, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(Constants.ClosedAccountIdsFilePath, json);
+    }
+
+    public List<int> LoadClosedAccountIds()
+    {
+        if (!File.Exists(Constants.ClosedAccountIdsFilePath))
+        {
+            throw new FileNotFoundException($"File not found: {Constants.ClosedAccountIdsFilePath}");
+        }
+
+        string json = File.ReadAllText(Constants.ClosedAccountIdsFilePath);
+        List<int> closedAccountIds = JsonSerializer.Deserialize<List<int>>(json);
+        return closedAccountIds;
     }
 
     public List<Ciphertext> LoadTransactions(int id)

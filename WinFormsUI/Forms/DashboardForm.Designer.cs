@@ -1021,11 +1021,11 @@
             BackColor = Color.FromArgb(45, 45, 45);
             ClientSize = new Size(1176, 728);
             Controls.Add(SidebarListBox);
+            Controls.Add(TransactPanel);
             Controls.Add(DashboardPanel);
             Controls.Add(AccountDetailsPanel);
             Controls.Add(AccountsPanel);
             Controls.Add(CreateAccountPanel);
-            Controls.Add(TransactPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);

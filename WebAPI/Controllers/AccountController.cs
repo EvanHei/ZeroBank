@@ -152,7 +152,7 @@ public class AccountController : ControllerBase
 
     [HttpPost("close")]
     [Authorize]
-    public IResult CloseAccount([FromBody] CloseAccountRequest request)
+    public IResult CloseAccount([FromBody] UserCloseAccountRequest request)
     {
         _logger.LogInformation($"CloseAccount method called for account ID: {request.Account.Id}");
 
@@ -160,7 +160,7 @@ public class AccountController : ControllerBase
         {
             string userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             int userId = int.Parse(userIdClaim);
-            Account closedAccount = ServerConfig.CloseAccount(request.Account, userId, request.Key);
+            Account closedAccount = ServerConfig.UserCloseAccount(request.Account, userId, request.Key);
             _logger.LogInformation($"Successfully closed account ID: {request.Account.Id}");
             return Results.Ok(closedAccount);
         }

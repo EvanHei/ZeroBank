@@ -298,6 +298,7 @@ namespace AdminUI.Forms
             CreateAdminPanel.Visible = false;
             AccountsPanel.Visible = false;
             AccountDetailsPanel.Visible = true;
+            AccountDetailsPanelErrorLabel.Text = "";
         }
 
         private async void AccountDetailsPanelBackArrowPictureBox_Click(object sender, EventArgs e)
@@ -561,9 +562,17 @@ namespace AdminUI.Forms
             e.Graphics.DrawString(text, font, brush, x, y);
         }
 
-        private void AccountDetailsPanelClosePictureBox_Click(object sender, EventArgs e)
+        private async void AccountDetailsPanelClosePictureBox_Click(object sender, EventArgs e)
         {
-            // TODO
+            // TODO: test
+            try
+            {
+                await AdminConfig.ApiAccessor.CloseAccount(selectedAccount.Id);
+            }
+            catch (Exception ex)
+            {
+                AccountDetailsPanelErrorLabel.Text = "Could not close the account";
+            }
         }
 
         private void AccountDetailsPanelTranasctionsListPictureBox_Paint(object sender, PaintEventArgs e)

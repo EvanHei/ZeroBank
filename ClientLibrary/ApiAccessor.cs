@@ -103,7 +103,7 @@ public class ApiAccessor
 
     public async Task<Account> CloseAccount(Account account, byte[] key)
     {
-        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.AccountCloseUrl, new CloseAccountRequest(account, key));
+        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.AccountCloseUrl, new UserCloseAccountRequest(account, key));
         if (!response.IsSuccessStatusCode)
         {
             string errorContent = await response.Content.ReadAsStringAsync();

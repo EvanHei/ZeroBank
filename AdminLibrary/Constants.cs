@@ -15,4 +15,5 @@ public static class Constants
     public static readonly string GetUserAccountsUrl = "https://localhost:7188/api/Admin/accounts";
     public static readonly string GetUsersUrl = "https://localhost:7188/api/Admin/users";
     public static readonly string GetKeysUrl = "https://localhost:7188/api/Admin/keys";
+    public static readonly string CloseAccountUrl = "https://localhost:7188/api/Admin/close-account";
 }

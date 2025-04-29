@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Security.Policy;
 using System.Transactions;
 using System.Windows.Forms.DataVisualization.Charting;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ClientUI.Forms
 {
@@ -1062,7 +1063,7 @@ namespace ClientUI.Forms
             }
             catch (Exception ex)
             {
-                TransactPanelErrorLabel.Text = "An error occurred while confirming the transaction";
+                TransactPanelErrorLabel.Text = "An error occurred; your account may have been administratively closed";
             }
         }
 

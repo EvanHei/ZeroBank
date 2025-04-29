@@ -60,6 +60,16 @@ public class ApiAccessor
         return accounts;
     }
 
+    public async Task CloseAccount(int accountId)
+    {
+        HttpResponseMessage response = await client.PostAsJsonAsync(Constants.CloseAccountUrl, new AdminCloseAccountRequest(accountId));
+        if (!response.IsSuccessStatusCode)
+        {
+            string errorMessage = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Server error (HTTP {response.StatusCode}): {errorMessage}");
+        }
+    }
+
     public async Task<List<User>> GetUsers()
     {
         HttpResponseMessage response = await client.GetAsync(Constants.GetUsersUrl);

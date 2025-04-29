@@ -516,9 +516,9 @@
             ClientSize = new Size(1176, 728);
             Controls.Add(SidebarRefreshLabel);
             Controls.Add(SidebarListBox);
+            Controls.Add(AccountDetailsPanel);
             Controls.Add(AccountsPanel);
             Controls.Add(CreateAdminPanel);
-            Controls.Add(AccountDetailsPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);

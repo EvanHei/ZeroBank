@@ -174,13 +174,21 @@ public static class ServerConfig
     private static void AuthorizeAccountAccess(int accountId, int userId)
     {
         Account account = DataAccessor.LoadAccount(accountId);
+
+        // check if the user owns the account
         if (account.UserId != userId)
         {
-            throw new UnauthorizedAccessException("The user does not have permission to access this account.");
+            throw new UnauthorizedAccessException("The user does not own this account.");
+        }
+
+        // check if the account was administratively closed
+        if (DataAccessor.LoadClosedAccountIds().Contains(accountId))
+        {
+            throw new UnauthorizedAccessException("This account has been administratively closed.");
         }
     }
 
-    public static Account CloseAccount(Account account, int userId, byte[] key)
+    public static Account UserCloseAccount(Account account, int userId, byte[] key)
     {
         // verify the user owns the account
         AuthorizeAccountAccess(account.Id, userId);
@@ -197,7 +205,7 @@ public static class ServerConfig
         account.EnsureValid();
 
         // save to server
-        DataAccessor.CloseAccount(account, key);
+        DataAccessor.UserCloseAccount(account, key);
 
         return account;
     }
