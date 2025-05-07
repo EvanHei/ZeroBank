@@ -23,8 +23,6 @@ A Windows desktop app for private financial transactions using homomorphic encyr
 
 2. Double-click ZeroBank.exe, click "More info", and then click "Run anyway". This prompt will disappear the next time ZeroBank is run.
 
-   <img src="./images/MoreInfo.png" width="350"><img src="./images/RunAnyway.png" width="350">
-
 </details>
 
 <details>
@@ -46,18 +44,23 @@ A Windows desktop app for private financial transactions using homomorphic encyr
 
 ## Guide
 
-### Dashboard Form
+### Dashboard Tab
 
-<details>
-<summary><strong>Summary</strong></summary>
-The Dashboard Form displays tiles for...
+The Dashboard tab displays...
 
-- **Tile 1**:
-- **Tile 2**:
+- **User Guide**: opens this README in a new browser tab.
+- **Create Account**: opens the account creation dialog.
 
-<img src="./images/" width="1000">
+   <img src="./images/ClientDashboard.png" width=800>
 
-</details>
+### Accounts Tab
+
+The Accounts Form tab...
+
+- **Create New**: opens the account creation dialog.
+- **Delete**: deletes an account if it has no transactions.
+
+   <img src="./images/ClientAccounts.png" width=800>
 
 ---
 

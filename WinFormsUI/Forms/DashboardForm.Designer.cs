@@ -764,7 +764,6 @@
             TransactPanelAmountTextBox.ForeColor = Color.Silver;
             TransactPanelAmountTextBox.Location = new Point(356, 329);
             TransactPanelAmountTextBox.Name = "TransactPanelAmountTextBox";
-            TransactPanelAmountTextBox.RightToLeft = RightToLeft.Yes;
             TransactPanelAmountTextBox.Size = new Size(239, 22);
             TransactPanelAmountTextBox.TabIndex = 15;
             TransactPanelAmountTextBox.KeyDown += TransactPanelAmountTextBox_KeyDown;
