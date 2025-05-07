@@ -8,6 +8,16 @@ using System.Text;
 using WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(7000);
+    options.ListenAnyIP(7188, listenOptions =>
+    {
+        listenOptions.UseHttps();
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
