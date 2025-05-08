@@ -67,11 +67,11 @@ namespace AdminUI.Forms
             this.Refresh();
         }
 
-        private void DashboardForm_Paint(object sender, PaintEventArgs e)
+        private void RootPanel_Paint(object sender, PaintEventArgs e)
         {
             // draw the line separating the sidebar
-            using Pen pen = new(Color.FromArgb(79, 79, 79), 2);
-            int xPosition = 195;
+            using Pen pen = new(Color.FromArgb(79, 79, 79), 1);
+            int xPosition = 194;
             e.Graphics.DrawLine(pen, new Point(xPosition, 0), new Point(xPosition, this.ClientSize.Height));
         }
 

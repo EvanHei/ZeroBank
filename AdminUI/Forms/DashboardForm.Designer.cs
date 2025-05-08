@@ -62,6 +62,7 @@
             CreateAdminPanelCreatePictureBox = new PictureBox();
             CreateAdminPanelHeaderLabel = new Label();
             SidebarRefreshLabel = new Label();
+            RootPanel = new Panel();
             AccountsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelViewDetailsPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelListPictureBox).BeginInit();
@@ -80,6 +81,7 @@
             ((System.ComponentModel.ISupportInitialize)CreateAdminPanelUsernamePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)CreateAdminPanelPasswordPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)CreateAdminPanelCreatePictureBox).BeginInit();
+            RootPanel.SuspendLayout();
             SuspendLayout();
             // 
             // AccountsPanel
@@ -476,31 +478,41 @@
             // 
             SidebarRefreshLabel.AutoSize = true;
             SidebarRefreshLabel.ForeColor = Color.FromArgb(172, 172, 172);
-            SidebarRefreshLabel.Location = new Point(-1, 3);
+            SidebarRefreshLabel.Location = new Point(0, 3);
             SidebarRefreshLabel.Name = "SidebarRefreshLabel";
             SidebarRefreshLabel.Size = new Size(32, 21);
             SidebarRefreshLabel.TabIndex = 42;
             SidebarRefreshLabel.Text = "🔄";
             SidebarRefreshLabel.Click += SidebarRefreshLabel_Click;
             // 
+            // RootPanel
+            // 
+            RootPanel.AutoScroll = true;
+            RootPanel.Controls.Add(AccountDetailsPanel);
+            RootPanel.Controls.Add(CreateAdminPanel);
+            RootPanel.Controls.Add(AccountsPanel);
+            RootPanel.Controls.Add(SidebarListBox);
+            RootPanel.Controls.Add(SidebarRefreshLabel);
+            RootPanel.Dock = DockStyle.Fill;
+            RootPanel.Location = new Point(0, 0);
+            RootPanel.Name = "RootPanel";
+            RootPanel.Size = new Size(1182, 742);
+            RootPanel.TabIndex = 43;
+            RootPanel.Paint += RootPanel_Paint;
+            // 
             // DashboardForm
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(45, 45, 45);
-            ClientSize = new Size(1176, 728);
-            Controls.Add(SidebarRefreshLabel);
-            Controls.Add(SidebarListBox);
-            Controls.Add(AccountsPanel);
-            Controls.Add(CreateAdminPanel);
-            Controls.Add(AccountDetailsPanel);
+            ClientSize = new Size(1182, 742);
+            Controls.Add(RootPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
             Name = "DashboardForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "ZeroBank Admin";
-            Paint += DashboardForm_Paint;
             AccountsPanel.ResumeLayout(false);
             AccountsPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelViewDetailsPictureBox).EndInit();
@@ -521,8 +533,9 @@
             ((System.ComponentModel.ISupportInitialize)CreateAdminPanelUsernamePictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)CreateAdminPanelPasswordPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)CreateAdminPanelCreatePictureBox).EndInit();
+            RootPanel.ResumeLayout(false);
+            RootPanel.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -560,5 +573,6 @@
         private PictureBox CreateAdminPanelCreatePictureBox;
         private Label CreateAdminPanelHeaderLabel;
         private Label SidebarRefreshLabel;
+        private Panel RootPanel;
     }
 }

@@ -101,6 +101,7 @@
             CreateAccountPanelHeaderLabel = new Label();
             CreateAccountPanelTypePictureBox = new PictureBox();
             CreateAccountPanelTypeComboBox = new ComboBox();
+            RootPanel = new Panel();
             AccountsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelDeletePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelCreateNewPictureBox).BeginInit();
@@ -137,6 +138,7 @@
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelPasswordPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelCreatePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelTypePictureBox).BeginInit();
+            RootPanel.SuspendLayout();
             SuspendLayout();
             // 
             // AccountsPanel
@@ -1013,18 +1015,29 @@
             CreateAccountPanelTypeComboBox.TabIndex = 24;
             CreateAccountPanelTypeComboBox.SelectedIndexChanged += CreateAccountPanelTypeComboBox_SelectedIndexChanged;
             // 
+            // RootPanel
+            // 
+            RootPanel.AutoScroll = true;
+            RootPanel.Controls.Add(AccountDetailsPanel);
+            RootPanel.Controls.Add(DashboardPanel);
+            RootPanel.Controls.Add(TransactPanel);
+            RootPanel.Controls.Add(SidebarListBox);
+            RootPanel.Controls.Add(CreateAccountPanel);
+            RootPanel.Controls.Add(AccountsPanel);
+            RootPanel.Dock = DockStyle.Fill;
+            RootPanel.Location = new Point(0, 0);
+            RootPanel.Name = "RootPanel";
+            RootPanel.Size = new Size(1182, 742);
+            RootPanel.TabIndex = 23;
+            RootPanel.Paint += RootPanel_Paint;
+            // 
             // DashboardForm
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(45, 45, 45);
-            ClientSize = new Size(1176, 728);
-            Controls.Add(SidebarListBox);
-            Controls.Add(TransactPanel);
-            Controls.Add(DashboardPanel);
-            Controls.Add(AccountDetailsPanel);
-            Controls.Add(AccountsPanel);
-            Controls.Add(CreateAccountPanel);
+            ClientSize = new Size(1182, 742);
+            Controls.Add(RootPanel);
             Font = new Font("Segoe UI Emoji", 12F);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
@@ -1032,7 +1045,6 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "ZeroBank";
             Load += DashboardForm_Load;
-            Paint += DashboardForm_Paint;
             AccountsPanel.ResumeLayout(false);
             AccountsPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)AccountsPanelDeletePictureBox).EndInit();
@@ -1074,6 +1086,7 @@
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelPasswordPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelCreatePictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)CreateAccountPanelTypePictureBox).EndInit();
+            RootPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -1150,5 +1163,6 @@
         private RadioButton AccountsPanelAllRadioButton;
         private RadioButton AccountsPanelClosedRadioButton;
         private RadioButton AccountsPanelOpenRadioButton;
+        private Panel RootPanel;
     }
 }

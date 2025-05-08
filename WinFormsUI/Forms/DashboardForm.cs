@@ -60,6 +60,14 @@ namespace ClientUI.Forms
             await GetServerData();
         }
 
+        private void RootPanel_Paint(object sender, PaintEventArgs e)
+        {
+            // draw the line separating the sidebar
+            using Pen pen = new(Color.FromArgb(79, 79, 79), 1);
+            int xPosition = 194;
+            e.Graphics.DrawLine(pen, new Point(xPosition, 0), new Point(xPosition, this.ClientSize.Height));
+        }
+
         private void SidebarListBox_DrawItem(object sender, DrawItemEventArgs e)
         {
             string text = SidebarListBox.Items[e.Index].ToString();
@@ -102,14 +110,6 @@ namespace ClientUI.Forms
             {
                 ShowAccountsPanel();
             }
-        }
-
-        private void DashboardForm_Paint(object sender, PaintEventArgs e)
-        {
-            // draw the line separating the sidebar
-            using Pen pen = new(Color.FromArgb(79, 79, 79), 2);
-            int xPosition = 195;
-            e.Graphics.DrawLine(pen, new Point(xPosition, 0), new Point(xPosition, this.ClientSize.Height));
         }
 
         #region DashboardPanel
