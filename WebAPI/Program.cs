@@ -6,8 +6,14 @@ using ServerLibrary;
 using SharedLibrary;
 using System.Text;
 using WebAPI;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Load embedded appsettings.json
+using Stream stream = Assembly.GetExecutingAssembly()
+    .GetManifestResourceStream("WebAPI.appsettings.json")!;
+builder.Configuration.AddJsonStream(stream);
 
 builder.WebHost.ConfigureKestrel(options =>
 {

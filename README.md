@@ -7,21 +7,30 @@ A Windows desktop app prototype for private financial transactions using homomor
 ## Table of Contents
 
 1. [Getting Started](#getting-started)
-2. [Guide](#guide)
-3. [Technologies](#technologies)
+2. [Client Guide](#client-guide)
+3. [Admin Guide](#admin-guide)
+4. [Technologies](#technologies)
 
 ## Getting Started
 
 <details>
-<summary><strong>Run from executable</strong></summary>
+<summary><strong>Run from .exe files</strong></summary>
 
-1. Download [ZeroBank.exe](RELEASE_URL) (SHA256 below)
+1. Download the following files:
 
-   ```SHA256
-   <SHA256_HASH>
-   ```
+   | File Name    | Download Link    | SHA256 Hash     |
+   | ------------ | ---------------- | --------------- |
+   | WebAPI.exe   | [RELEASE_URL](#) | `<SHA256_HASH>` |
+   | ClientUI.exe | [RELEASE_URL](#) | `<SHA256_HASH>` |
+   | AdminUI.exe  | [RELEASE_URL](#) | `<SHA256_HASH>` |
 
-2. Double-click ZeroBank.exe, click "More info", and then click "Run anyway". This prompt will disappear the next time ZeroBank is run.
+2. Double-click WebAPI.exe to start the server, and then double-click either ClientUI.exe or AdminUI.exe to use as a client or admin, respectively.
+
+   If there is a security prompt, click "More info", and then click "Run anyway". This prompt will disappear the next time each is run.
+
+   If a Windows Defender Firewall prompt appears, select "Private Networks" and click "Allow Access." ZeroBank is a prototype and does not need to communicate with public networks.
+
+   <img src="./images/WindowsDefenderFirewall.png" width=400>
 
 </details>
 
@@ -30,19 +39,42 @@ A Windows desktop app prototype for private financial transactions using homomor
 
 1. Download the .NET SDK from Microsoft's website <a href="https://dotnet.microsoft.com/download"> here</a> or verify installation by running the following command:
 
-   ```bash
+   ```powershell
    dotnet --version
    ```
 
-2. Navigate to `<SOURCE_DIRECTORY>` and launch with the following command:
+2. Navigate to the `ZeroBank` root directory and launch the WebAPI, CLientUI, and AdminUI using the following commands from PowerShell:
 
-   ```bash
-   dotnet run
+   **WebAPI**
+
+   ```powershell
+   dotnet run --project .\WebAPI\WebAPI.csproj
+   ```
+
+   **ClientUI**
+
+   ```powershell
+   dotnet run --project .\WinFormsUI\ClientUI.csproj
+   ```
+
+   **AdminUI**
+
+   ```powershell
+   dotnet run --project .\AdminUI\AdminUI.csproj
    ```
 
 </details>
 
-## Client UI Guide
+<details>
+<summary><strong>Remove Files</strong></summary>
+
+1. Delete WebAPI.exe, ClientUI.exe, and AdminUI.exe.
+
+2. Delete the folder at `C:\Users\<username>\AppData\Roaming\ZeroBank`
+
+</details>
+
+## Client Guide
 
 ### Dashboard Tab
 
@@ -63,6 +95,7 @@ The client's Accounts tab displays a list of all accounts which may be filtered 
 - **Delete**: deletes an account if it has no transactions.
 
 ### Account Details
+
 Viewing an account's details after providing a password displays all data about the account and allows a client to make transactions.
 
    <img src="./images/ClientAccountDetails.png" width=800>
@@ -70,7 +103,7 @@ Viewing an account's details after providing a password displays all data about 
 - **Transact**: makes a deposit or withdrawal.
 - **Close**: reveals the secret key to the server to facilitate decryption of transaction amounts.
 
-## Admin UI Guide
+## Admin Guide
 
 ### Account Tab
 
@@ -84,9 +117,9 @@ Admins may view all accounts of all users in a list which may be filtered based 
 
 Admins may only view an account's metadata if the client has and open account. Individual transaction amounts are hidden, but a range of possible balances may be computed using properties of homomorphic encryption. The bounds are found as follows:
 
-**Upper Bound** = (maximum possible transaction size) * (number of transactions)
+**Upper Bound** = (maximum possible transaction size) \* (number of transactions)
 
-**Lower Bound** = (minimum possible transaction size) * (number of transactions)
+**Lower Bound** = (minimum possible transaction size) \* (number of transactions)
 
    <img src="./images/AdminAccountDetailsEncrypted.png" width=800>
 
@@ -110,6 +143,7 @@ Admins may view an account's metadata and transaction amounts if the client has 
 - **Wireframing**: Figma
 - **Version Control**: Git / GitHub
 - **Encryption**:
+  - **Symmetric**: AES
   - **Asymmetric**: RSA
   - **Homomorphic**: BFV
 - **Authentication**: JWT
