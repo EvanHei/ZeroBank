@@ -18,11 +18,11 @@ A Windows desktop app prototype for private financial transactions using homomor
 
 1. Download and extract the following zip files:
 
-   | File Name           | Download Link    | SHA256 Hash     |
-   | ------------------- | ---------------- | --------------- |
-   | ZeroBank-Admin.zip  | [RELEASE_URL](#) | `<SHA256_HASH>` |
-   | ZeroBank-Client.zip | [RELEASE_URL](#) | `<SHA256_HASH>` |
-   | ZeroBank-Server.zip | [RELEASE_URL](#) | `<SHA256_HASH>` |
+   | File Link                                                                                               | SHA256 Hash                                                        |
+   | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+   | [ZeroBank-Server.zip](https://github.com/EvanHei/ZeroBank/releases/download/v1.0.0/ZeroBank-Server.zip) | `bd82b70133d8d4537c4d1b5a8b564aeab9f45861cb04b1b3b5e421493fdca203` |
+   | [ZeroBank-Client.zip](https://github.com/EvanHei/ZeroBank/releases/download/v1.0.0/ZeroBank-Client.zip) | `f8aea322aada306116fafe5a702dac5d771d00848a9cfff4463d852f0e0b6703` |
+   | [ZeroBank-Admin.zip](https://github.com/EvanHei/ZeroBank/releases/download/v1.0.0/ZeroBank-Admin.zip)   | `8934c5438720436da3ac6a91116600451682906e6de076330d4b3139903910ea` |
 
 2. Double-click WebAPI.exe to start the server, and then double-click either ClientUI.exe or AdminUI.exe to use as a client or admin, respectively.
 
