@@ -2,7 +2,7 @@
 
 # ZeroBank
 
-A Windows desktop app prototype for private financial transactions using homomorphic encyrption.
+A Windows desktop app prototype for private financial transactions using homomorphic encryption.
 
 ## Table of Contents
 
@@ -16,13 +16,13 @@ A Windows desktop app prototype for private financial transactions using homomor
 <details>
 <summary><strong>Run from .exe files</strong></summary>
 
-1. Download the following files:
+1. Download and extract the following zip files:
 
-   | File Name    | Download Link    | SHA256 Hash     |
-   | ------------ | ---------------- | --------------- |
-   | WebAPI.exe   | [RELEASE_URL](#) | `<SHA256_HASH>` |
-   | ClientUI.exe | [RELEASE_URL](#) | `<SHA256_HASH>` |
-   | AdminUI.exe  | [RELEASE_URL](#) | `<SHA256_HASH>` |
+   | File Name           | Download Link    | SHA256 Hash     |
+   | ------------------- | ---------------- | --------------- |
+   | ZeroBank-Admin.zip  | [RELEASE_URL](#) | `<SHA256_HASH>` |
+   | ZeroBank-Client.zip | [RELEASE_URL](#) | `<SHA256_HASH>` |
+   | ZeroBank-Server.zip | [RELEASE_URL](#) | `<SHA256_HASH>` |
 
 2. Double-click WebAPI.exe to start the server, and then double-click either ClientUI.exe or AdminUI.exe to use as a client or admin, respectively.
 
